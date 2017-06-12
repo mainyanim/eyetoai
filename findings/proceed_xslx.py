@@ -615,8 +615,8 @@ def save_output(output_list):
     # Create title for columns
     columns_titles = ['Name', 'Condition description', 'birad[0]','birad[1]','birad[2]','birad[3]','birad[4]','birad[5]','birad[6]','Relevant modalities',
                       'Relevant findings', 'Unique findings','Additional info',
-                      'Parameters', 'Typical', 'Possible',
-                      'Atypical', 'Pathogenomonic', 'Unrelated', 'Negative',
+                      'Parameters', 50, 30, 1,
+                      'Pathogenomonic', 'Unrelated', 'Negative',
                       'Ignore', 'Associated conditions', 'Differential diagnosis', 'Notes']
     ws1.append(columns_titles)
     # Create list for output file
