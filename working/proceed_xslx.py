@@ -62,8 +62,6 @@ class SetParams:
                                                    params_name.mass_shape),
                     'Atypical': self.return_params(10, 13, 'a',
                                                    params_name.mass_shape),
-                    'None': self.return_params(10, 13, 'none',
-                                                    params_name.mass_shape),
                     'Pathogenomonic': self.return_params(10, 13, 'pat',
                                                          params_name.mass_shape),
                     'Unrelated': self.return_params(10, 13, 'u',
@@ -80,8 +78,6 @@ class SetParams:
                                                    params_name.mammo_mass_margin),
                     'Atypical': self.return_params(13, 18, 'a',
                                                    params_name.mammo_mass_margin),
-                    'None': self.return_params(13, 18, 'none',
-                                                    params_name.mammo_mass_margin),
                     'Pathogenomonic': self.return_params(13, 18, 'pat',
                                                          params_name.mammo_mass_margin),
                     'Unrelated': self.return_params(13, 18, 'u',
@@ -93,21 +89,19 @@ class SetParams:
                 },
                 'Density': {
                     'Typical': self.return_params(18, 22, 't',
-                                                  params_name.mammo_mass_density),
+                                                  params_name.mammo_calcifications_typically_benign),
                     'Possible': self.return_params(18, 22, 'p',
-                                                   params_name.mammo_mass_density),
+                                                   params_name.mammo_calcifications_typically_benign),
                     'Atypical': self.return_params(18, 22, 'a',
-                                                   params_name.mammo_mass_density),
-                    'None': self.return_params(18, 22, 'none',
-                                                    params_name.mammo_mass_density),
+                                                   params_name.mammo_calcifications_typically_benign),
                     'Pathogenomonic': self.return_params(18, 22, 'pat',
-                                                         params_name.mammo_mass_density),
+                                                         params_name.mammo_calcifications_typically_benign),
                     'Unrelated': self.return_params(18, 22, 'u',
-                                                    params_name.mammo_mass_density),
+                                                    params_name.mammo_calcifications_typically_benign),
                     'Negative': self.return_params(18, 22, 'n',
-                                                   params_name.mammo_mass_density),
+                                                   params_name.mammo_calcifications_typically_benign),
                     'Ignore': self.return_params(18, 22, 'i',
-                                                 params_name.mammo_mass_density),
+                                                 params_name.mammo_calcifications_typically_benign),
                 }
             },
             'Calcifications': {
@@ -118,8 +112,6 @@ class SetParams:
                                                    params_name.mammo_calcifications_typically_benign),
                     'Atypical': self.return_params(22, 31, 'a',
                                                    params_name.mammo_calcifications_typically_benign),
-                    'None': self.return_params(22, 31, 'none',
-                                                    params_name.mammo_calcifications_typically_benign),
                     'Pathogenomonic': self.return_params(22, 31, 'pat',
                                                          params_name.mammo_calcifications_typically_benign),
                     'Unrelated': self.return_params(22, 31, 'u',
@@ -136,8 +128,6 @@ class SetParams:
                                                    params_name.mammo_calcifications_suspicious_morphology),
                     'Atypical': self.return_params(31, 35, 'a',
                                                    params_name.mammo_calcifications_suspicious_morphology),
-                    'None': self.return_params(31, 35, 'none',
-                                                    params_name.mammo_calcifications_suspicious_morphology),
                     'Pathogenomonic': self.return_params(31, 35, 'pat',
                                                          params_name.mammo_calcifications_suspicious_morphology),
                     'Unrelated': self.return_params(31, 35, 'u',
@@ -154,8 +144,6 @@ class SetParams:
                                                    params_name.mammo_calcifications_suspicious_distribution),
                     'Atypical': self.return_params(35, 40, 'a',
                                                    params_name.mammo_calcifications_suspicious_distribution),
-                    'None': self.return_params(35, 40, 'none',
-                                                    params_name.mammo_calcifications_suspicious_distribution),
                     'Pathogenomonic': self.return_params(35, 40, 'pat',
                                                          params_name.mammo_calcifications_suspicious_distribution),
                     'Unrelated': self.return_params(35, 40, 'u',
@@ -174,8 +162,6 @@ class SetParams:
                                                    params_name.mammo_asymmetries),
                     'Atypical': self.return_params(40, 44, 'a',
                                                    params_name.mammo_asymmetries),
-                    'None': self.return_params(40, 44, 'none',
-                                                    params_name.mammo_asymmetries),
                     'Pathogenomonic': self.return_params(40, 44, 'pat',
                                                          params_name.mammo_asymmetries),
                     'Unrelated': self.return_params(40, 44, 'u',
@@ -194,8 +180,6 @@ class SetParams:
                                                    params_name.lymph_nodes),
                     'Atypical': self.return_params(44, 46, 'a',
                                                    params_name.lymph_nodes),
-                    'None': self.return_params(44, 46, 'none',
-                                                    params_name.lymph_nodes),
                     'Pathogenomonic': self.return_params(44, 46, 'pat',
                                                          params_name.lymph_nodes),
                     'Unrelated': self.return_params(44, 46, 'u',
@@ -218,8 +202,6 @@ class SetParams:
                                                    params_name.mass_shape),
                     'Atypical': self.return_params(54, 57, 'a',
                                                    params_name.mass_shape),
-                    'None': self.return_params(54, 57, 'none',
-                                                    params_name.mass_shape),
                     'Pathogenomonic': self.return_params(54, 57, 'pat',
                                                          params_name.mass_shape),
                     'Unrelated': self.return_params(54, 57, 'u',
@@ -236,8 +218,6 @@ class SetParams:
                                                    params_name.us_mass_margin),
                     'Atypical': self.return_params(57, 63, 'a',
                                                    params_name.us_mass_margin),
-                    'None': self.return_params(57, 63, 'none',
-                                                    params_name.us_mass_margin),
                     'Pathogenomonic': self.return_params(57, 63, 'pat',
                                                          params_name.us_mass_margin),
                     'Unrelated': self.return_params(57, 63, 'u',
@@ -254,8 +234,6 @@ class SetParams:
                                                    params_name.us_mass_echo_pattern),
                     'Atypical': self.return_params(63, 69, 'a',
                                                    params_name.us_mass_echo_pattern),
-                    'None': self.return_params(63, 69, 'none',
-                                                    params_name.us_mass_echo_pattern),
                     'Pathogenomonic': self.return_params(63, 69, 'pat',
                                                          params_name.us_mass_echo_pattern),
                     'Unrelated': self.return_params(63, 69, 'u',
@@ -272,8 +250,6 @@ class SetParams:
                                                    params_name.us_mass_posterior_features),
                     'Atypical': self.return_params(69, 73, 'a',
                                                    params_name.us_mass_posterior_features),
-                    'None': self.return_params(69, 73, 'none',
-                                                    params_name.us_mass_posterior_features),
                     'Pathogenomonic': self.return_params(69, 73, 'pat',
                                                          params_name.us_mass_posterior_features),
                     'Unrelated': self.return_params(69, 73, 'u',
@@ -292,8 +268,6 @@ class SetParams:
                                                    params_name.us_calcifications),
                     'Atypical': self.return_params(73, 76, 'a',
                                                    params_name.us_calcifications),
-                    'None': self.return_params(73, 76, 'none',
-                                                    params_name.us_calcifications),
                     'Pathogenomonic': self.return_params(73, 76, 'pat',
                                                          params_name.us_calcifications),
                     'Unrelated': self.return_params(73, 76, 'u',
@@ -312,8 +286,6 @@ class SetParams:
                                                    params_name.lymph_nodes),
                     'Atypical': self.return_params(76, 78, 'a',
                                                    params_name.lymph_nodes),
-                    'None': self.return_params(76, 78, 'none',
-                                                    params_name.lymph_nodes),
                     'Pathogenomonic': self.return_params(76, 78, 'pat',
                                                          params_name.lymph_nodes),
                     'Unrelated': self.return_params(76, 78, 'u',
@@ -332,8 +304,6 @@ class SetParams:
                                                    params_name.us_special_cases),
                     'Atypical': self.return_params(88, 97, 'a',
                                                    params_name.us_special_cases),
-                    'None': self.return_params(88, 97, 'none',
-                                                    params_name.us_special_cases),
                     'Pathogenomonic': self.return_params(88, 97, 'pat',
                                                          params_name.us_special_cases),
                     'Unrelated': self.return_params(88, 97, 'u',
@@ -356,8 +326,6 @@ class SetParams:
                                                    params_name.mass_shape),
                     'Atypical': self.return_params(99, 102, 'a',
                                                    params_name.mass_shape),
-                    'None': self.return_params(99, 102, 'none',
-                                                    params_name.mass_shape),
                     'Pathogenomonic': self.return_params(99, 102, 'pat',
                                                          params_name.mass_shape),
                     'Unrelated': self.return_params(99, 102, 'u',
@@ -374,8 +342,6 @@ class SetParams:
                                                    params_name.mri_mass_margin),
                     'Atypical': self.return_params(102, 106, 'a',
                                                    params_name.mri_mass_margin),
-                    'None': self.return_params(102, 106, 'none',
-                                                    params_name.mri_mass_margin),
                     'Pathogenomonic': self.return_params(102, 106, 'pat',
                                                          params_name.mri_mass_margin),
                     'Unrelated': self.return_params(102, 106, 'u',
@@ -392,8 +358,6 @@ class SetParams:
                                                    params_name.mri_mass_internal_enhacement),
                     'Atypical': self.return_params(106, 110, 'a',
                                                    params_name.mri_mass_internal_enhacement),
-                    'None': self.return_params(106, 110, 'none',
-                                                    params_name.mri_mass_internal_enhacement),
                     'Pathogenomonic': self.return_params(106, 110, 'pat',
                                                          params_name.mri_mass_internal_enhacement),
                     'Unrelated': self.return_params(106, 110, 'u',
@@ -412,8 +376,6 @@ class SetParams:
                                                    params_name.mri_features),
                     'Atypical': self.return_params(110, 113, 'a',
                                                    params_name.mri_features),
-                    'None': self.return_params(110, 113, 'none',
-                                                    params_name.mri_features),
                     'Pathogenomonic': self.return_params(110, 113, 'pat',
                                                          params_name.mri_features),
                     'Unrelated': self.return_params(110, 113, 'u',
@@ -432,8 +394,6 @@ class SetParams:
                                                    params_name.mri_kinetic_curve_assessment),
                     'Atypical': self.return_params(113, 119, 'a',
                                                    params_name.mri_kinetic_curve_assessment),
-                    'None': self.return_params(113, 119, 'none',
-                                                    params_name.mri_kinetic_curve_assessment),
                     'Pathogenomonic': self.return_params(113, 119, 'pat',
                                                          params_name.mri_kinetic_curve_assessment),
                     'Unrelated': self.return_params(113, 119, 'u',
@@ -452,8 +412,6 @@ class SetParams:
                                                    params_name.mri_nme_distribution),
                     'Atypical': self.return_params(120, 126, 'a',
                                                    params_name.mri_nme_distribution),
-                    'None': self.return_params(120, 126, 'none',
-                                                    params_name.mri_nme_distribution),
                     'Pathogenomonic': self.return_params(120, 126, 'pat',
                                                          params_name.mri_nme_distribution),
                     'Unrelated': self.return_params(120, 126, 'u',
@@ -470,8 +428,6 @@ class SetParams:
                                                    params_name.mri_nme_iep),
                     'Atypical': self.return_params(126, 130, 'a',
                                                    params_name.mri_nme_iep),
-                    'None': self.return_params(126, 130, 'none',
-                                                    params_name.mri_nme_iep),
                     'Pathogenomonic': self.return_params(126, 130, 'pat',
                                                          params_name.mri_nme_iep),
                     'Unrelated': self.return_params(126, 130, 'u',
@@ -490,8 +446,6 @@ class SetParams:
                                                    params_name.mri_nef),
                     'Atypical': self.return_params(130, 137, 'a',
                                                    params_name.mri_nef),
-                    'None': self.return_params(130, 137, 'none',
-                                                    params_name.mri_nef),
                     'Pathogenomonic': self.return_params(130, 137, 'pat',
                                                          params_name.mri_nef),
                     'Unrelated': self.return_params(130, 137, 'u',
@@ -510,8 +464,6 @@ class SetParams:
                                                    params_name.lymph_nodes),
                     'Atypical': self.return_params(137, 139, 'a',
                                                    params_name.lymph_nodes),
-                    'None': self.return_params(137, 139, 'none',
-                                                    params_name.lymph_nodes),
                     'Pathogenomonic': self.return_params(137, 139, 'pat',
                                                          params_name.lymph_nodes),
                     'Unrelated': self.return_params(137, 139, 'u',
@@ -530,8 +482,6 @@ class SetParams:
                                                    params_name.mri_fcl),
                     'Atypical': self.return_params(139, 144, 'a',
                                                    params_name.mri_fcl),
-                    'None': self.return_params(139, 144, 'none',
-                                                    params_name.mri_fcl),
                     'Pathogenomonic': self.return_params(139, 144, 'pat',
                                                          params_name.mri_fcl),
                     'Unrelated': self.return_params(139, 144, 'u',
@@ -551,7 +501,7 @@ class SetParams:
         :return: string
         """
         pt = {
-            't': 'Typical', 'p': 'Possible', 'a': 'Atypical', 'none': 'None',
+            't': 'Typical', 'p': 'Possible', 'a': 'Atypical',
             'pat': 'Pathogenomonic', 'u': 'Unrelated',
             'n': 'Negative', 'i': 'Ignore'
         }
@@ -665,7 +615,7 @@ def save_output(output_list):
     # Create title for columns
     columns_titles = ['Name', 'Condition description', 'birad[0]','birad[1]','birad[2]','birad[3]','birad[4]','birad[5]','birad[6]','Relevant modalities',
                       'Relevant findings', 'Unique findings','Additional info',
-                      'Parameters', 50, 30, 1, 'General',
+                      'Parameters', 50, 30, 1,
                       'Pathogenomonic', 'Unrelated', 'Negative',
                       'Ignore', 'Associated conditions', 'Differential diagnosis', 'Notes']
     ws1.append(columns_titles)
@@ -706,10 +656,6 @@ def create_list(row):
     except:
         a = ''
     try:
-        none = row['None']
-    except:
-        none = ''
-    try:
         pat = row['Pathogenomonic']
     except:
         pat = ''
@@ -731,7 +677,7 @@ def create_list(row):
         notes = ''
     ac = row['Associated conditions']
     dd = row['Differential diagnosis']
-    return [name, cd, br0, br1, br2, br3, br4, br5, br6, rm, rf, uf, ai, params, t, p, a, none, pat, u, n, i, ac, dd, notes]
+    return [name, cd, br0, br1, br2, br3, br4, br5, br6, rm, rf, uf, ai, params, t, p, a, pat, u, n, i, ac, dd, notes]
 
 
 def main():
