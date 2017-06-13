@@ -51,159 +51,87 @@ class SetParams:
     """Create list of params for output file"""
     def __init__(self, params_name, row):
         self.row = row
+        x = 10
+        y = 13
+        b = 18
+        c = 22
+        d = 31
+        e = 35
+        f = 40
+        g = 44
+        h = 46
+
+        i = 54
+        j = 57
+        j2 = 63
+        l = 69
+        m = 73
+        n = 76
+        o = 78
+        p = 88
+        q = 97
+
+
+        r = 99
+        s = 102
+        t = 106
+        u = 110
+        v = 113
+        w = 119
+        z = 120
+        z1 = 126
+        z2 = 130
+        z3 = 137
+        z4 = 139
+        z5 = 144
+
+
+        probabilities = ['Typical', 'Possible', 'Atypical', 'None', 'Pathogenomonic', 'Unrelated', 'Negative', 'Ignore']
+        short_notation = ['t', 'p', 'a', 'none', 'pat', 'u', 'n', 'i']
 
         # Mammography params
         self.mammo_params = {
             'Mass': {
                 'Shape': {
-                    'Typical': self.return_params(10, 13, 't',
-                                                  params_name.mass_shape),
-                    'Possible': self.return_params(10, 13, 'p',
-                                                   params_name.mass_shape),
-                    'Atypical': self.return_params(10, 13, 'a',
-                                                   params_name.mass_shape),
-                    'None': self.return_params(10, 13, 'none',
-                                                    params_name.mass_shape),
-                    'Pathogenomonic': self.return_params(10, 13, 'pat',
-                                                         params_name.mass_shape),
-                    'Unrelated': self.return_params(10, 13, 'u',
-                                                    params_name.mass_shape),
-                    'Negative': self.return_params(10, 13, 'n',
-                                                   params_name.mass_shape),
-                    'Ignore': self.return_params(10, 13, 'i',
-                                                 params_name.mass_shape),
-                },
+                    probabilities[k]: self.return_params(x, y, short_notation[k], params_name.mass_shape)
+                    for k in range(len(probabilities))
+                    },
                 'Margin': {
-                    'Typical': self.return_params(13, 18, 't',
-                                                  params_name.mammo_mass_margin),
-                    'Possible': self.return_params(13, 18, 'p',
-                                                   params_name.mammo_mass_margin),
-                    'Atypical': self.return_params(13, 18, 'a',
-                                                   params_name.mammo_mass_margin),
-                    'None': self.return_params(13, 18, 'none',
-                                                    params_name.mammo_mass_margin),
-                    'Pathogenomonic': self.return_params(13, 18, 'pat',
-                                                         params_name.mammo_mass_margin),
-                    'Unrelated': self.return_params(13, 18, 'u',
-                                                    params_name.mammo_mass_margin),
-                    'Negative': self.return_params(13, 18, 'n',
-                                                   params_name.mammo_mass_margin),
-                    'Ignore': self.return_params(13, 18, 'i',
-                                                 params_name.mammo_mass_margin),
-                },
+                    probabilities[k]: self.return_params(y, b, short_notation[k], params_name.mammo_mass_margin)
+                    for k in range(len(probabilities))
+                    },
                 'Density': {
-                    'Typical': self.return_params(18, 22, 't',
-                                                  params_name.mammo_mass_density),
-                    'Possible': self.return_params(18, 22, 'p',
-                                                   params_name.mammo_mass_density),
-                    'Atypical': self.return_params(18, 22, 'a',
-                                                   params_name.mammo_mass_density),
-                    'None': self.return_params(18, 22, 'none',
-                                                    params_name.mammo_mass_density),
-                    'Pathogenomonic': self.return_params(18, 22, 'pat',
-                                                         params_name.mammo_mass_density),
-                    'Unrelated': self.return_params(18, 22, 'u',
-                                                    params_name.mammo_mass_density),
-                    'Negative': self.return_params(18, 22, 'n',
-                                                   params_name.mammo_mass_density),
-                    'Ignore': self.return_params(18, 22, 'i',
-                                                 params_name.mammo_mass_density),
+                    probabilities[k]: self.return_params(b, c, short_notation[k], params_name.mammo_mass_density)
+                    for k in range(len(probabilities))
                 }
             },
             'Calcifications': {
                 'Typically benign': {
-                    'Typical': self.return_params(22, 31, 't',
-                                                  params_name.mammo_calcifications_typically_benign),
-                    'Possible': self.return_params(22, 31, 'p',
-                                                   params_name.mammo_calcifications_typically_benign),
-                    'Atypical': self.return_params(22, 31, 'a',
-                                                   params_name.mammo_calcifications_typically_benign),
-                    'None': self.return_params(22, 31, 'none',
-                                                    params_name.mammo_calcifications_typically_benign),
-                    'Pathogenomonic': self.return_params(22, 31, 'pat',
-                                                         params_name.mammo_calcifications_typically_benign),
-                    'Unrelated': self.return_params(22, 31, 'u',
-                                                    params_name.mammo_calcifications_typically_benign),
-                    'Negative': self.return_params(22, 31, 'n',
-                                                   params_name.mammo_calcifications_typically_benign),
-                    'Ignore': self.return_params(22, 31, 'i',
-                                                 params_name.mammo_calcifications_typically_benign),
+                    probabilities[k]: self.return_params(c, d, short_notation[k],
+                    params_name.mammo_calcifications_typically_benign)
+                    for k in range(len(probabilities))
                 },
                 'Suspicious morphology': {
-                    'Typical': self.return_params(31, 35, 't',
-                                                  params_name.mammo_calcifications_suspicious_morphology),
-                    'Possible': self.return_params(31, 35, 'p',
-                                                   params_name.mammo_calcifications_suspicious_morphology),
-                    'Atypical': self.return_params(31, 35, 'a',
-                                                   params_name.mammo_calcifications_suspicious_morphology),
-                    'None': self.return_params(31, 35, 'none',
-                                                    params_name.mammo_calcifications_suspicious_morphology),
-                    'Pathogenomonic': self.return_params(31, 35, 'pat',
-                                                         params_name.mammo_calcifications_suspicious_morphology),
-                    'Unrelated': self.return_params(31, 35, 'u',
-                                                    params_name.mammo_calcifications_suspicious_morphology),
-                    'Negative': self.return_params(31, 35, 'n',
-                                                   params_name.mammo_calcifications_suspicious_morphology),
-                    'Ignore': self.return_params(31, 35, 'i',
-                                                 params_name.mammo_calcifications_suspicious_morphology),
+                    probabilities[k]: self.return_params(d, e, short_notation[k],
+                    params_name.mammo_calcifications_suspicious_morphology)
+                    for k in range(len(probabilities))
                 },
                 'Distribution': {
-                    'Typical': self.return_params(35, 40, 't',
-                                                  params_name.mammo_calcifications_suspicious_distribution),
-                    'Possible': self.return_params(35, 40, 'p',
-                                                   params_name.mammo_calcifications_suspicious_distribution),
-                    'Atypical': self.return_params(35, 40, 'a',
-                                                   params_name.mammo_calcifications_suspicious_distribution),
-                    'None': self.return_params(35, 40, 'none',
-                                                    params_name.mammo_calcifications_suspicious_distribution),
-                    'Pathogenomonic': self.return_params(35, 40, 'pat',
-                                                         params_name.mammo_calcifications_suspicious_distribution),
-                    'Unrelated': self.return_params(35, 40, 'u',
-                                                    params_name.mammo_calcifications_suspicious_distribution),
-                    'Negative': self.return_params(35, 40, 'n',
-                                                   params_name.mammo_calcifications_suspicious_distribution),
-                    'Ignore': self.return_params(35, 40, 'i',
-                                                 params_name.mammo_calcifications_suspicious_distribution),
+                    probabilities[k]: self.return_params(e, f, short_notation[k],
+                    params_name.mammo_calcifications_suspicious_distribution)
+                    for k in range(len(probabilities))
                 }
             },
             'Assymetry': {
                 'Assymetry': {
-                    'Typical': self.return_params(40, 44, 't',
-                                                  params_name.mammo_asymmetries),
-                    'Possible': self.return_params(40, 44, 'p',
-                                                   params_name.mammo_asymmetries),
-                    'Atypical': self.return_params(40, 44, 'a',
-                                                   params_name.mammo_asymmetries),
-                    'None': self.return_params(40, 44, 'none',
-                                                    params_name.mammo_asymmetries),
-                    'Pathogenomonic': self.return_params(40, 44, 'pat',
-                                                         params_name.mammo_asymmetries),
-                    'Unrelated': self.return_params(40, 44, 'u',
-                                                    params_name.mammo_asymmetries),
-                    'Negative': self.return_params(40, 44, 'n',
-                                                   params_name.mammo_asymmetries),
-                    'Ignore': self.return_params(40, 44, 'i',
-                                                 params_name.mammo_asymmetries),
+                    probabilities[k]: self.return_params(f, g, short_notation[k], params_name.mammo_asymmetries)
+                    for k in range(len(probabilities))
                 }
             },
             'Lymph nodes': {
                 'Lymph nodes': {
-                    'Typical': self.return_params(44, 46, 't',
-                                                  params_name.lymph_nodes),
-                    'Possible': self.return_params(44, 46, 'p',
-                                                   params_name.lymph_nodes),
-                    'Atypical': self.return_params(44, 46, 'a',
-                                                   params_name.lymph_nodes),
-                    'None': self.return_params(44, 46, 'none',
-                                                    params_name.lymph_nodes),
-                    'Pathogenomonic': self.return_params(44, 46, 'pat',
-                                                         params_name.lymph_nodes),
-                    'Unrelated': self.return_params(44, 46, 'u',
-                                                    params_name.lymph_nodes),
-                    'Negative': self.return_params(44, 46, 'n',
-                                                   params_name.lymph_nodes),
-                    'Ignore': self.return_params(44, 46, 'i',
-                                                 params_name.lymph_nodes),
+                    probabilities[k]: self.return_params(g, h, short_notation[k], params_name.lymph_nodes)
+                    for k in range(len(probabilities))
                 }
             },
         }
@@ -212,334 +140,98 @@ class SetParams:
         self.us_params = {
             'Mass': {
                 'Shape': {
-                    'Typical': self.return_params(54, 57, 't',
-                                                  params_name.mass_shape),
-                    'Possible': self.return_params(54, 57, 'p',
-                                                   params_name.mass_shape),
-                    'Atypical': self.return_params(54, 57, 'a',
-                                                   params_name.mass_shape),
-                    'None': self.return_params(54, 57, 'none',
-                                                    params_name.mass_shape),
-                    'Pathogenomonic': self.return_params(54, 57, 'pat',
-                                                         params_name.mass_shape),
-                    'Unrelated': self.return_params(54, 57, 'u',
-                                                    params_name.mass_shape),
-                    'Negative': self.return_params(54, 57, 'n',
-                                                   params_name.mass_shape),
-                    'Ignore': self.return_params(54, 57, 'i',
-                                                 params_name.mass_shape),
+                    probabilities[k]: self.return_params(i, j, short_notation[k], params_name.mass_shape)
+                    for k in range(len(probabilities))
                 },
                 'Margin': {
-                    'Typical': self.return_params(57, 63, 't',
-                                                  params_name.us_mass_margin),
-                    'Possible': self.return_params(57, 63, 'p',
-                                                   params_name.us_mass_margin),
-                    'Atypical': self.return_params(57, 63, 'a',
-                                                   params_name.us_mass_margin),
-                    'None': self.return_params(57, 63, 'none',
-                                                    params_name.us_mass_margin),
-                    'Pathogenomonic': self.return_params(57, 63, 'pat',
-                                                         params_name.us_mass_margin),
-                    'Unrelated': self.return_params(57, 63, 'u',
-                                                    params_name.us_mass_margin),
-                    'Negative': self.return_params(57, 63, 'n',
-                                                   params_name.us_mass_margin),
-                    'Ignore': self.return_params(57, 63, 'i',
-                                                 params_name.us_mass_margin),
+                    probabilities[k]: self.return_params(j, j2, short_notation[k], params_name.us_mass_margin)
+                    for k in range(len(probabilities))
                 },
-                'Echo': {
-                    'Typical': self.return_params(63, 69, 't',
-                                                  params_name.us_mass_echo_pattern),
-                    'Possible': self.return_params(63, 69, 'p',
-                                                   params_name.us_mass_echo_pattern),
-                    'Atypical': self.return_params(63, 69, 'a',
-                                                   params_name.us_mass_echo_pattern),
-                    'None': self.return_params(63, 69, 'none',
-                                                    params_name.us_mass_echo_pattern),
-                    'Pathogenomonic': self.return_params(63, 69, 'pat',
-                                                         params_name.us_mass_echo_pattern),
-                    'Unrelated': self.return_params(63, 69, 'u',
-                                                    params_name.us_mass_echo_pattern),
-                    'Negative': self.return_params(63, 69, 'n',
-                                                   params_name.us_mass_echo_pattern),
-                    'Ignore': self.return_params(63, 69, 'i',
-                                                 params_name.us_mass_echo_pattern),
+                'Echo': { #63, 69
+                    probabilities[k]: self.return_params(j2, l, short_notation[k], params_name.us_mass_echo_pattern)
+                    for k in range(len(probabilities))
                 },
-                'Posterior': {
-                    'Typical': self.return_params(69, 73, 't',
-                                                  params_name.us_mass_posterior_features),
-                    'Possible': self.return_params(69, 73, 'p',
-                                                   params_name.us_mass_posterior_features),
-                    'Atypical': self.return_params(69, 73, 'a',
-                                                   params_name.us_mass_posterior_features),
-                    'None': self.return_params(69, 73, 'none',
-                                                    params_name.us_mass_posterior_features),
-                    'Pathogenomonic': self.return_params(69, 73, 'pat',
-                                                         params_name.us_mass_posterior_features),
-                    'Unrelated': self.return_params(69, 73, 'u',
-                                                    params_name.us_mass_posterior_features),
-                    'Negative': self.return_params(69, 73, 'n',
-                                                   params_name.us_mass_posterior_features),
-                    'Ignore': self.return_params(69, 73, 'i',
-                                                 params_name.us_mass_posterior_features),
+                'Posterior': { #69, 73
+                    probabilities[k]: self.return_params(l, m, short_notation[k], params_name.us_mass_posterior_features)
+                    for k in range(len(probabilities))
                 }
             },
             'Calcifications US': {
-                'Calcifications US': {
-                    'Typical': self.return_params(73, 76, 't',
-                                                  params_name.us_calcifications),
-                    'Possible': self.return_params(73, 76, 'p',
-                                                   params_name.us_calcifications),
-                    'Atypical': self.return_params(73, 76, 'a',
-                                                   params_name.us_calcifications),
-                    'None': self.return_params(73, 76, 'none',
-                                                    params_name.us_calcifications),
-                    'Pathogenomonic': self.return_params(73, 76, 'pat',
-                                                         params_name.us_calcifications),
-                    'Unrelated': self.return_params(73, 76, 'u',
-                                                    params_name.us_calcifications),
-                    'Negative': self.return_params(73, 76, 'n',
-                                                   params_name.us_calcifications),
-                    'Ignore': self.return_params(73, 76, 'i',
-                                                 params_name.us_calcifications),
+                'Calcifications US': { #73, 76
+                    probabilities[k]: self.return_params(m, n, short_notation[k], params_name.us_calcifications)
+                    for k in range(len(probabilities))
                 }
             },
+
             'Lymph nodes': {
-                'Lymph nodes': {
-                    'Typical': self.return_params(76, 78, 't',
-                                                  params_name.lymph_nodes),
-                    'Possible': self.return_params(76, 78, 'p',
-                                                   params_name.lymph_nodes),
-                    'Atypical': self.return_params(76, 78, 'a',
-                                                   params_name.lymph_nodes),
-                    'None': self.return_params(76, 78, 'none',
-                                                    params_name.lymph_nodes),
-                    'Pathogenomonic': self.return_params(76, 78, 'pat',
-                                                         params_name.lymph_nodes),
-                    'Unrelated': self.return_params(76, 78, 'u',
-                                                    params_name.lymph_nodes),
-                    'Negative': self.return_params(76, 78, 'n',
-                                                   params_name.lymph_nodes),
-                    'Ignore': self.return_params(76, 78, 'i',
-                                                 params_name.lymph_nodes),
+                'Lymph nodes': { #76, 78
+                    probabilities[k]: self.return_params(n, o, short_notation[k], params_name.lymph_nodes)
+                    for k in range(len(probabilities))
                 }
             },
             'Special cases': {
-                'Special cases': {
-                    'Typical': self.return_params(88, 97, 't',
-                                                  params_name.us_special_cases),
-                    'Possible': self.return_params(88, 97, 'p',
-                                                   params_name.us_special_cases),
-                    'Atypical': self.return_params(88, 97, 'a',
-                                                   params_name.us_special_cases),
-                    'None': self.return_params(88, 97, 'none',
-                                                    params_name.us_special_cases),
-                    'Pathogenomonic': self.return_params(88, 97, 'pat',
-                                                         params_name.us_special_cases),
-                    'Unrelated': self.return_params(88, 97, 'u',
-                                                    params_name.us_special_cases),
-                    'Negative': self.return_params(88, 97, 'n',
-                                                   params_name.us_special_cases),
-                    'Ignore': self.return_params(88, 97, 'i',
-                                                 params_name.us_special_cases),
+                'Special cases': { #88, 97
+                    probabilities[k]: self.return_params(p, q, short_notation[k], params_name.us_special_cases)
+                    for k in range(len(probabilities))
                 }
             }
         }
 
+
         # MRI params
         self.mri_params = {
             'Mass': {
-                'Shape': {
-                    'Typical': self.return_params(99, 102, 't',
-                                                  params_name.mass_shape),
-                    'Possible': self.return_params(99, 102, 'p',
-                                                   params_name.mass_shape),
-                    'Atypical': self.return_params(99, 102, 'a',
-                                                   params_name.mass_shape),
-                    'None': self.return_params(99, 102, 'none',
-                                                    params_name.mass_shape),
-                    'Pathogenomonic': self.return_params(99, 102, 'pat',
-                                                         params_name.mass_shape),
-                    'Unrelated': self.return_params(99, 102, 'u',
-                                                    params_name.mass_shape),
-                    'Negative': self.return_params(99, 102, 'n',
-                                                   params_name.mass_shape),
-                    'Ignore': self.return_params(99, 102, 'i',
-                                                 params_name.mass_shape),
+                'Shape': { #99, 102
+                    probabilities[k]: self.return_params(r, s, short_notation[k], params_name.mass_shape)
+                    for k in range(len(probabilities))
                 },
-                'Margin': {
-                    'Typical': self.return_params(102, 106, 't',
-                                                  params_name.mri_mass_margin),
-                    'Possible': self.return_params(102, 106, 'p',
-                                                   params_name.mri_mass_margin),
-                    'Atypical': self.return_params(102, 106, 'a',
-                                                   params_name.mri_mass_margin),
-                    'None': self.return_params(102, 106, 'none',
-                                                    params_name.mri_mass_margin),
-                    'Pathogenomonic': self.return_params(102, 106, 'pat',
-                                                         params_name.mri_mass_margin),
-                    'Unrelated': self.return_params(102, 106, 'u',
-                                                    params_name.mri_mass_margin),
-                    'Negative': self.return_params(102, 106, 'n',
-                                                   params_name.mri_mass_margin),
-                    'Ignore': self.return_params(102, 106, 'i',
-                                                 params_name.mri_mass_margin),
+                'Margin': { #102, 106
+                    probabilities[k]: self.return_params(s, t, short_notation[k], params_name.mri_mass_margin)
+                    for k in range(len(probabilities))
                 },
-                'Internal enhacement': {
-                    'Typical': self.return_params(106, 110, 't',
-                                                  params_name.mri_mass_internal_enhacement),
-                    'Possible': self.return_params(106, 110, 'p',
-                                                   params_name.mri_mass_internal_enhacement),
-                    'Atypical': self.return_params(106, 110, 'a',
-                                                   params_name.mri_mass_internal_enhacement),
-                    'None': self.return_params(106, 110, 'none',
-                                                    params_name.mri_mass_internal_enhacement),
-                    'Pathogenomonic': self.return_params(106, 110, 'pat',
-                                                         params_name.mri_mass_internal_enhacement),
-                    'Unrelated': self.return_params(106, 110, 'u',
-                                                    params_name.mri_mass_internal_enhacement),
-                    'Negative': self.return_params(106, 110, 'n',
-                                                   params_name.mri_mass_internal_enhacement),
-                    'Ignore': self.return_params(106, 110, 'i',
-                                                 params_name.mri_mass_internal_enhacement),
+                'Internal enhacement': { #106, 110
+                    probabilities[k]: self.return_params(t, u, short_notation[k], params_name.mri_mass_internal_enhacement)
+                    for k in range(len(probabilities))
                 }
             },
             'MRI features': {
-                'MRI features': {
-                    'Typical': self.return_params(110, 113, 't',
-                                                  params_name.mri_features),
-                    'Possible': self.return_params(110, 113, 'p',
-                                                   params_name.mri_features),
-                    'Atypical': self.return_params(110, 113, 'a',
-                                                   params_name.mri_features),
-                    'None': self.return_params(110, 113, 'none',
-                                                    params_name.mri_features),
-                    'Pathogenomonic': self.return_params(110, 113, 'pat',
-                                                         params_name.mri_features),
-                    'Unrelated': self.return_params(110, 113, 'u',
-                                                    params_name.mri_features),
-                    'Negative': self.return_params(110, 113, 'n',
-                                                   params_name.mri_features),
-                    'Ignore': self.return_params(110, 113, 'i',
-                                                 params_name.mri_features),
+                'MRI features': { #110, 113
+                    probabilities[k]: self.return_params(u, v, short_notation[k], params_name.mri_features)
+                    for k in range(len(probabilities))
                 }
             },
             'Kinetic curve assessment': {
-                'Kinetic curve assessment': {
-                    'Typical': self.return_params(113, 119, 't',
-                                                  params_name.mri_kinetic_curve_assessment),
-                    'Possible': self.return_params(113, 119, 'p',
-                                                   params_name.mri_kinetic_curve_assessment),
-                    'Atypical': self.return_params(113, 119, 'a',
-                                                   params_name.mri_kinetic_curve_assessment),
-                    'None': self.return_params(113, 119, 'none',
-                                                    params_name.mri_kinetic_curve_assessment),
-                    'Pathogenomonic': self.return_params(113, 119, 'pat',
-                                                         params_name.mri_kinetic_curve_assessment),
-                    'Unrelated': self.return_params(113, 119, 'u',
-                                                    params_name.mri_kinetic_curve_assessment),
-                    'Negative': self.return_params(113, 119, 'n',
-                                                   params_name.mri_kinetic_curve_assessment),
-                    'Ignore': self.return_params(113, 119, 'i',
-                                                 params_name.mri_kinetic_curve_assessment),
+                'Kinetic curve assessment': { #113, 119
+                    probabilities[k]: self.return_params(v, w, short_notation[k], params_name.mri_kinetic_curve_assessment)
+                    for k in range(len(probabilities))
                 }
             },
             'Non-mass enhancement (NME)': {
-                'Distribution': {
-                    'Typical': self.return_params(120, 126, 't',
-                                                  params_name.mri_nme_distribution),
-                    'Possible': self.return_params(120, 126, 'p',
-                                                   params_name.mri_nme_distribution),
-                    'Atypical': self.return_params(120, 126, 'a',
-                                                   params_name.mri_nme_distribution),
-                    'None': self.return_params(120, 126, 'none',
-                                                    params_name.mri_nme_distribution),
-                    'Pathogenomonic': self.return_params(120, 126, 'pat',
-                                                         params_name.mri_nme_distribution),
-                    'Unrelated': self.return_params(120, 126, 'u',
-                                                    params_name.mri_nme_distribution),
-                    'Negative': self.return_params(120, 126, 'n',
-                                                   params_name.mri_nme_distribution),
-                    'Ignore': self.return_params(120, 126, 'i',
-                                                 params_name.mri_nme_distribution),
+                'Distribution': { #120, 126
+                    probabilities[k]: self.return_params(z, z1, short_notation[k], params_name.mri_nme_distribution)
+                    for k in range(len(probabilities))
                 },
-                'Internal enhancement patterns': {
-                    'Typical': self.return_params(126, 130, 't',
-                                                  params_name.mri_nme_iep),
-                    'Possible': self.return_params(126, 130, 'p',
-                                                   params_name.mri_nme_iep),
-                    'Atypical': self.return_params(126, 130, 'a',
-                                                   params_name.mri_nme_iep),
-                    'None': self.return_params(126, 130, 'none',
-                                                    params_name.mri_nme_iep),
-                    'Pathogenomonic': self.return_params(126, 130, 'pat',
-                                                         params_name.mri_nme_iep),
-                    'Unrelated': self.return_params(126, 130, 'u',
-                                                    params_name.mri_nme_iep),
-                    'Negative': self.return_params(126, 130, 'n',
-                                                   params_name.mri_nme_iep),
-                    'Ignore': self.return_params(126, 130, 'i',
-                                                 params_name.mri_nme_iep),
+                'Internal enhancement patterns': { #126, 130
+                    probabilities[k]: self.return_params(z1, z2, short_notation[k], params_name.mri_nme_iep)
+                    for k in range(len(probabilities))
                 }
             },
             'Non-enhancing findings': {
-                'Non-enhancing findings': {
-                    'Typical': self.return_params(130, 137, 't',
-                                                  params_name.mri_nef),
-                    'Possible': self.return_params(130, 137, 'p',
-                                                   params_name.mri_nef),
-                    'Atypical': self.return_params(130, 137, 'a',
-                                                   params_name.mri_nef),
-                    'None': self.return_params(130, 137, 'none',
-                                                    params_name.mri_nef),
-                    'Pathogenomonic': self.return_params(130, 137, 'pat',
-                                                         params_name.mri_nef),
-                    'Unrelated': self.return_params(130, 137, 'u',
-                                                    params_name.mri_nef),
-                    'Negative': self.return_params(130, 137, 'n',
-                                                   params_name.mri_nef),
-                    'Ignore': self.return_params(130, 137, 'i',
-                                                 params_name.mri_nef),
+                'Non-enhancing findings': { #130, 137
+                    probabilities[k]: self.return_params(z2, z3, short_notation[k], params_name.mri_nef)
+                    for k in range(len(probabilities))
                 }
             },
             'Lymph nodes': {
-                'Lymph nodes': {
-                    'Typical': self.return_params(137, 139, 't',
-                                                  params_name.lymph_nodes),
-                    'Possible': self.return_params(137, 139, 'p',
-                                                   params_name.lymph_nodes),
-                    'Atypical': self.return_params(137, 139, 'a',
-                                                   params_name.lymph_nodes),
-                    'None': self.return_params(137, 139, 'none',
-                                                    params_name.lymph_nodes),
-                    'Pathogenomonic': self.return_params(137, 139, 'pat',
-                                                         params_name.lymph_nodes),
-                    'Unrelated': self.return_params(137, 139, 'u',
-                                                    params_name.lymph_nodes),
-                    'Negative': self.return_params(137, 139, 'n',
-                                                   params_name.lymph_nodes),
-                    'Ignore': self.return_params(137, 139, 'i',
-                                                 params_name.lymph_nodes),
+                'Lymph nodes': { #137, 139
+                    probabilities[k]: self.return_params(z3, z4, short_notation[k], params_name.lymph_nodes)
+                    for k in range(len(probabilities))
                 }
             },
             'Fat containing lesions': {
-                'Fat containing lesions': {
-                    'Typical': self.return_params(139, 144, 't',
-                                                  params_name.mri_fcl),
-                    'Possible': self.return_params(139, 144, 'p',
-                                                   params_name.mri_fcl),
-                    'Atypical': self.return_params(139, 144, 'a',
-                                                   params_name.mri_fcl),
-                    'None': self.return_params(139, 144, 'none',
-                                                    params_name.mri_fcl),
-                    'Pathogenomonic': self.return_params(139, 144, 'pat',
-                                                         params_name.mri_fcl),
-                    'Unrelated': self.return_params(139, 144, 'u',
-                                                    params_name.mri_fcl),
-                    'Negative': self.return_params(139, 144, 'n',
-                                                   params_name.mri_fcl),
-                    'Ignore': self.return_params(139, 144, 'i',
-                                                 params_name.mri_fcl),
+                'Fat containing lesions': { #139, 144
+                    probabilities[k]: self.return_params(z4, z5, short_notation[k], params_name.mri_fcl)
+                    for k in range(len(probabilities))
                 }
             },
         }
