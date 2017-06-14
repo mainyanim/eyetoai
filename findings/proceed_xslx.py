@@ -278,7 +278,7 @@ def get_dictionary(file_data):
         rel_modalities = [x.strip() for x in row[4].split(',') if ch_none(x)]
         unique_finding = ', '.join([x for x in row[163:173] if ch_none(x)])
         params_list = SetParams(params, row)
-        dict_birad = {'Typical': 50, 'Possible': 30, 'None':1, 'Ignore': 'Ignore'}
+        dict_birad = {'Typical': 0.5, 'Possible': 0.3, 'None':0.04, 'Ignore': 0.04}
         d = {'Name': row[1], 'Condition description': row[2],
              'Relevant modalities': rel_modalities,
              'Unique findings': unique_finding,
@@ -356,7 +356,7 @@ def save_output(output_list):
     ws1.title = 'Sheet1'
     # Create title for columns
     columns_titles = ['Name', 'Condition description', 'birad[0]','birad[1]','birad[2]','birad[3]','birad[4]','birad[5]','birad[6]','Relevant modalities',
-                      'Relevant findings', 'Unique findings','Additional info',
+                    'Relevant findings', 'Unique findings','Additional info',
                       'Parameters', 50, 30, 1, 'General',
                       'Pathogenomonic', 'Unrelated', 'Negative',
                       'Ignore', 'Associated conditions', 'Differential diagnosis', 'Notes']
