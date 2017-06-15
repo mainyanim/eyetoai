@@ -9,6 +9,14 @@ A = np.array([[i.value for i in j] for j in ws['C1':'I1']]).ravel()
 B = np.array([[i.value for i in j] for j in ws['C2':'I2']]).ravel()
 d = list(B)
 c = list(A)
+
+def sum(items):
+    sum_n = 0
+    for x in items:
+        sum_n += x
+    return sum_n
+print(sum(d))
+
 print(c)
 print(d)
 
