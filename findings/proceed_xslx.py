@@ -278,7 +278,7 @@ def get_dictionary(file_data):
         rel_modalities = [x.strip() for x in row[4].split(',') if ch_none(x)]
         unique_finding = ', '.join([x for x in row[163:173] if ch_none(x)])
         params_list = SetParams(params, row)
-        dict_birad = {'Typical': 0.5, 'Possible': 0.3, 'None':0.04, 'Ignore': 0.04}
+        dict_birad = {'Typical': 5, 'Possible': 3, 'None': 2, 'Ignore': 1}
         d = {'Name': row[1], 'Condition description': row[2],
              'Relevant modalities': rel_modalities,
              'Unique findings': unique_finding,

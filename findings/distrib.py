@@ -7,17 +7,14 @@ print(wb.sheetnames)
 ws = wb.get_sheet_by_name('Sheet1')
 A = np.array([[i.value for i in j] for j in ws['C1':'I1']]).ravel()
 B = np.array([[i.value for i in j] for j in ws['C2':'I2']]).ravel()
-d = list(B)
-c = list(A)
+d = list(A)
+c = list(B)
 
-def sum(items):
+def probval(items):
     sum_n = 0
     for x in items:
         sum_n += x
-    return sum_n
-print(sum(d))
+    problist = [x/sum_n for x in items]
+    return(problist)
 
-print(c)
-print(d)
-
-print(np.random.choice(c, 100, p=d))
+print(probval(c))
