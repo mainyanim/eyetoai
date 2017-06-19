@@ -1,0 +1,74 @@
+import pandas as pd
+import numpy as np
+import random
+import json
+from openpyxl import load_workbook
+from openpyxl import Workbook
+import numpy as np
+
+output_df = pd.read_excel("output.xlsx")
+wd = output_df[:8]
+wb = load_workbook('output.xlsx')
+print(wb.sheetnames)
+ws = wb.get_sheet_by_name('Sheet1')
+A = np.array([[i.value for i in j] for j in ws['C1':'I1']]).ravel()
+B = np.array([[i.value for i in j] for j in ws['C2':'I2']]).ravel()
+C = np.array([[i.value for i in j] for j in ws['O1':'Q1']]).ravel()
+C1 = list(C)
+d = list(A)
+c = list(B)
+
+
+def probval(items):
+    sum_n = 0
+    for x in items:
+        sum_n += x
+    problist = [x/sum_n for x in items]
+    return(problist)
+
+print(probval(c))
+print(probval(C1))
+
+t = wd[50].values.tolist()
+pos = wd[30].values.tolist()
+n = wd[1].values.tolist()
+
+np.random.choice((t, pos, n), 5, p=C1)
+
+
+
+"select mammography"
+name = wd['Name'].values.tolist()[0:1]
+"create list of values and slice empty entities from list"
+cd = wd['Condition description'].values.tolist()[0:1]
+f_list = wd['Relevant findings']
+"random finding"
+f = random.choice(f_list)
+un_list = wd['Unique findings'].values.tolist()
+un = random.choice(un_list)
+p_list = wd['Parameters'].values.tolist()
+p = random.choice(p_list)
+g_list = wd['General'].values.tolist()
+g = random.choice(g_list)
+u_list = wd['Unrelated'].values.tolist()
+u = random.choice(u_list)
+i_list = wd['Ignore'].values.tolist()
+i = random.choice(i_list)
+a_list = wd['Associated conditions'].values.tolist()
+a = random.choice(a_list)
+dd_list = wd['Differential diagnosis'].values.tolist()
+dd = random.choice(dd_list)
+nt_list = wd['Notes'].values.tolist()
+nt = random.choice(nt_list)
+
+params = ["name", "condition description", "relevant finding", "unique finding", "parameters", "general", "unrelated", "ignore", "associated conditions", "notes"]
+keys = [name, cd, f, un, p, g, u, i, a, dd, nt]
+
+rep = {}
+for i in range(len(params)):
+    rep[params[i]] = keys[i]
+    
+rep = json.dumps(rep)
+print(rep)
+
+wd
