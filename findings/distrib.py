@@ -40,7 +40,8 @@ def normalize(items):
 
 
 
-for i in range(54):
+
+for i in range(10):
     br_p = normalize(b)
     a = list(A)
     br = np.random.choice(a, 1, br_p)
@@ -140,7 +141,7 @@ for i in range(54):
             ie = np.array([[i.value for i in j] for j in ws['O19':'Q19']]).ravel()
             ie = list(ie)
             int_e = np.random.choice(ie, 1, p)
-            print(name, br, r, f, shape, mass, int_e)
+            print(name, br, r, f, shape, margin, int_e)
         elif f == 'MRI features':
             p = normalize(c)
             m_f = np.array([[i.value for i in j] for j in ws['O20':'Q20']]).ravel()
@@ -207,5 +208,105 @@ for i in range(len(params)):
 
 rep = json.dumps(rep)
 #print(rep)
+
+##### information for the entire sheet ####
+num_rows_in_cond = 25 #"height" of each condition
+#width could be different for each condition - so not writing down
+starting_column_for_typical = 15 # for all conditions, Typical, possible, none columns, start with typical at col 15
+# possible at 15+1, and none at 15+2
+first_row = 1 #this is the row with the numbers for typical, possible and none
+
+def determine_width(starting_column):
+    # traverse first_row to determine width
+    width = 0
+    item = df.iloc[first_row, starting_column_for_typical] #our first value
+    while isinstance(item, float) and (item!=0):
+        width = width + 1
+        item = df.iloc[first_row, starting_column_for_typical + width]
+        # each time incrementing a counter (count_numbers or width)
+    #for example, width should equal 3 at this point
+    return width;
+
+
+####print(get_names_and_probs(2,3)) ->> [a,p],[['Oval', 'Round', 'Irregular']
+
+
+# run this for each ROW in each condition (aka run function 25 times for each condition)
+# row =  number of starting row for condition
+# width = number of rows with numbers at top
+#returns: "a and p arrays" for reach row in condition - aka 25 a arrays and 25 p arrays
+def get_names_and_probs(row, width):
+
+
+    #debugger
+    #from IPython.core.debugger import Tracer; Tracer()()
+
+
+    first_row = row
+    first_col = starting_column_for_typical
+
+
+    # this array_to_normalize will store all the values to normalize
+    array_to_normalize = [] #the "a" array
+    p_values = [] #the "p" array
+
+
+    #for each colmn from the first row until the last row (see "depth" of disease above
+    current_row = first_row
+    current_col = first_col #set the current_col to first_col to start
+    i = 0
+    for i in range(width):
+        #determine if cell has text, or is empty
+        if isinstance(df.iloc[current_row, current_col + i], float): #if cell is empty, python calls it a float
+            i = i+1
+            continue
+        #if we get to this point, there is text in the cell
+        temp_array = df.iloc[current_row, current_col + i].replace(" ","").split(",") #look at a cell
+        j = 0
+        for j in range(len(temp_array)):
+            p_values.append(df.iloc[1,current_col + i])
+            j = j+1
+        array_to_normalize.append(temp_array)
+        i = i+1
+        #array_to_normalize looks like [["oval","rectangular], "irregular"]
+        #p_values looks like [50, 50 , 1]
+
+    #flatten array_to_normalize
+    #https://stackoverflow.com/questions/952914/making-a-flat-list-out-of-list-of-lists-in-python
+    flat_list = [item for sublist in array_to_normalize for item in sublist]
+    #for sublist in array_to_normalize:
+    #    for item in sublist:
+    #        flat_list.append(item)
+    array_to_normalize = flat_list
+    #now array to normalize should look like ['Oval', 'Round', 'Irregular']
+
+    #a = ['Oval', 'Round', 'Irregular'] #for each row
+    #p = [50, 50, 1] #one for the entire sheeet
+
+    print("p_values:")
+    print(p_values)
+    #convert p_values from array of strings to array of ints
+    #https://stackoverflow.com/questions/5306079/python-how-do-i-convert-an-array-of-strings-to-an-array-of-numbers
+    #p_values = map(int, p_values)
+    #p_values = [int(numeric_string) for numeric_string in p_values]
+
+    #normalize p_values / "p array"
+    normalize(p_values)
+    return array_to_normalize, p_values
+# ['Oval', 'Round', 'Irregular'] , [50, 50, 1]
+
+
+#row = starting row of condition
+#return array of arrays for condition
+# pri[[a,p],[['Oval', 'Round', 'Irregular'],[50, 50, 1]],...25 times]
+def cond_calculate(row):
+    cond_big_array[num_rows_in_cond]
+    return cond_big_array
+my_width = determine_width(starting_column_for_typical) #my_width should equal 3
+get_names_and_probs(2, my_width) #2 represents the 2nd row, aka, first row of Fibroadenoma
+
+
+
+
 
 #wd
