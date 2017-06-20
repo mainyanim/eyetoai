@@ -7,7 +7,7 @@ from openpyxl import Workbook
 import numpy as np
 
 #read excel
-df = pd.read_excel("output.xlsx")[0:25]
+df = pd.read_excel("output.xlsx")
 
 #read Condition Name into 1D-array
 name_arr = df.Name.unique()
@@ -16,7 +16,7 @@ name_arr = list(name_arr)
 
 #Choose Params for disease
 
-wb = load_workbook('output.xlsx') #Define workbook
+wb = load_workbook('output.xlsx')
 ws = wb.get_sheet_by_name('Sheet1') #Define worksheet
 
 A = np.array([[i.value for i in j] for j in ws['C1':'I1']]).ravel() #Read BiRads into list
@@ -198,87 +198,31 @@ dd = random.choice(dd_list)
 nt_list = df['Notes'].values.tolist()
 nt = random.choice(nt_list)
 
-"""
-params = ["condition description", "relevant finding", "unique finding", "parameters", "general", "unrelated", "ignore", "associated conditions", "notes"]
-keys = [cd, f, un, p, g, u, i, a, dd, nt]
-
-rep = {}
-for i in range(len(params)):
-
-    rep[params[i]] = keys[i]
-
-rep = json.dumps(rep)
-#print(rep) """
-"""
-def get_names_and_probs(row, col):
-    first_row = row
-    first_col = col
-    array_to_normalize = [] #the "a" array
-    p_values = [] #the "p" array
-    i = 0
-    for i in range(3):
-
-        #determine if cell has text, or is empty
-        if isinstance(df.iloc[first_row, first_col + i], float): #if cell is empty, python calls it a float
-            i = i+1
-            continue
-        temp_array = df.iloc[first_row, first_col + i].replace(" ","").split(",") #look at a cell
-        j = 0
-        for j in range(len(temp_array)):
-            p_values.append(df.iloc[0,first_col + i])
-            j = j+1
-        array_to_normalize.append(temp_array)
-        i = i+1
-        #array_to_normalize looks like [["oval","rectangular], "irregular"]
-        #p_values looks like [50, 50 , 1]
-
-    #flatten array_to_normalize
-    #https://stackoverflow.com/questions/952914/making-a-flat-list-out-of-list-of-lists-in-python
-    flat_list = [item for sublist in array_to_normalize for item in sublist]
-    #for sublist in array_to_normalize:
-    #    for item in sublist:
-    #        flat_list.append(item)
-    array_to_normalize = flat_list
-    print(array_to_normalize)
-
-    #now array to normalize should look like ['Oval', 'Round', 'Irregular']
-
-    #a = ['Oval', 'Round', 'Irregular'] #for each row
-    #p = [50, 50, 1] #one for the entire sheeet
-
-    #convert p_values from array of strings to array of ints
-    #https://stackoverflow.com/questions/5306079/python-how-do-i-convert-an-array-of-strings-to-an-array-of-numbers
-    #p_values = map(int, p_values)
-    #p_values = [int(numeric_string) for numeric_string in p_values]
-
-    #normalize p_values / "p array"
-    normalize(p_values)
-    return array_to_normalize, p_values
-# ['Oval', 'Round', 'Irregular'] , [50, 50, 1]
-get_names_and_probs(1, 15)
-
-
-
-
-
-#row = starting row of condition
-#return array of arrays for condition
-# pri[[a,p],[['Oval', 'Round', 'Irregular'],[50, 50, 1]],...25 times] """
-
 #define values check
 import math
-
-def check_celval(row, col, width):
+#define values check and append to arr
+def check_and_append(row, col, width, start, stop):
     val_arr = []
+    prob_head = list(df)[start:stop]
+    prob_arr = []
     for i in range(width):
         value_temp = df.iloc[row, col]
         if (isinstance(value_temp, float)) == False:
             value = value_temp.replace(" ","").split(",")
+            k = 0
+            for k in range(len(value)):
+                prob_arr.append(prob_head[i])
+                k = k + 1
             for i in range(len(value)):
                 val_arr.append(value[i])
             else:
+                k = k + 1
                 pass
         col = col+1
     print(val_arr)
+    print(prob_arr)
+    print(normalize(prob_arr))
 
-check_celval(1, 14, 3)
+#define probability array
+
+check_and_append(0, 14, 3, 14, 17)
