@@ -39,146 +39,146 @@ def normalize(items):
     return(problist)
 
 
-
-
-for i in range(10):
-    br_p = normalize(b)
-    a = list(A)
-    br = np.random.choice(a, 1, br_p)
-    name = df['Name'].values.tolist()[0:1]
-    "create list of values and slice empty entities from list"
-    cd = df['Condition description'].values.tolist()
-    rm = df['Relevant modalities'].values.tolist()
-    r = random.choice(rm)
-    #mammo params
-    if r == 'Mammography':
-        f_list = df['Relevant findings'].values.tolist()[0:9]
-        "random finding"
-        f = random.choice(f_list)
-        if f == 'Mass':
-            p = normalize(c)
-            s = np.array([[i.value for i in j] for j in ws['O2':'Q2']]).ravel()
-            s = list(s)
-            shape = np.random.choice(s, 1, p)
-            m = np.array([[i.value for i in j] for j in ws['O3':'Q3']]).ravel()
-            m = list(m)
-            margin = np.random.choice(m, 1, p)
-            d = np.array([[i.value for i in j] for j in ws['O4':'Q4']]).ravel()
-            d = list(d)
-            density = np.random.choice(d, 1, p)
-            print(name, br, r, f, shape, margin, density)
-        elif f == 'Calcifications':
-            p = normalize(c)
-            tb = np.array([[i.value for i in j] for j in ws['O5':'Q5']]).ravel()
-            tb = list(tb)
-            t_benigh = np.random.choice(tb, 1, p)
-            sm = np.array([[i.value for i in j] for j in ws['O6':'Q6']]).ravel()
-            sm = list(sm)
-            s_morph = np.random.choice(sm, 1, p)
-            d = np.array([[i.value for i in j] for j in ws['O7':'Q7']]).ravel()
-            d = list(d)
-            distrib = np.random.choice(d, 1, p)
-            print(name, br, r, f, tb, s_morph, distrib)
-        elif f == 'Assymetry':
-            p = normalize(c)
-            a = np.array([[i.value for i in j] for j in ws['O8':'Q8']]).ravel()
-            a = list(a)
-            assymetry = np.random.choice(a, 1, p)
-            print(name, br, r, f, assymetry)
+#Create random with parameter of report numbers
+def report(num):
+    for i in range(num):
+        br_p = normalize(b)
+        a = list(A)
+        br = np.random.choice(a, 1, br_p)
+        name = df['Name'].values.tolist()[0:1]
+        "create list of values and slice empty entities from list"
+        cd = df['Condition description'].values.tolist()
+        rm = df['Relevant modalities'].values.tolist()
+        r = random.choice(rm)
+        #mammo params
+        if r == 'Mammography':
+            f_list = df['Relevant findings'].values.tolist()[0:9]
+            "random finding"
+            f = random.choice(f_list)
+            if f == 'Mass':
+                p = normalize(c)
+                s = np.array([[i.value for i in j] for j in ws['O2':'Q2']]).ravel()
+                s = list(s)
+                shape = np.random.choice(s, 1, p)
+                m = np.array([[i.value for i in j] for j in ws['O3':'Q3']]).ravel()
+                m = list(m)
+                margin = np.random.choice(m, 1, p)
+                d = np.array([[i.value for i in j] for j in ws['O4':'Q4']]).ravel()
+                d = list(d)
+                density = np.random.choice(d, 1, p)
+                print(name, br, r, f, shape, margin, density)
+            elif f == 'Calcifications':
+                p = normalize(c)
+                tb = np.array([[i.value for i in j] for j in ws['O5':'Q5']]).ravel()
+                tb = list(tb)
+                t_benigh = np.random.choice(tb, 1, p)
+                sm = np.array([[i.value for i in j] for j in ws['O6':'Q6']]).ravel()
+                sm = list(sm)
+                s_morph = np.random.choice(sm, 1, p)
+                d = np.array([[i.value for i in j] for j in ws['O7':'Q7']]).ravel()
+                d = list(d)
+                distrib = np.random.choice(d, 1, p)
+                print(name, br, r, f, tb, s_morph, distrib)
+            elif f == 'Assymetry':
+                p = normalize(c)
+                a = np.array([[i.value for i in j] for j in ws['O8':'Q8']]).ravel()
+                a = list(a)
+                assymetry = np.random.choice(a, 1, p)
+                print(name, br, r, f, assymetry)
+            else:
+                p = normalize(c)
+                ln = np.array([[i.value for i in j] for j in ws['O9':'Q9']]).ravel()
+                ln = list(ln)
+                print(name, br, r, f, ln)
+        #us params
+        elif r == 'US':
+            f_list = df['Relevant findings'].values.tolist()[10:16]
+            f = random.choice(f_list)
+            if f == 'Mass':
+                p = normalize(c)
+                s = np.array([[i.value for i in j] for j in ws['O10':'Q10']]).ravel()
+                s = list(s)
+                shape = np.random.choice(s, 1, p)
+                m = np.array([[i.value for i in j] for j in ws['O11':'Q11']]).ravel()
+                m = list(m)
+                margin = np.random.choice(m, 1, p)
+                e = np.array([[i.value for i in j] for j in ws['O12':'Q12']]).ravel()
+                e = list(e)
+                echo = np.random.choice(e, 1, p)
+                pos = np.array([[i.value for i in j] for j in ws['O13':'Q13']]).ravel()
+                pos = list(pos)
+                posterior = np.random.choice(pos, 1, p)
+                print(name, br, r, f, shape, margin, echo, posterior)
+            elif f == 'Calcifications US':
+                p = normalize(c)
+                calc = np.array([[i.value for i in j] for j in ws['O14':'Q14']]).ravel()
+                calc = list(calc)
+                calc_us = np.random.choice(calc, 1, p)
+                print(name, br, r, f, calc_us)
+            elif f == 'Lymph nodes':
+                p = normalize(c)
+                ln = np.array([[i.value for i in j] for j in ws['O15':'Q15']]).ravel()
+                ln = list(ln)
+                l_nodes = np.random.choice(ln, 1, p)
+                print(name, br, r, f, l_nodes)
+            else:
+                p = normalize(c)
+                sc = np.array([[i.value for i in j] for j in ws['O16':'Q16']]).ravel()
+                sc = list(sc)
+                sp_cases = np.random.choice(sc, 1, p)
+                print(name, br, r, f, sp_cases)
         else:
-            p = normalize(c)
-            ln = np.array([[i.value for i in j] for j in ws['O9':'Q9']]).ravel()
-            ln = list(ln)
-            print(name, br, r, f, ln)
-    #us params
-    elif r == 'US':
-        f_list = df['Relevant findings'].values.tolist()[10:16]
-        f = random.choice(f_list)
-        if f == 'Mass':
-            p = normalize(c)
-            s = np.array([[i.value for i in j] for j in ws['O10':'Q10']]).ravel()
-            s = list(s)
-            shape = np.random.choice(s, 1, p)
-            m = np.array([[i.value for i in j] for j in ws['O11':'Q11']]).ravel()
-            m = list(m)
-            margin = np.random.choice(m, 1, p)
-            e = np.array([[i.value for i in j] for j in ws['O12':'Q12']]).ravel()
-            e = list(e)
-            echo = np.random.choice(e, 1, p)
-            pos = np.array([[i.value for i in j] for j in ws['O13':'Q13']]).ravel()
-            pos = list(pos)
-            posterior = np.random.choice(pos, 1, p)
-            print(name, br, r, f, shape, margin, echo, posterior)
-        elif f == 'Calcifications US':
-            p = normalize(c)
-            calc = np.array([[i.value for i in j] for j in ws['O14':'Q14']]).ravel()
-            calc = list(calc)
-            calc_us = np.random.choice(calc, 1, p)
-            print(name, br, r, f, calc_us)
-        elif f == 'Lymph nodes':
-            p = normalize(c)
-            ln = np.array([[i.value for i in j] for j in ws['O15':'Q15']]).ravel()
-            ln = list(ln)
-            l_nodes = np.random.choice(ln, 1, p)
-            print(name, br, r, f, l_nodes)
-        else:
-            p = normalize(c)
-            sc = np.array([[i.value for i in j] for j in ws['O16':'Q16']]).ravel()
-            sc = list(sc)
-            sp_cases = np.random.choice(sc, 1, p)
-            print(name, br, r, f, sp_cases)
-    else:
-        f_list = df['Relevant findings'].values.tolist()[17:25]
-        f = random.choice(f_list)
-        if f == 'Mass':
-            p = normalize(c)
-            s = np.array([[i.value for i in j] for j in ws['O17':'Q17']]).ravel()
-            s = list(s)
-            shape = np.random.choice(m, 1, p)
-            m = np.array([[i.value for i in j] for j in ws['O18':'Q18']]).ravel()
-            m = list(m)
-            margin = np.random.choice(m, 1, p)
-            ie = np.array([[i.value for i in j] for j in ws['O19':'Q19']]).ravel()
-            ie = list(ie)
-            int_e = np.random.choice(ie, 1, p)
-            print(name, br, r, f, shape, margin, int_e)
-        elif f == 'MRI features':
-            p = normalize(c)
-            m_f = np.array([[i.value for i in j] for j in ws['O20':'Q20']]).ravel()
-            m_f = list(m_f)
-            mri_f = np.random.choice(m_f, 1, p)
-            print(name, br, r, f, mri_f)
-        elif f == 'Kinetic curve assessment':
-            p = normalize(c)
-            kca = np.array([[i.value for i in j] for j in ws['O21':'Q21']]).ravel()
-            kca = list(kca)
-            kin_ca = np.random.choice(kca, 1, p)
-            print(name, br, r, f, kin_ca)
-        elif f == 'Non-mass enhancement (NME)':
-            p = normalize(c)
-            distr = np.array([[i.value for i in j] for j in ws['O22':'Q22']]).ravel()
-            distr = list(distr)
-            distrib = np.random.choice(distr, 1, p)
-            iep = np.array([[i.value for i in j] for j in ws['O23':'Q23']]).ravel()
-            print(name, br, r, f, distrib, iep)
-        elif f == 'Non-enhancing findings':
-            p = normalize(c)
-            nef = np.array([[i.value for i in j] for j in ws['O21':'Q22']]).ravel()
-            nef = list(nef)
-            ne_f = np.random.choice(nef, 1, p)
-            print(name, br, r, f, ne_f)
-        elif f == 'Lymph nodes':
-            p = normalize(c)
-            ln = np.array([[i.value for i in j] for j in ws['O22':'Q22']]).ravel()
-            ln = list(ln)
-            l_nodes = np.random.choice(ln, 1, p)
-            print(name, br, r, f, l_nodes)
-        else:
-            p = normalize(c)
-            fcl = np.array([[i.value for i in j] for j in ws['O23':'Q23']]).ravel()
-            fcl= list(fcl)
-            fat_cl = np.random.choice(fcl, 1, p)
-            print(name, br, r, f, fat_cl)
+            f_list = df['Relevant findings'].values.tolist()[17:25]
+            f = random.choice(f_list)
+            if f == 'Mass':
+                p = normalize(c)
+                s = np.array([[i.value for i in j] for j in ws['O17':'Q17']]).ravel()
+                s = list(s)
+                shape = np.random.choice(m, 1, p)
+                m = np.array([[i.value for i in j] for j in ws['O18':'Q18']]).ravel()
+                m = list(m)
+                margin = np.random.choice(m, 1, p)
+                ie = np.array([[i.value for i in j] for j in ws['O19':'Q19']]).ravel()
+                ie = list(ie)
+                int_e = np.random.choice(ie, 1, p)
+                print(name, br, r, f, shape, margin, int_e)
+            elif f == 'MRI features':
+                p = normalize(c)
+                m_f = np.array([[i.value for i in j] for j in ws['O20':'Q20']]).ravel()
+                m_f = list(m_f)
+                mri_f = np.random.choice(m_f, 1, p)
+                print(name, br, r, f, mri_f)
+            elif f == 'Kinetic curve assessment':
+                p = normalize(c)
+                kca = np.array([[i.value for i in j] for j in ws['O21':'Q21']]).ravel()
+                kca = list(kca)
+                kin_ca = np.random.choice(kca, 1, p)
+                print(name, br, r, f, kin_ca)
+            elif f == 'Non-mass enhancement (NME)':
+                p = normalize(c)
+                distr = np.array([[i.value for i in j] for j in ws['O22':'Q22']]).ravel()
+                distr = list(distr)
+                distrib = np.random.choice(distr, 1, p)
+                iep = np.array([[i.value for i in j] for j in ws['O23':'Q23']]).ravel()
+                print(name, br, r, f, distrib, iep)
+            elif f == 'Non-enhancing findings':
+                p = normalize(c)
+                nef = np.array([[i.value for i in j] for j in ws['O21':'Q22']]).ravel()
+                nef = list(nef)
+                ne_f = np.random.choice(nef, 1, p)
+                print(name, br, r, f, ne_f)
+            elif f == 'Lymph nodes':
+                p = normalize(c)
+                ln = np.array([[i.value for i in j] for j in ws['O22':'Q22']]).ravel()
+                ln = list(ln)
+                l_nodes = np.random.choice(ln, 1, p)
+                print(name, br, r, f, l_nodes)
+            else:
+                p = normalize(c)
+                fcl = np.array([[i.value for i in j] for j in ws['O23':'Q23']]).ravel()
+                fcl= list(fcl)
+                fat_cl = np.random.choice(fcl, 1, p)
+                print(name, br, r, f, fat_cl)
 
 
 un_list = df['Unique findings'].values.tolist()
@@ -198,8 +198,9 @@ dd = random.choice(dd_list)
 nt_list = df['Notes'].values.tolist()
 nt = random.choice(nt_list)
 
-params = ["name", "condition description", "relevant finding", "unique finding", "parameters", "general", "unrelated", "ignore", "associated conditions", "notes"]
-keys = [name, cd, f, un, p, g, u, i, a, dd, nt]
+"""
+params = ["condition description", "relevant finding", "unique finding", "parameters", "general", "unrelated", "ignore", "associated conditions", "notes"]
+keys = [cd, f, un, p, g, u, i, a, dd, nt]
 
 rep = {}
 for i in range(len(params)):
@@ -207,64 +208,24 @@ for i in range(len(params)):
     rep[params[i]] = keys[i]
 
 rep = json.dumps(rep)
-#print(rep)
-
-##### information for the entire sheet ####
-num_rows_in_cond = 25 #"height" of each condition
-#width could be different for each condition - so not writing down
-starting_column_for_typical = 15 # for all conditions, Typical, possible, none columns, start with typical at col 15
-# possible at 15+1, and none at 15+2
-first_row = 1 #this is the row with the numbers for typical, possible and none
-
-def determine_width(starting_column):
-    # traverse first_row to determine width
-    width = 0
-    item = df.iloc[first_row, starting_column_for_typical] #our first value
-    while isinstance(item, float) and (item!=0):
-        width = width + 1
-        item = df.iloc[first_row, starting_column_for_typical + width]
-        # each time incrementing a counter (count_numbers or width)
-    #for example, width should equal 3 at this point
-    return width;
-
-
-####print(get_names_and_probs(2,3)) ->> [a,p],[['Oval', 'Round', 'Irregular']
-
-
-# run this for each ROW in each condition (aka run function 25 times for each condition)
-# row =  number of starting row for condition
-# width = number of rows with numbers at top
-#returns: "a and p arrays" for reach row in condition - aka 25 a arrays and 25 p arrays
-def get_names_and_probs(row, width):
-
-
-    #debugger
-    #from IPython.core.debugger import Tracer; Tracer()()
-
-
+#print(rep) """
+"""
+def get_names_and_probs(row, col):
     first_row = row
-    first_col = starting_column_for_typical
-
-
-    # this array_to_normalize will store all the values to normalize
+    first_col = col
     array_to_normalize = [] #the "a" array
     p_values = [] #the "p" array
-
-
-    #for each colmn from the first row until the last row (see "depth" of disease above
-    current_row = first_row
-    current_col = first_col #set the current_col to first_col to start
     i = 0
-    for i in range(width):
+    for i in range(3):
+
         #determine if cell has text, or is empty
-        if isinstance(df.iloc[current_row, current_col + i], float): #if cell is empty, python calls it a float
+        if isinstance(df.iloc[first_row, first_col + i], float): #if cell is empty, python calls it a float
             i = i+1
             continue
-        #if we get to this point, there is text in the cell
-        temp_array = df.iloc[current_row, current_col + i].replace(" ","").split(",") #look at a cell
+        temp_array = df.iloc[first_row, first_col + i].replace(" ","").split(",") #look at a cell
         j = 0
         for j in range(len(temp_array)):
-            p_values.append(df.iloc[1,current_col + i])
+            p_values.append(df.iloc[0,first_col + i])
             j = j+1
         array_to_normalize.append(temp_array)
         i = i+1
@@ -278,13 +239,13 @@ def get_names_and_probs(row, width):
     #    for item in sublist:
     #        flat_list.append(item)
     array_to_normalize = flat_list
+    print(array_to_normalize)
+
     #now array to normalize should look like ['Oval', 'Round', 'Irregular']
 
     #a = ['Oval', 'Round', 'Irregular'] #for each row
     #p = [50, 50, 1] #one for the entire sheeet
 
-    print("p_values:")
-    print(p_values)
     #convert p_values from array of strings to array of ints
     #https://stackoverflow.com/questions/5306079/python-how-do-i-convert-an-array-of-strings-to-an-array-of-numbers
     #p_values = map(int, p_values)
@@ -294,19 +255,30 @@ def get_names_and_probs(row, width):
     normalize(p_values)
     return array_to_normalize, p_values
 # ['Oval', 'Round', 'Irregular'] , [50, 50, 1]
+get_names_and_probs(1, 15)
+
+
+
 
 
 #row = starting row of condition
 #return array of arrays for condition
-# pri[[a,p],[['Oval', 'Round', 'Irregular'],[50, 50, 1]],...25 times]
-def cond_calculate(row):
-    cond_big_array[num_rows_in_cond]
-    return cond_big_array
-my_width = determine_width(starting_column_for_typical) #my_width should equal 3
-get_names_and_probs(2, my_width) #2 represents the 2nd row, aka, first row of Fibroadenoma
+# pri[[a,p],[['Oval', 'Round', 'Irregular'],[50, 50, 1]],...25 times] """
 
+#define values check
+import math
 
+def check_celval(row, col, width):
+    val_arr = []
+    for i in range(width):
+        value_temp = df.iloc[row, col]
+        if (isinstance(value_temp, float)) == False:
+            value = value_temp.replace(" ","").split(",")
+            for i in range(len(value)):
+                val_arr.append(value[i])
+            else:
+                pass
+        col = col+1
+    print(val_arr)
 
-
-
-#wd
+check_celval(1, 14, 3)
