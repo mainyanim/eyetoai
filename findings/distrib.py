@@ -205,6 +205,7 @@ def check_and_append(row, col, width, start, stop):
     val_arr = []
     prob_head = list(df)[start:stop]
     prob_arr = []
+    j = 0
     for i in range(width):
         value_temp = df.iloc[row, col]
         if (isinstance(value_temp, float)) == False:
@@ -215,14 +216,21 @@ def check_and_append(row, col, width, start, stop):
                 k = k + 1
             for i in range(len(value)):
                 val_arr.append(value[i])
-            else:
-                k = k + 1
-                pass
+        else:
+            j = j+1
+            if j == width:
+                for k in range(width):
+                    prob_arr.append(prob_head[i])
+                    k = k + 1
+                for i in range(width):
+                    val_arr.append(1)
+            pass
         col = col+1
+    print(j)
     print(val_arr)
     print(prob_arr)
     print(normalize(prob_arr))
 
 #define probability array
 
-check_and_append(0, 14, 3, 14, 17)
+check_and_append(14, 14, 3, 14, 17)
