@@ -220,7 +220,7 @@ def check_and_append(row, col, width, start, stop):
             j = j+1
             if j == width:
                 for k in range(width):
-                    prob_arr.append(prob_head[i])
+                    prob_arr.append(prob_head[k])
                     k = k + 1
                 for i in range(width):
                     val_arr.append(1)
@@ -233,4 +233,4 @@ def check_and_append(row, col, width, start, stop):
 
 #define probability array
 
-check_and_append(14, 14, 3, 14, 17)
+check_and_append(6, 14, 3, 14, 17)
