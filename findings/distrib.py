@@ -5,9 +5,17 @@ import json
 from openpyxl import load_workbook
 from openpyxl import Workbook
 import numpy as np
+import math
+
+
+#define values check and append to arr
+#define probability array
+from collections import Counter
+
 
 #read excel
 df = pd.read_excel("output.xlsx")
+OUTPUT_FILE = 'report.xlsx'
 
 #read Condition Name into 1D-array
 name_arr = df.Name.unique()
@@ -38,170 +46,10 @@ def normalize(items):
     problist = [x/sum_n for x in items]
     return(problist)
 
+#def probslist
+import random
 
-#Create random with parameter of report numbers
-def report(num):
-    for i in range(num):
-        br_p = normalize(b)
-        a = list(A)
-        br = np.random.choice(a, 1, br_p)
-        name = df['Name'].values.tolist()[0:1]
-        "create list of values and slice empty entities from list"
-        cd = df['Condition description'].values.tolist()
-        rm = df['Relevant modalities'].values.tolist()
-        r = random.choice(rm)
-        #mammo params
-        if r == 'Mammography':
-            f_list = df['Relevant findings'].values.tolist()[0:9]
-            "random finding"
-            f = random.choice(f_list)
-            if f == 'Mass':
-                p = normalize(c)
-                s = np.array([[i.value for i in j] for j in ws['O2':'Q2']]).ravel()
-                s = list(s)
-                shape = np.random.choice(s, 1, p)
-                m = np.array([[i.value for i in j] for j in ws['O3':'Q3']]).ravel()
-                m = list(m)
-                margin = np.random.choice(m, 1, p)
-                d = np.array([[i.value for i in j] for j in ws['O4':'Q4']]).ravel()
-                d = list(d)
-                density = np.random.choice(d, 1, p)
-                print(name, br, r, f, shape, margin, density)
-            elif f == 'Calcifications':
-                p = normalize(c)
-                tb = np.array([[i.value for i in j] for j in ws['O5':'Q5']]).ravel()
-                tb = list(tb)
-                t_benigh = np.random.choice(tb, 1, p)
-                sm = np.array([[i.value for i in j] for j in ws['O6':'Q6']]).ravel()
-                sm = list(sm)
-                s_morph = np.random.choice(sm, 1, p)
-                d = np.array([[i.value for i in j] for j in ws['O7':'Q7']]).ravel()
-                d = list(d)
-                distrib = np.random.choice(d, 1, p)
-                print(name, br, r, f, tb, s_morph, distrib)
-            elif f == 'Assymetry':
-                p = normalize(c)
-                a = np.array([[i.value for i in j] for j in ws['O8':'Q8']]).ravel()
-                a = list(a)
-                assymetry = np.random.choice(a, 1, p)
-                print(name, br, r, f, assymetry)
-            else:
-                p = normalize(c)
-                ln = np.array([[i.value for i in j] for j in ws['O9':'Q9']]).ravel()
-                ln = list(ln)
-                print(name, br, r, f, ln)
-        #us params
-        elif r == 'US':
-            f_list = df['Relevant findings'].values.tolist()[10:16]
-            f = random.choice(f_list)
-            if f == 'Mass':
-                p = normalize(c)
-                s = np.array([[i.value for i in j] for j in ws['O10':'Q10']]).ravel()
-                s = list(s)
-                shape = np.random.choice(s, 1, p)
-                m = np.array([[i.value for i in j] for j in ws['O11':'Q11']]).ravel()
-                m = list(m)
-                margin = np.random.choice(m, 1, p)
-                e = np.array([[i.value for i in j] for j in ws['O12':'Q12']]).ravel()
-                e = list(e)
-                echo = np.random.choice(e, 1, p)
-                pos = np.array([[i.value for i in j] for j in ws['O13':'Q13']]).ravel()
-                pos = list(pos)
-                posterior = np.random.choice(pos, 1, p)
-                print(name, br, r, f, shape, margin, echo, posterior)
-            elif f == 'Calcifications US':
-                p = normalize(c)
-                calc = np.array([[i.value for i in j] for j in ws['O14':'Q14']]).ravel()
-                calc = list(calc)
-                calc_us = np.random.choice(calc, 1, p)
-                print(name, br, r, f, calc_us)
-            elif f == 'Lymph nodes':
-                p = normalize(c)
-                ln = np.array([[i.value for i in j] for j in ws['O15':'Q15']]).ravel()
-                ln = list(ln)
-                l_nodes = np.random.choice(ln, 1, p)
-                print(name, br, r, f, l_nodes)
-            else:
-                p = normalize(c)
-                sc = np.array([[i.value for i in j] for j in ws['O16':'Q16']]).ravel()
-                sc = list(sc)
-                sp_cases = np.random.choice(sc, 1, p)
-                print(name, br, r, f, sp_cases)
-        else:
-            f_list = df['Relevant findings'].values.tolist()[17:25]
-            f = random.choice(f_list)
-            if f == 'Mass':
-                p = normalize(c)
-                s = np.array([[i.value for i in j] for j in ws['O17':'Q17']]).ravel()
-                s = list(s)
-                shape = np.random.choice(m, 1, p)
-                m = np.array([[i.value for i in j] for j in ws['O18':'Q18']]).ravel()
-                m = list(m)
-                margin = np.random.choice(m, 1, p)
-                ie = np.array([[i.value for i in j] for j in ws['O19':'Q19']]).ravel()
-                ie = list(ie)
-                int_e = np.random.choice(ie, 1, p)
-                print(name, br, r, f, shape, margin, int_e)
-            elif f == 'MRI features':
-                p = normalize(c)
-                m_f = np.array([[i.value for i in j] for j in ws['O20':'Q20']]).ravel()
-                m_f = list(m_f)
-                mri_f = np.random.choice(m_f, 1, p)
-                print(name, br, r, f, mri_f)
-            elif f == 'Kinetic curve assessment':
-                p = normalize(c)
-                kca = np.array([[i.value for i in j] for j in ws['O21':'Q21']]).ravel()
-                kca = list(kca)
-                kin_ca = np.random.choice(kca, 1, p)
-                print(name, br, r, f, kin_ca)
-            elif f == 'Non-mass enhancement (NME)':
-                p = normalize(c)
-                distr = np.array([[i.value for i in j] for j in ws['O22':'Q22']]).ravel()
-                distr = list(distr)
-                distrib = np.random.choice(distr, 1, p)
-                iep = np.array([[i.value for i in j] for j in ws['O23':'Q23']]).ravel()
-                print(name, br, r, f, distrib, iep)
-            elif f == 'Non-enhancing findings':
-                p = normalize(c)
-                nef = np.array([[i.value for i in j] for j in ws['O21':'Q22']]).ravel()
-                nef = list(nef)
-                ne_f = np.random.choice(nef, 1, p)
-                print(name, br, r, f, ne_f)
-            elif f == 'Lymph nodes':
-                p = normalize(c)
-                ln = np.array([[i.value for i in j] for j in ws['O22':'Q22']]).ravel()
-                ln = list(ln)
-                l_nodes = np.random.choice(ln, 1, p)
-                print(name, br, r, f, l_nodes)
-            else:
-                p = normalize(c)
-                fcl = np.array([[i.value for i in j] for j in ws['O23':'Q23']]).ravel()
-                fcl= list(fcl)
-                fat_cl = np.random.choice(fcl, 1, p)
-                print(name, br, r, f, fat_cl)
-
-
-un_list = df['Unique findings'].values.tolist()
-un = random.choice(un_list)
-p_list = df['Parameters'].values.tolist()
-p = random.choice(p_list)
-g_list = df['General'].values.tolist()
-g = random.choice(g_list)
-u_list = df['Unrelated'].values.tolist()
-u = random.choice(u_list)
-i_list = df['Ignore'].values.tolist()
-i = random.choice(i_list)
-a_list = df['Associated conditions'].values.tolist()
-a = random.choice(a_list)
-dd_list = df['Differential diagnosis'].values.tolist()
-dd = random.choice(dd_list)
-nt_list = df['Notes'].values.tolist()
-nt = random.choice(nt_list)
-
-#define values check
-import math
-#define values check and append to arr
-def check_and_append(row, col, width, start, stop):
+def concatvals(row, col, width, start, stop):
     val_arr = []
     prob_head = list(df)[start:stop]
     prob_arr = []
@@ -209,7 +57,7 @@ def check_and_append(row, col, width, start, stop):
     for i in range(width):
         value_temp = df.iloc[row, col]
         if (isinstance(value_temp, float)) == False:
-            value = value_temp.replace(" ","").split(",")
+            value = [x.strip() for x in value_temp.split(',')]
             k = 0
             for k in range(len(value)):
                 prob_arr.append(prob_head[i])
@@ -217,20 +65,177 @@ def check_and_append(row, col, width, start, stop):
             for i in range(len(value)):
                 val_arr.append(value[i])
         else:
-            j = j+1
-            if j == width:
-                for k in range(width):
-                    prob_arr.append(prob_head[k])
-                    k = k + 1
-                for i in range(width):
-                    val_arr.append(1)
+            num_empty = j+1
+            for k in range(num_empty-1):
+                prob_arr.append(prob_head[i])
+                k = k + 1
+                for i in range(num_empty):
+                    val_arr.append(value[i])
             pass
         col = col+1
-    print(j)
-    print(val_arr)
-    print(prob_arr)
-    print(normalize(prob_arr))
 
-#define probability array
+    p = normalize(prob_arr)
+    randparameter = random.choices(val_arr, prob_arr, k=1)
+    return randparameter
 
-check_and_append(6, 14, 3, 14, 17)
+
+def get_dic_from_two_lists(keys, values):
+    return { keys[i] : values[i] for i in range(len(keys)) }
+
+#Create random with parameter of report numbers
+def report(items):
+    for i in range(items):
+        br_p = normalize(b)
+        a = list(A)
+        br = random.choices(a, br_p, k=1)
+        name = df['Name'].values.tolist()[0:1]
+        "create list of values and slice empty entities from list"
+        cd = df['Condition description'].values.tolist()[0:1]
+        rm = df['Relevant modalities'].values.tolist()[0:26]
+        r = random.choice(rm)
+        #mammo params
+        if r == 'Mammography':
+            f_list = df['Relevant findings'].values.tolist()[0:8]
+            #"random finding"
+            f = random.choice(f_list)
+            if f == 'Mass':
+                shape = concatvals(0, 14, 5, 14, 19)
+                margin = concatvals(1, 14, 5, 14, 19)
+                density = concatvals(2, 14, 5, 14, 19)
+                dict_keys = ['Name', 'BiRad', 'Condition description', 'Relevant Modality', 'Relevant Finding', 'Shape', 'Margin', 'Density']
+                dict_values = [name, br, cd,r,f, shape, margin, density]
+                data = get_dic_from_two_lists(dict_keys, dict_values)
+                report = json.dumps(data)
+                print(report)
+                #print(report)
+            elif f == 'Calcifications':
+                t_b = concatvals(3, 14, 5, 14, 19)
+                s_morph = concatvals(4, 14, 5, 14, 19)
+                distrib = concatvals(5, 14, 5, 14, 19)
+                dict_keys = ['Name', 'BiRad', 'Condition description', 'Relevant Modality', 'Relevant Finding', 'Typically benign', 'Suspicious morphology', 'Distribution']
+                dict_values = [name, br, cd, r, f, t_b, s_morph, distrib]
+                data = get_dic_from_two_lists(dict_keys, dict_values)
+                report = json.dumps(data)
+                print(report)
+            elif f == 'Assymetry':
+                a = concatvals(6, 14, 5, 14, 19)
+                dict_keys = ['Name', 'BiRad', 'Condition description', 'Relevant Modality', 'Relevant Finding', 'Assymetry']
+                dict_values = [name, br, cd, r, f, a]
+                data = get_dic_from_two_lists(dict_keys, dict_values)
+                report = json.dumps(data)
+                print(report)
+            else:
+                l_nodes = concatvals(7, 14, 5, 14, 19)
+                dict_keys = ['Name', 'BiRad', 'Condition description', 'Relevant Modality', 'Relevant Finding', 'Lymph nodes']
+                dict_values = [name, br, cd, r, f, l_nodes]
+                data = get_dic_from_two_lists(dict_keys, dict_values)
+                report = json.dumps(data)
+                print(report)
+        elif r == 'US':
+            f_list = df['Relevant findings'].values.tolist()[8:15]
+            f = random.choice(f_list)
+            if f == 'Mass':
+                shape = concatvals(8, 14, 5, 14, 19)
+                margin = concatvals(9, 14, 5, 14, 19)
+                echo = concatvals(10, 14, 5, 14, 19)
+                posterior = concatvals(11, 14, 5, 14, 19)
+                dict_keys = ['Name', 'BiRad', 'Condition description', 'Relevant Modality', 'Relevant Finding', 'Shape', 'Margin', 'Echo', 'Posterior']
+                dict_values = [name, br, cd, r, f, shape, margin, echo, posterior]
+                data = get_dic_from_two_lists(dict_keys, dict_values)
+                report = json.dumps(data)
+                print(report)
+            elif f == 'Calcifications US':
+                calc = concatvals(12, 14, 5, 14, 19)
+                dict_keys = ['Name', 'BiRad', 'Condition description', 'Relevant Modality', 'Relevant Finding', 'Calcifications']
+                dict_values = [name, br, cd, r, f, calc]
+                data = get_dic_from_two_lists(dict_keys, dict_values)
+                report = json.dumps(data)
+                print(report)
+            elif f == 'Lymph nodes':
+                l_nodes = concatvals(13, 14, 5, 14, 19)
+                dict_keys = ['Name', 'BiRad', 'Condition description', 'Relevant Modality', 'Relevant Finding', 'Lymph Nodes']
+                dict_values = [name, br, cd, r, f, l_nodes]
+                data = get_dic_from_two_lists(dict_keys, dict_values)
+                report = json.dumps(data)
+                print(report)
+            else:
+                sp_c = concatvals(14, 14, 5, 14, 19)
+                dict_keys = ['Name', 'BiRad', 'Condition description', 'Relevant Modality', 'Relevant Finding', 'Special Cases']
+                dict_values = [name, br, cd, r, f, sp_c]
+                data = get_dic_from_two_lists(dict_keys, dict_values)
+                report = json.dumps(data)
+                print(report)
+        elif r == 'MRI':
+            f_list = df['Relevant findings'].values.tolist()[15:25]
+            f = random.choice(f_list)
+            if f == 'Mass':
+                shape = concatvals(15, 14, 5, 14, 19)
+                margin = concatvals(16, 14, 5, 14, 19)
+                int_enh = concatvals(17, 14, 5, 14, 19)
+                dict_keys = ['Name', 'BiRad', 'Condition description', 'Relevant Modality', 'Relevant Finding', 'Shape', 'Margin', 'Internal enhancement']
+                dict_values = [name, br, cd, r, f, shape, margin, int_enh]
+                data = get_dic_from_two_lists(dict_keys, dict_values)
+                report = json.dumps(data)
+                print(report)
+            elif f == 'MRI featues':
+                mri_f = concatvals(18, 14, 5, 14, 19)
+                dict_keys = ['Name', 'BiRad', 'Condition description', 'Relevant Modality', 'Relevant Finding', 'MRI features']
+                dict_values = [name, br, cd, r, f, mri_f]
+                data = get_dic_from_two_lists(dict_keys, dict_values)
+                report = json.dumps(data)
+                print(report)
+            elif f == 'Kinetic curve assessment':
+                kin_c_a = concatvals(19, 14, 5, 14, 19)
+                dict_values = [name, br, cd, r, f, kin_c_a]
+                dict_keys = ['Name', 'BiRad', 'Condition description', 'Relevant Modality', 'Relevant Finding', 'Kinetic curve assessment']
+                data = get_dic_from_two_lists(dict_keys, dict_values)
+                report = json.dumps(data)
+                print(report)
+            elif f == 'Non-mass enhancement (NME)':
+                distrib = concatvals(20, 14, 5, 14, 19)
+                int_enh_patt = concatvals(21, 14, 5, 14, 19)
+                dict_values = [name, br, cd, r, f, distrib, int_enh_patt]
+                dict_keys = ['Name', 'BiRad', 'Condition description', 'Relevant Modality', 'Relevant Finding', 'Distribution','Internal enhacement patterns']
+                data = get_dic_from_two_lists(dict_keys, dict_values)
+                report = json.dumps(data)
+                print(report)
+            elif f == 'Non-enhancing findings':
+                nef = concatvals(22, 14, 5, 14, 19)
+                dict_values = [name, br, cd, r, f, nef]
+                dict_keys = ['Name', 'BiRad', 'Condition description', 'Relevant Modality', 'Non-enhancing patterns']
+                data = get_dic_from_two_lists(dict_keys, dict_values)
+                report = json.dumps(data)
+                print(report)
+            elif f == 'Lymph nodes':
+                l_nodes = concatvals(22, 14, 5, 14, 19)
+                dict_values = [name, br, cd, r, f, l_nodes]
+                dict_keys = ['Name', 'BiRad', 'Condition description', 'Relevant Modality', 'Lymph nodes']
+                data = get_dic_from_two_lists(dict_keys, dict_values)
+                report = json.dumps(data)
+                print(report)
+            else:
+                fcl = concatvals(23, 14, 5, 14, 19)
+                dict_values = [name, br, cd, r, f, fcl]
+                dict_keys = ['Name', 'BiRad', 'Condition description', 'Relevant Modality', 'Fat containing lesions']
+                data = get_dic_from_two_lists(dict_keys, dict_values)
+                report = json.dumps(data)
+                print(report)
+
+reports = report(100)
+
+#define values check
+
+#report general outlook
+#name
+#condition description
+#birad
+#relevant modality
+#unique findings
+#additional info
+#parameters + value_according_to_prob
+#Pathogenomonic
+#Negative
+#Ignore
+#Associated conditions
+#Differential_diagnosis
+#notes

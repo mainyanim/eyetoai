@@ -89,7 +89,7 @@ class SetParams:
         probabilities = ['Typical', 'Possible', 'Atypical', 'None', 'Pathogenomonic', 'Unrelated', 'Negative', 'Ignore']
         short_notation = ['t', 'p', 'a', 'none', 'pat', 'u', 'n', 'i']
 
-        # Mammography params
+        # Mammography paramsа
         self.mammo_params = {
             'Mass': {
                 'Shape': {
@@ -357,8 +357,7 @@ def save_output(output_list):
     # Create title for columns
     columns_titles = ['Name', 'Condition description', 'birad[0]','birad[1]','birad[2]','birad[3]','birad[4]','birad[5]','birad[6]','Relevant modalities',
                     'Relevant findings', 'Unique findings','Additional info',
-                      'Parameters', 50, 30, 1, 'General',
-                      'Pathogenomonic', 'Unrelated', 'Negative',
+                      'Parameters', 50, 30, 10, 5, 1,'Pathogenomonic', 'Negative',
                       'Ignore', 'Associated conditions', 'Differential diagnosis', 'Notes']
     ws1.append(columns_titles)
     # Create list for output file
@@ -398,17 +397,17 @@ def create_list(row):
     except:
         a = ''
     try:
-        none = row['None']
+        gen = row['None']
     except:
-        none = ''
-    try:
-        pat = row['Pathogenomonic']
-    except:
-        pat = ''
+        gen = ''
     try:
         u = row['Unrelated']
     except:
         u = ''
+    try:
+        pat = row['Pathogenomonic']
+    except:
+        pat = ''
     try:
         n = row['Negative']
     except:
@@ -423,7 +422,7 @@ def create_list(row):
         notes = ''
     ac = row['Associated conditions']
     dd = row['Differential diagnosis']
-    return [name, cd, br0, br1, br2, br3, br4, br5, br6, rm, rf, uf, ai, params, t, p, a, none, pat, u, n, i, ac, dd, notes]
+    return [name, cd, br0, br1, br2, br3, br4, br5, br6, rm, rf, uf, ai, params, t, p, a, gen, u, pat, n, i, ac, dd, notes]
 
 
 def main():
