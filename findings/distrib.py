@@ -6,68 +6,29 @@ from openpyxl import load_workbook
 from openpyxl import Workbook
 import numpy as np
 import math
-
 #define values check and append to arr
 #define probability array
-
 #read excel
+
 df = pd.read_excel("output.xlsx")
-
-#read Condition Name into 1D-array
-name_arr = df.Name.unique()
-name_arr = list(name_arr)
-
-
-#Choose Params for disease
 wb = load_workbook('output.xlsx')
 ws = wb.get_sheet_by_name('Sheet1') #Define worksheet
 
-A = np.array([[i.value for i in j] for j in ws['C1':'I1']]).ravel() #Read BiRads into list
-B = np.array([[i.value for i in j] for j in ws['C2':'I2']]).ravel() #Read BiRads Probabilities into list
-C = np.array([[i.value for i in j] for j in ws['O1':'Q1']]).ravel() #Read Params Probabilities into list
-
-#Convert from np-arr to 1D arr
-
-a = list(A) #BiRads list
-b = list(B) #BiRad probs integer values
-c = list(C) #Params probs integer values
-
 #Define function to normalize arr values
-
 def normalize(items):
-    sum_n = 0
-    for x in items:
-        sum_n += x
-    problist = [x/sum_n for x in items]
-    return(problist)
-
+    problist = [x/sum(items) for x in items]
 #def probslist
 
 def concatvals(row, col, width, start, stop):
-    val_arr = []
     prob_head = list(df)[start:stop]
-    prob_arr = []
-    j = 0
     for i in range(width):
         value_temp = df.iloc[row, col]
-        if (isinstance(value_temp, float)) == False:
+        if isinstance(value_temp, float) is False:
             value = [x.strip() for x in value_temp.split(',')]
-            k = 0
-            for k in range(len(value)):
-                prob_arr.append(prob_head[i])
-                k += 1
-            for i in range(len(value)):
-                val_arr.append(value[i])
-        else:
-            num_empty = j+1
-            for k in range(num_empty-1):
-                prob_arr.append(prob_head[i])
-                k += 1
-                for i in range(num_empty):
-                    val_arr.append(value[i])
-            pass
+            len_val = len(value)
+            prob_arr = [prob_head[i] for _ in range(len_val)]
+            val_arr = [value[x] for x in range(len_val)]
         col += 1
-    p = normalize(prob_arr)
     randparameter = random.choices(val_arr, prob_arr, k=1)
     return randparameter
 
@@ -87,11 +48,14 @@ def get_name(infile):
 def generate_report(items, infile):
     data_list = []
     for i in range(items):
+        a = np.array([[i.value for i in j] for j in ws['C1':'I1']]).ravel()
+        b = np.array([[i.value for i in j] for j in ws['C2':'I2']]).ravel()
+        #Read BiRads Probabilities into list
+        #Read BiRads into list
         person_name = get_name(infile)
         p_id = random.randrange(100)
         p_age = random.randrange(25, 65)
         br_p = normalize(b)
-        a = list(A)
         br = random.choices(a, br_p, k=1)
         name = df['Name'].values.tolist()[0:1]
         "create list of values and slice empty entities from list"
