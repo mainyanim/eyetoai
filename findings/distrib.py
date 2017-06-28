@@ -8,6 +8,7 @@ import numpy as np
 import math
 
 
+
 #define values check and append to arr
 #define probability array
 from collections import Counter
@@ -83,54 +84,62 @@ def get_dic_from_two_lists(keys, values):
     return { keys[i] : values[i] for i in range(len(keys)) }
 
 #Create random with parameter of report numbers
-def report(items):
+def generate_report(items, infile):
+    data_list = []
     for i in range(items):
+        with open(infile) as f:
+            contents_of_file = f.read()
+            lines = contents_of_file.splitlines()
+            line_number = random.randrange(0, len(lines))
+            person_name = lines[line_number]
+        p_id = random.randrange(100)
+        p_age = random.randrange(25, 65)
         br_p = normalize(b)
         a = list(A)
         br = random.choices(a, br_p, k=1)
         name = df['Name'].values.tolist()[0:1]
         "create list of values and slice empty entities from list"
-        cd = df['Condition description'].values.tolist()[0:1]
         rm = df['Relevant modalities'].values.tolist()[0:26]
         r = random.choice(rm)
+        #r = 'Mammography'
         #mammo params
         if r == 'Mammography':
             f_list = df['Relevant findings'].values.tolist()[0:8]
-            #"random finding"
             f = random.choice(f_list)
+            #f = 'Mass'
             if f == 'Mass':
                 shape = concatvals(0, 14, 5, 14, 19)
                 margin = concatvals(1, 14, 5, 14, 19)
                 density = concatvals(2, 14, 5, 14, 19)
-                dict_keys = ['Name', 'BiRad', 'Condition description', 'Relevant Modality', 'Relevant Finding', 'Shape', 'Margin', 'Density']
-                dict_values = [name, br, cd,r,f, shape, margin, density]
+                dict_keys = ['id','First name', 'age','Condition Name', 'BiRad', 'Relevant Modality', 'Relevant Finding', 'Shape', 'Margin', 'Density']
+                dict_values = [p_id, person_name, p_age, name, br, r,f, shape, margin, density]
                 data = get_dic_from_two_lists(dict_keys, dict_values)
-                report = json.dumps(data)
-                print(report)
-                #print(report)
+                data_list.append(data)
+
             elif f == 'Calcifications':
                 t_b = concatvals(3, 14, 5, 14, 19)
                 s_morph = concatvals(4, 14, 5, 14, 19)
                 distrib = concatvals(5, 14, 5, 14, 19)
-                dict_keys = ['Name', 'BiRad', 'Condition description', 'Relevant Modality', 'Relevant Finding', 'Typically benign', 'Suspicious morphology', 'Distribution']
-                dict_values = [name, br, cd, r, f, t_b, s_morph, distrib]
+                dict_keys = ['id','First name', 'age','Condition Name', 'BiRad',  'Relevant Modality', 'Relevant Finding', 'Typically benign', 'Suspicious morphology', 'Distribution']
+                dict_values = [p_id, person_name, p_age, name, br,  r, f, t_b, s_morph, distrib]
                 data = get_dic_from_two_lists(dict_keys, dict_values)
-                report = json.dumps(data)
-                print(report)
+                data_list.append(data)
+                #print(report)
             elif f == 'Assymetry':
                 a = concatvals(6, 14, 5, 14, 19)
-                dict_keys = ['Name', 'BiRad', 'Condition description', 'Relevant Modality', 'Relevant Finding', 'Assymetry']
-                dict_values = [name, br, cd, r, f, a]
+                dict_keys = ['id','First name','age','Condition Name', 'BiRad',  'Relevant Modality', 'Relevant Finding', 'Assymetry']
+                dict_values = [p_id, person_name, p_age, name, br,  r, f, a]
                 data = get_dic_from_two_lists(dict_keys, dict_values)
-                report = json.dumps(data)
-                print(report)
+                data_list.append(data)
+                #print(report)
             else:
                 l_nodes = concatvals(7, 14, 5, 14, 19)
-                dict_keys = ['Name', 'BiRad', 'Condition description', 'Relevant Modality', 'Relevant Finding', 'Lymph nodes']
-                dict_values = [name, br, cd, r, f, l_nodes]
+                dict_keys = ['id','First name','age','Condition Name', 'BiRad',  'Relevant Modality', 'Relevant Finding', 'Lymph nodes']
+                dict_values = [p_id, person_name, name,p_age, br,  r, f, l_nodes]
                 data = get_dic_from_two_lists(dict_keys, dict_values)
-                report = json.dumps(data)
-                print(report)
+                data = get_dic_from_two_lists(dict_keys, dict_values)
+                data_list.append(data)
+                #print(report)
         elif r == 'US':
             f_list = df['Relevant findings'].values.tolist()[8:15]
             f = random.choice(f_list)
@@ -139,32 +148,32 @@ def report(items):
                 margin = concatvals(9, 14, 5, 14, 19)
                 echo = concatvals(10, 14, 5, 14, 19)
                 posterior = concatvals(11, 14, 5, 14, 19)
-                dict_keys = ['Name', 'BiRad', 'Condition description', 'Relevant Modality', 'Relevant Finding', 'Shape', 'Margin', 'Echo', 'Posterior']
-                dict_values = [name, br, cd, r, f, shape, margin, echo, posterior]
+                dict_keys = ['id','First name','age','Condition Name', 'BiRad',  'Relevant Modality', 'Relevant Finding', 'Shape', 'Margin', 'Echo', 'Posterior']
+                dict_values = [p_id, person_name, p_age, name, br,  r, f, shape, margin, echo, posterior]
                 data = get_dic_from_two_lists(dict_keys, dict_values)
-                report = json.dumps(data)
-                print(report)
+                data_list.append(data)
+                #print(report)
             elif f == 'Calcifications US':
                 calc = concatvals(12, 14, 5, 14, 19)
-                dict_keys = ['Name', 'BiRad', 'Condition description', 'Relevant Modality', 'Relevant Finding', 'Calcifications']
-                dict_values = [name, br, cd, r, f, calc]
+                dict_keys = ['id','First name','age','Condition Name', 'BiRad',  'Relevant Modality', 'Relevant Finding', 'Calcifications']
+                dict_values = [p_id, person_name, p_age, name, br,  r, f, calc]
                 data = get_dic_from_two_lists(dict_keys, dict_values)
-                report = json.dumps(data)
-                print(report)
+                data_list.append(data)
+                #print(report)
             elif f == 'Lymph nodes':
                 l_nodes = concatvals(13, 14, 5, 14, 19)
-                dict_keys = ['Name', 'BiRad', 'Condition description', 'Relevant Modality', 'Relevant Finding', 'Lymph Nodes']
-                dict_values = [name, br, cd, r, f, l_nodes]
+                dict_keys = ['id','First name','age', 'Condition Name', 'BiRad',  'Relevant Modality', 'Relevant Finding', 'Lymph Nodes']
+                dict_values = [p_id,person_name,p_age, name, br,  r, f, l_nodes]
                 data = get_dic_from_two_lists(dict_keys, dict_values)
-                report = json.dumps(data)
-                print(report)
+                data_list.append(data)
+                #print(report)
             else:
                 sp_c = concatvals(14, 14, 5, 14, 19)
-                dict_keys = ['Name', 'BiRad', 'Condition description', 'Relevant Modality', 'Relevant Finding', 'Special Cases']
-                dict_values = [name, br, cd, r, f, sp_c]
+                dict_keys = ['id','First name','age','Condition Name', 'BiRad',  'Relevant Modality', 'Relevant Finding', 'Special Cases']
+                dict_values = [p_id,person_name,p_age, name, br,  r, f, sp_c]
                 data = get_dic_from_two_lists(dict_keys, dict_values)
-                report = json.dumps(data)
-                print(report)
+                data_list.append(data)
+                #print(report)
         elif r == 'MRI':
             f_list = df['Relevant findings'].values.tolist()[15:25]
             f = random.choice(f_list)
@@ -172,57 +181,62 @@ def report(items):
                 shape = concatvals(15, 14, 5, 14, 19)
                 margin = concatvals(16, 14, 5, 14, 19)
                 int_enh = concatvals(17, 14, 5, 14, 19)
-                dict_keys = ['Name', 'BiRad', 'Condition description', 'Relevant Modality', 'Relevant Finding', 'Shape', 'Margin', 'Internal enhancement']
-                dict_values = [name, br, cd, r, f, shape, margin, int_enh]
+                dict_keys = ['id','First name', 'age','Condition Name', 'BiRad',  'Relevant Modality', 'Relevant Finding', 'Shape', 'Margin', 'Internal enhancement']
+                dict_values = [p_id, person_name, p_age, name, br,  r, f, shape, margin, int_enh]
                 data = get_dic_from_two_lists(dict_keys, dict_values)
-                report = json.dumps(data)
-                print(report)
+                data_list.append(data)
+                #print(report)
             elif f == 'MRI featues':
                 mri_f = concatvals(18, 14, 5, 14, 19)
-                dict_keys = ['Name', 'BiRad', 'Condition description', 'Relevant Modality', 'Relevant Finding', 'MRI features']
-                dict_values = [name, br, cd, r, f, mri_f]
+                dict_keys = ['id','First name', 'age','Condition Name', 'BiRad',  'Relevant Modality', 'Relevant Finding', 'MRI features']
+                dict_values = [p_id,person_name, p_age, name, br,  r, f, mri_f]
                 data = get_dic_from_two_lists(dict_keys, dict_values)
-                report = json.dumps(data)
-                print(report)
+                data_list.append(data)
+                #print(report)
             elif f == 'Kinetic curve assessment':
                 kin_c_a = concatvals(19, 14, 5, 14, 19)
-                dict_values = [name, br, cd, r, f, kin_c_a]
-                dict_keys = ['Name', 'BiRad', 'Condition description', 'Relevant Modality', 'Relevant Finding', 'Kinetic curve assessment']
+                dict_values = [p_id, person_name, p_age, name, br,  r, f, kin_c_a]
+                dict_keys = ['id','First name','age','Condition Name', 'BiRad',  'Relevant Modality', 'Relevant Finding', 'Kinetic curve assessment']
                 data = get_dic_from_two_lists(dict_keys, dict_values)
-                report = json.dumps(data)
-                print(report)
+                data_list.append(data)
+                #print(report)
             elif f == 'Non-mass enhancement (NME)':
                 distrib = concatvals(20, 14, 5, 14, 19)
                 int_enh_patt = concatvals(21, 14, 5, 14, 19)
-                dict_values = [name, br, cd, r, f, distrib, int_enh_patt]
-                dict_keys = ['Name', 'BiRad', 'Condition description', 'Relevant Modality', 'Relevant Finding', 'Distribution','Internal enhacement patterns']
+                dict_values = [p_id, person_name, p_age, name, br,  r, f, distrib, int_enh_patt]
+                dict_keys = ['id','First name','age','Condition Name', 'BiRad',  'Relevant Modality', 'Relevant Finding', 'Distribution','Internal enhacement patterns']
                 data = get_dic_from_two_lists(dict_keys, dict_values)
-                report = json.dumps(data)
-                print(report)
+                data_list.append(data)
+                #print(report)
             elif f == 'Non-enhancing findings':
                 nef = concatvals(22, 14, 5, 14, 19)
-                dict_values = [name, br, cd, r, f, nef]
-                dict_keys = ['Name', 'BiRad', 'Condition description', 'Relevant Modality', 'Non-enhancing patterns']
+                dict_values = [p_id,person_name, p_age,name, br,  r, f, nef]
+                dict_keys = ['id','First name','age','Condition Name', 'BiRad',  'Relevant Modality', 'Non-enhancing patterns']
                 data = get_dic_from_two_lists(dict_keys, dict_values)
-                report = json.dumps(data)
-                print(report)
+                data_list.append(data)
+                #print(report)
             elif f == 'Lymph nodes':
                 l_nodes = concatvals(22, 14, 5, 14, 19)
-                dict_values = [name, br, cd, r, f, l_nodes]
-                dict_keys = ['Name', 'BiRad', 'Condition description', 'Relevant Modality', 'Lymph nodes']
+                dict_values = [p_id,person_name,p_age,name, br,  r, f, l_nodes]
+                dict_keys = ['id','First name','age','Condition Name', 'BiRad',  'Relevant Modality', 'Lymph nodes']
                 data = get_dic_from_two_lists(dict_keys, dict_values)
-                report = json.dumps(data)
-                print(report)
+                data_list.append(data)
+                #print(report)
             else:
                 fcl = concatvals(23, 14, 5, 14, 19)
-                dict_values = [name, br, cd, r, f, fcl]
-                dict_keys = ['Name', 'BiRad', 'Condition description', 'Relevant Modality', 'Fat containing lesions']
+                dict_values = [p_id, person_name, p_age, name, br,  r, f, fcl]
+                dict_keys = ['id','First name','age','Condition Name', 'BiRad',  'Relevant Modality', 'Fat containing lesions']
                 data = get_dic_from_two_lists(dict_keys, dict_values)
-                report = json.dumps(data)
-                print(report)
+                data_list.append(data)
 
-reports = report(100)
+                #print(report)
+        report_temp = json.dumps(data_list)
+    print(report_temp)
 
+def main():
+    reports = generate_report(300, "first-names.txt")
+
+main()
 #define values check
 
 #report general outlook
