@@ -27,7 +27,7 @@ def concatvals(row, col, width, start, stop):
             value = [x.strip() for x in value_temp.split(',')]
             len_val = len(value)
             prob_arr = [prob_head[i] for _ in range(len_val)]
-            val_arr = [value[x] for x in range(len_val)]
+            val_arr = value[0:len_val]
         col += 1
     randparameter = random.choices(val_arr, prob_arr, k=1)
     return randparameter
@@ -37,13 +37,22 @@ def get_dic_from_two_lists(keys, values):
     return { keys[i] : values[i] for i in range(len(keys)) }
 
 def get_name(infile):
-    with open(infile) as f:
+    with open(infile, 'r') as f:
         contents_of_file = f.read()
         lines = contents_of_file.splitlines()
-        line_number = random.randrange(0, len(lines))
-        person_name = lines[line_number]
-        return(person_name)
+    line_number = random.randrange(0, len(lines))
+    person_name = lines[line_number]
+    return person_name
 
+def get_cond_name():
+    name_arr = df.Name.unique()
+    n = list(name_arr)
+    n_arr = []
+    for i in range(len(name_arr)):
+        if (isinstance(n[i], float)) is False:
+            n_arr += [n[i]]
+    return(n_arr)
+condname = print(get_cond_name())
 #Create random with parameter of report numbers
 def generate_report(items, infile):
     data_list = []
@@ -57,7 +66,8 @@ def generate_report(items, infile):
         p_age = random.randrange(25, 65)
         br_p = normalize(b)
         br = random.choices(a, br_p, k=1)
-        name = df['Name'].values.tolist()[0:1]
+        name =  df.iloc[0,0]
+
         "create list of values and slice empty entities from list"
         rm = df['Relevant modalities'].values.tolist()[0:26]
         #r = 'Mammography'
