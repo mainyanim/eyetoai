@@ -14,27 +14,34 @@ df = pd.read_excel("output.xlsx")
 wb = load_workbook('output.xlsx')
 ws = wb.get_sheet_by_name('Sheet1') #Define worksheet
 
+
+
+def get_dic_from_two_lists(keys, values):
+    return { keys[i] : values[i] for i in range(len(keys)) }
+
 #Define function to normalize arr values
 def normalize(items):
     problist = [x/sum(items) for x in items]
 #def probslist
 
-def concatvals(row, col, width, start, stop):
+def concatvals(row, start, stop):
     prob_head = list(df)[start:stop]
+    width = stop-start
+    col = start
+    val_arr = []
+    prob_arr = []
     for i in range(width):
         value_temp = df.iloc[row, col]
         if isinstance(value_temp, float) is False:
             value = [x.strip() for x in value_temp.split(',')]
-            len_val = len(value)
-            prob_arr = [prob_head[i] for _ in range(len_val)]
-            val_arr = value[0:len_val]
-        col += 1
-    randparameter = random.choices(val_arr, prob_arr, k=1)
+            for k in range(len(value)):
+                prob_arr.append(prob_head[i])
+            for i in range(len(value)):
+                val_arr.append(value[i])
+        col+=1
+    randparameter = random.choices(val_arr, prob_arr, k = 1)
     return randparameter
-
-
-def get_dic_from_two_lists(keys, values):
-    return { keys[i] : values[i] for i in range(len(keys)) }
+    print(val_arr,prob_arr, randparameter)
 
 def get_name(infile):
     with open(infile, 'r') as f:
@@ -51,8 +58,20 @@ def get_cond_name():
     for i in range(len(name_arr)):
         if (isinstance(n[i], float)) is False:
             n_arr += [n[i]]
-    return(n_arr)
-condname = print(get_cond_name())
+    rand_cond_name = random.choice(n_arr)
+    return rand_cond_name
+
+def check_row(cond_name):
+    from xlrd import open_workbook
+    book = open_workbook("output.xlsx")
+    for sheet in book.sheets():
+        for rowidx in range(sheet.nrows):
+            row = sheet.row(rowidx)
+            for colidx, cell in enumerate(row):
+                if cell.value == cond_name :
+                    return rowidx+1
+
+
 #Create random with parameter of report numbers
 def generate_report(items, infile):
     data_list = []
@@ -66,23 +85,26 @@ def generate_report(items, infile):
         p_age = random.randrange(25, 65)
         br_p = normalize(b)
         br = random.choices(a, br_p, k=1)
-        name =  df.iloc[0,0]
-
+        #Random condition name
+        name = get_cond_name()
+        row = check_row(name)
+        print(row)
         "create list of values and slice empty entities from list"
         rm = df['Relevant modalities'].values.tolist()[0:26]
-        #r = 'Mammography'
-        r = random.choice(rm)
+        r = 'Mammography'
+        #r = random.choice(rm)
         dict_keys = ['Id', 'First name', 'Age', 'Condition Name', 'BiRad', 'Relevant Modality']
         dict_values = [p_id, person_name, p_age, name, br, r]
         #mammo params
+
         if r == 'Mammography':
-            f_list = df['Relevant findings'].values.tolist()[0:8]
-            f = random.choice(f_list)
-            #f = 'Mass'
+            f_list = df['Relevant findings']
+            #f = random.choice(f_list)
+            f = 'Mass'
             if f == 'Mass':
-                shape = concatvals(0, 14, 5, 14, 19)
-                margin = concatvals(1, 14, 5, 14, 19)
-                density = concatvals(2, 14, 5, 14, 19)
+                shape = concatvals(0, 14, 19) #if row = 0
+                margin = concatvals(1, 14, 19) #here row should be 1
+                density = concatvals(2, 14, 19) # and here 2 - how can I achieve that?
                 dict_keys += ['Relevant Finding','Shape', 'Margin', 'Density']
                 dict_values += [f, shape, margin, density]
 
@@ -185,8 +207,7 @@ def generate_report(items, infile):
     print(report_temp)
 
 def main():
-    reports = generate_report(2, "first-names.txt")
-
+    reports = generate_report(5, "first-names.txt")
 main()
 #define values check
 
