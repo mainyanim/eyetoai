@@ -6,6 +6,8 @@ from openpyxl import load_workbook
 from openpyxl import Workbook
 import numpy as np
 import math
+from collections import defaultdict
+
 
 # define values check and append to arr
 # define probability array
@@ -197,7 +199,7 @@ def generate_report(infile):
         f_temp = df['Relevant findings'].values.tolist()[0:8]
         f_list = [x for i, x in enumerate(f_temp) if i == f_temp.index(x)]
         f_num_total = len(f_list)
-        f_rand = random.randrange(f_num_total)
+        f_rand = random.randrange(1, f_num_total+1)
         print(f_temp, f_list, f_num_total, f_rand)
 
         #dict_report.update({'Relevant finding': f})
@@ -205,22 +207,25 @@ def generate_report(infile):
         iter_params_calc = ['Typically benign', 'Suspicious morphology', 'Distribution']
         iter_params_a = ['Assymetry']
         iter_params_lymph = ['Lymph nodes']
-        for i in range(f_rand):
+        findings = {}
+        findings['Findings'] = {}
+        for i in range(f_rand+1):
             f = random.choice(f_list)
-            print(f)
-            params = {}
             if f == 'Mass':
                 rep_temp = create_rep(iter_params_mass, row, f, r)
-                print(rep_temp)
+                findings['Findings'][f] = rep_temp
             elif f == 'Calcifications':
                 rep_temp = create_rep(iter_params_calc, row, f, r)
-                print(rep_temp)
+                findings['Findings'][f] = rep_temp
             elif f == 'Assymetry':
                 rep_temp = create_rep(iter_params_a, row, f, r)
-                print(rep_temp)
+                findings['Findings'][f] = rep_temp
             else:
                 rep_temp = create_rep(iter_params_lymph, row, f, r)
-                print(rep_temp)
+                findings['Findings'][f] = rep_temp
+            report = findings
+        print(report)
+
     elif r == 'US':
         f_list = df['Relevant findings'].values.tolist()[8:15]
         f = random.choice(f_list)
@@ -237,6 +242,7 @@ def generate_report(infile):
             report = create_rep(us_params_l_nodes, dict_report, row, f, r)
         else:
             report = create_rep(us_params_sp_cases, dict_report, row, f, r)
+
     elif r == 'MRI':
         f_list = df['Relevant findings'].values.tolist()[15:25]
         mri_params_mass = ['Shape', 'Margin', 'Internal enhancement']
