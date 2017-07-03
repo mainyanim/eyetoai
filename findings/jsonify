@@ -200,8 +200,9 @@ def generate_report(infile):
     # mammo params
     findings = {}
     findings['conditions'] = {}
-    findings['conditions']['conditionName'] = name
+
     if r == 'Mammography':
+        findings['conditions']['conditionName'] = name
         f_temp = df['Relevant findings'].values.tolist()[0:8]
         f_list = [x for i, x in enumerate(f_temp) if i == f_temp.index(x)]
         f_num_total = len(f_list)
@@ -210,22 +211,24 @@ def generate_report(infile):
         iter_params_calc = ['typicallyBenign', 'suspiciousMorphology', 'distribution']
         iter_params_a = ['assymetry']
         iter_params_lymph = ['lymphNodes']
-        findings['conditions']['finding'] = {}
-
+        findings['conditions']['relevantFinding'] = {}
         for i in range(f_rand+1):
             f = camelCase(random.choice(f_list))
             if f == 'mass':
                 rep_temp = create_rep(iter_params_mass, row, f, r)
-                findings['conditions']['finding'][f] = rep_temp
+                findings['conditions']['relevantFinding'][f] = rep_temp
             elif f == 'calcifications':
                 rep_temp = create_rep(iter_params_calc, row, f, r)
-                findings['conditions']['finding'][f] = rep_temp
+                findings['conditions']['relevantFinding'][f] = rep_temp
+
             elif f == 'assymetry':
                 rep_temp = create_rep(iter_params_a, row, f, r)
-                findings['conditions']['finding'][f] = rep_temp
+                findings['conditions']['relevantFinding'][f] = rep_temp
+
             else:
                 rep_temp = create_rep(iter_params_lymph, row, f, r)
-                findings['conditions']['finding'][f] = rep_temp
+                findings['conditions']['relevantFinding'][f] = rep_temp
+
             report = json.dumps(findings)
         print(report)
 
