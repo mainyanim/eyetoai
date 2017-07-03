@@ -131,7 +131,6 @@ def create_rep(arr, dict1, row_data, condname, modality):
     to_json += [dict1]
     return to_json
 
-
 def get_name(infile):
     with open(infile, 'r') as f:
         contents_of_file = f.read()
