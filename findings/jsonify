@@ -43,7 +43,8 @@ def concatvals(row, start, stop):
             prob_arr += [prob_head[i] for _ in range(len_val)]
             val_arr += value[0:len_val]
         col += 1
-    randparameter = random.choices(val_arr, prob_arr, k=1)
+    randparameter = (", ".join(random.choices(val_arr, prob_arr, k=1)))
+    print(randparameter)
     return randparameter
 
 
@@ -129,6 +130,7 @@ def create_rep(arr, row_data, condname, modality):  # get findings
         for i in range(len(arr)):
             params += grab_data(row_data, 23, 14, 19)
             row_data += 1
+
 
     findings = get_dic_from_two_lists(arr, params)
     # dict1.update(data)
