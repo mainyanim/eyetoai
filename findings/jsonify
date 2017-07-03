@@ -44,7 +44,6 @@ def concatvals(row, start, stop):
             val_arr += value[0:len_val]
         col += 1
     randparameter = (", ".join(random.choices(val_arr, prob_arr, k=1)))
-    print(randparameter)
     return randparameter
 
 
@@ -56,27 +55,27 @@ def grab_data(r, s, x, y):
 def create_rep(arr, row_data, condname, modality):  # get findings
     params = []
     # to_json = []
-    if condname == 'Mass' and modality == 'Mammography':
+    if condname == 'mass' and modality == 'Mammography':
         for i in range(len(arr)):
             params += grab_data(row_data, 0, 14, 19)
             row_data += 1
 
-    elif condname == 'Calcifications' and modality == 'Mammography':
+    elif condname == 'calcifications' and modality == 'Mammography':
         for i in range(len(arr)):
             params += grab_data(row_data, 3, 14, 19)
             row_data += 1
 
-    elif condname == 'Assymetry' and modality == 'Mammography':
+    elif condname == 'assymetry' and modality == 'Mammography':
         for i in range(len(arr)):
             params += grab_data(row_data, 6, 14, 19)
             row_data += 1
 
-    elif condname == 'Lymph nodes' and modality == 'Mammography':
+    elif condname == 'lymphNodes' and modality == 'Mammography':
         for i in range(len(arr)):
             params += grab_data(row_data, 7, 14, 19)
             row_data += 1
 
-    elif condname == 'Mass' and modality == 'US':
+    elif condname == 'mass' and modality == 'US':
         for i in range(len(arr)):
             params += grab_data(row_data, 8, 14, 19)
             row_data += 1
@@ -162,6 +161,9 @@ def get_cond_name():
     rand_cond_name = random.choice(n_arr)
     return rand_cond_name
 
+def camelCase(st):
+    output = ''.join(x for x in st.title() if x.isalpha())
+    return output[0].lower() + output[1:]
 
 def check_row(cond_name):
     from xlrd import open_workbook
@@ -172,6 +174,8 @@ def check_row(cond_name):
             for colidx, cell in enumerate(row):
                 if cell.value == cond_name:
                     return rowidx + 1
+
+
 
 
 # Create random with parameter of report numbers
@@ -202,30 +206,30 @@ def generate_report(infile):
         f_list = [x for i, x in enumerate(f_temp) if i == f_temp.index(x)]
         f_num_total = len(f_list)
         f_rand = random.randrange(1, f_num_total+1)
-        print(f_temp, f_list, f_num_total, f_rand)
 
         #dict_report.update({'Relevant finding': f})
-        iter_params_mass = ['Shape', 'Margin', 'Density']
-        iter_params_calc = ['Typically benign', 'Suspicious morphology', 'Distribution']
-        iter_params_a = ['Assymetry']
-        iter_params_lymph = ['Lymph nodes']
+        iter_params_mass = ['shape', 'margin', 'density']
+        iter_params_calc = ['typicallyBenign', 'suspiciousMorphology', 'distribution']
+        iter_params_a = ['assymetry']
+        iter_params_lymph = ['lymphNodes']
         findings = {}
-        findings['Findings'] = {}
+        findings['findings'] = {}
         for i in range(f_rand+1):
-            f = random.choice(f_list)
-            if f == 'Mass':
+            f = camelCase(random.choice(f_list))
+            print(f)
+            if f == 'mass':
                 rep_temp = create_rep(iter_params_mass, row, f, r)
-                findings['Findings'][f] = rep_temp
-            elif f == 'Calcifications':
+                findings['findings'][f] = rep_temp
+            elif f == 'calcifications':
                 rep_temp = create_rep(iter_params_calc, row, f, r)
-                findings['Findings'][f] = rep_temp
-            elif f == 'Assymetry':
+                findings['findings'][f] = rep_temp
+            elif f == 'assymetry':
                 rep_temp = create_rep(iter_params_a, row, f, r)
-                findings['Findings'][f] = rep_temp
+                findings['findings'][f] = rep_temp
             else:
                 rep_temp = create_rep(iter_params_lymph, row, f, r)
-                findings['Findings'][f] = rep_temp
-            report = findings
+                findings['findings'][f] = rep_temp
+            report = json.dumps(findings)
         print(report)
 
     elif r == 'US':
