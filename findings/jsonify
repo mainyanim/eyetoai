@@ -204,8 +204,6 @@ def generate_report(infile):
         f_list = [x for i, x in enumerate(f_temp) if i == f_temp.index(x)]
         f_num_total = len(f_list)
         f_rand = random.randrange(1, f_num_total+1)
-
-        #dict_report.update({'Relevant finding': f})
         iter_params_mass = ['shape', 'margin', 'density']
         iter_params_calc = ['typicallyBenign', 'suspiciousMorphology', 'distribution']
         iter_params_a = ['assymetry']
