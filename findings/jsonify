@@ -44,13 +44,15 @@ def concatvals(row, start, stop):
     randparameter = random.choices(val_arr, prob_arr, k=1)
     return randparameter
 
+
 def grab_data(r, s, x, y):
-    ps = [concatvals(r+s, x, y)]
+    ps = [concatvals(r + s, x, y)]
     return ps
 
-def create_rep(arr, dict1, row_data, condname, modality):
+
+def create_rep(arr, row_data, condname, modality):  # get findings
     params = []
-    to_json = []
+    # to_json = []
     if condname == 'Mass' and modality == 'Mammography':
         for i in range(len(arr)):
             params += grab_data(row_data, 0, 14, 19)
@@ -68,68 +70,68 @@ def create_rep(arr, dict1, row_data, condname, modality):
 
     elif condname == 'Lymph nodes' and modality == 'Mammography':
         for i in range(len(arr)):
-            params += [concatvals(row_data + 7, 14, 19)]
+            params += grab_data(row_data, 7, 14, 19)
             row_data += 1
 
     elif condname == 'Mass' and modality == 'US':
         for i in range(len(arr)):
-            params += [concatvals(row_data + 8, 14, 19)]
+            params += grab_data(row_data, 8, 14, 19)
             row_data += 1
 
     elif condname == 'Calcifications US' and modality == 'US':
         for i in range(len(arr)):
-            params += [concatvals(row_data + 12, 14, 19)]
+            params += grab_data(row_data, 12, 14, 19)
             row_data += 1
 
     elif condname == 'Lymph nodes' and modality == 'US':
         for i in range(len(arr)):
-            params += [concatvals(row_data + 13, 14, 19)]
+            params += grab_data(row_data, 13, 14, 19)
             row_data += 1
 
     elif condname == 'Special cases' and modality == 'US':
         for i in range(len(arr)):
-            params += [concatvals(row_data + 14, 14, 19)]
+            params += grab_data(row_data, 14, 14, 19)
             row_data += 1
 
     elif condname == 'Mass' and modality == 'MRI':
         for i in range(len(arr)):
-            params += [concatvals(row_data + 15, 14, 19)]
+            params += grab_data(row_data, 15, 14, 19)
             row_data += 1
 
     elif condname == 'MRI features' and modality == 'MRI':
         for i in range(len(arr)):
-            params += [concatvals(row_data + 18, 14, 19)]
+            params += grab_data(row_data, 18, 14, 19)
             row_data += 1
 
     elif condname == 'Kinetic curve assessment' and modality == 'MRI':
         for i in range(len(arr)):
-            params += [concatvals(row_data + 19, 14, 19)]
+            params += grab_data(row_data, 19, 14, 19)
             row_data += 1
 
     elif condname == 'Non-mass enhancement (NME)' and modality == 'MRI':
         for i in range(len(arr)):
-            params += [concatvals(row_data + 20, 14, 19)]
+            params += grab_data(row_data, 20, 14, 19)
             row_data += 1
 
     elif condname == 'Non-enhancing findings' and modality == 'MRI':
         for i in range(len(arr)):
-            params += [concatvals(row_data + 22, 14, 19)]
+            params += grab_data(row_data, 22, 14, 19)
             row_data += 1
 
     elif condname == 'Lymph nodes' and modality == 'MRI':
         for i in range(len(arr)):
-            params += [concatvals(row_data + 22, 14, 19)]
+            params += grab_data(row_data, 22, 14, 19)
             row_data += 1
 
     elif condname == 'Fat containing lesions' and modality == 'MRI':
         for i in range(len(arr)):
-            params += [concatvals(row_data + 23, 14, 19)]
+            params += grab_data(row_data, 23, 14, 19)
             row_data += 1
 
-    data = get_dic_from_two_lists(arr, params)
-    dict1.update(data)
-    to_json += [dict1]
-    return to_json
+    findings = get_dic_from_two_lists(arr, params)
+    # dict1.update(data)
+    # to_json += [dict1]
+    return findings
 
 
 def get_name(infile):
@@ -139,6 +141,7 @@ def get_name(infile):
     line_number = random.randrange(0, len(lines))
     person_name = lines[line_number]
     return person_name
+
 
 def get_numcond():
     names = len(df.Name.unique())
@@ -164,7 +167,6 @@ def check_row(cond_name):
             row = sheet.row(rowidx)
             for colidx, cell in enumerate(row):
                 if cell.value == cond_name:
-                    print("condition name is: ", cond_name)
                     return rowidx + 1
 
 
@@ -185,29 +187,40 @@ def generate_report(infile):
     row = check_row(name)
     "create list of values and slice empty entities from list"
     rm = df['Relevant modalities'].values.tolist()[0:26]
-    # r = 'Mammography'
-    r = random.choice(rm)
+    r = 'Mammography'
+    # r = random.choice(rm)
     dict_report = {'Id': p_id, 'First name': person_name, 'Age': p_age, 'Condition Name': name, 'BiRad': br,
                    'Relevant Modality': r}
 
-
     # mammo params
     if r == 'Mammography':
-        f_list = df['Relevant findings'].values.tolist()[0:8]
-        f = random.choice(f_list)
-        dict_report.update({'Relevant finding': f})
+        f_temp = df['Relevant findings'].values.tolist()[0:8]
+        f_list = [x for i, x in enumerate(f_temp) if i == f_temp.index(x)]
+        f_num_total = len(f_list)
+        f_rand = random.randrange(f_num_total)
+        print(f_temp, f_list, f_num_total, f_rand)
+
+        #dict_report.update({'Relevant finding': f})
         iter_params_mass = ['Shape', 'Margin', 'Density']
         iter_params_calc = ['Typically benign', 'Suspicious morphology', 'Distribution']
         iter_params_a = ['Assymetry']
         iter_params_lymph = ['Lymph nodes']
-        if f == 'Mass':
-             report = create_rep(iter_params_mass, dict_report, row, f, r)
-        elif f == 'Calcifications':
-            report = create_rep(iter_params_calc, dict_report, row, f, r)
-        elif f == 'Assymetry':
-            report = create_rep(iter_params_a, dict_report, row, f, r)
-        else:
-            report = create_rep(iter_params_lymph, dict_report, row, f, r)
+        for i in range(f_rand):
+            f = random.choice(f_list)
+            print(f)
+            params = {}
+            if f == 'Mass':
+                rep_temp = create_rep(iter_params_mass, row, f, r)
+                print(rep_temp)
+            elif f == 'Calcifications':
+                rep_temp = create_rep(iter_params_calc, row, f, r)
+                print(rep_temp)
+            elif f == 'Assymetry':
+                rep_temp = create_rep(iter_params_a, row, f, r)
+                print(rep_temp)
+            else:
+                rep_temp = create_rep(iter_params_lymph, row, f, r)
+                print(rep_temp)
     elif r == 'US':
         f_list = df['Relevant findings'].values.tolist()[8:15]
         f = random.choice(f_list)
@@ -249,7 +262,8 @@ def generate_report(infile):
             report = create_rep(mri_params_l_nodes, dict_report, row, f, r)
         else:
             report = create_rep(mri_params_fcl, dict_report, row, f, r)
-    print(report)
+
+    #print(report)
 
 
 def main():
