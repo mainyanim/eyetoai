@@ -80,60 +80,58 @@ def create_rep(arr, row_data, condname, modality):  # get findings
             params += grab_data(row_data, 8, 14, 19)
             row_data += 1
 
-    elif condname == 'Calcifications US' and modality == 'US':
+    elif condname == 'calcificationsUs' and modality == 'US':
         for i in range(len(arr)):
             params += grab_data(row_data, 12, 14, 19)
             row_data += 1
 
-    elif condname == 'Lymph nodes' and modality == 'US':
+    elif condname == 'lymphNodes' and modality == 'US':
         for i in range(len(arr)):
             params += grab_data(row_data, 13, 14, 19)
             row_data += 1
 
-    elif condname == 'Special cases' and modality == 'US':
+    elif condname == 'specialCases' and modality == 'US':
         for i in range(len(arr)):
             params += grab_data(row_data, 14, 14, 19)
             row_data += 1
 
-    elif condname == 'Mass' and modality == 'MRI':
+    elif condname == 'mass' and modality == 'MRI':
         for i in range(len(arr)):
             params += grab_data(row_data, 15, 14, 19)
             row_data += 1
 
-    elif condname == 'MRI features' and modality == 'MRI':
+    elif condname == 'mriFeatures' and modality == 'MRI':
         for i in range(len(arr)):
             params += grab_data(row_data, 18, 14, 19)
             row_data += 1
 
-    elif condname == 'Kinetic curve assessment' and modality == 'MRI':
+    elif condname == 'kineticCurveAssessment' and modality == 'MRI':
         for i in range(len(arr)):
             params += grab_data(row_data, 19, 14, 19)
             row_data += 1
 
-    elif condname == 'Non-mass enhancement (NME)' and modality == 'MRI':
+    elif condname == 'nonMassEnhancement(NME)' and modality == 'MRI':
         for i in range(len(arr)):
             params += grab_data(row_data, 20, 14, 19)
             row_data += 1
 
-    elif condname == 'Non-enhancing findings' and modality == 'MRI':
+    elif condname == 'nonEnhancingFindings' and modality == 'MRI':
         for i in range(len(arr)):
             params += grab_data(row_data, 22, 14, 19)
             row_data += 1
 
-    elif condname == 'Lymph nodes' and modality == 'MRI':
+    elif condname == 'lymphNodes' and modality == 'MRI':
         for i in range(len(arr)):
             params += grab_data(row_data, 22, 14, 19)
             row_data += 1
 
-    elif condname == 'Fat containing lesions' and modality == 'MRI':
+    elif condname == 'fatContainingLesions' and modality == 'MRI':
         for i in range(len(arr)):
             params += grab_data(row_data, 23, 14, 19)
             row_data += 1
 
 
     findings = get_dic_from_two_lists(arr, params)
-    # dict1.update(data)
-    # to_json += [dict1]
     return findings
 
 
@@ -195,8 +193,8 @@ def generate_report(infile):
     row = check_row(name)
     "create list of values and slice empty entities from list"
     rm = df['Relevant modalities'].values.tolist()[0:26]
-    r = 'Mammography'
-    # r = random.choice(rm)
+    #r = 'US'
+    r = random.choice(rm)
     dict_report = {'Id': p_id, 'First name': person_name, 'Age': p_age, 'Condition Name': name, 'BiRad': br,
                    'Relevant Modality': r}
 
@@ -233,48 +231,76 @@ def generate_report(infile):
         print(report)
 
     elif r == 'US':
-        f_list = df['Relevant findings'].values.tolist()[8:15]
-        f = random.choice(f_list)
-        dict_report.update({'Relevant finding': f})
-        us_params_mass = ['Shape', 'Margin', 'Echo', 'Posterior']
-        us_params_calc = ['Calcifications']
-        us_params_l_nodes = ['Lymph Nodes']
-        us_params_sp_cases = ['Special Cases']
-        if f == 'Mass':
-            report = create_rep(us_params_mass, dict_report, row, f, r)
-        elif f == 'Calcifications US':
-            report = create_rep(us_params_calc, dict_report, row, f, r)
-        elif f == 'Lymph nodes':
-            report = create_rep(us_params_l_nodes, dict_report, row, f, r)
-        else:
-            report = create_rep(us_params_sp_cases, dict_report, row, f, r)
+        f_temp = df['Relevant findings'].values.tolist()[8:15]
+        f_list = [x for i, x in enumerate(f_temp) if i == f_temp.index(x)]
+        f_num_total = len(f_list)
+        f_rand = random.randrange(1, f_num_total + 1)
 
+        us_params_mass = ['shape', 'margin', 'echo', 'posterior']
+        us_params_calc = ['calcifications']
+        us_params_l_nodes = ['lymphNodes']
+        us_params_sp_cases = ['specialCases']
+        findings = {}
+        findings['findings'] = {}
+        for i in range(f_rand+1):
+            f = camelCase(random.choice(f_list))
+            print(f)
+            if f == 'mass':
+                rep_temp = create_rep(us_params_mass, row, f, r)
+                findings['findings'][f] = rep_temp
+            elif f == 'calcificationsUs':
+                rep_temp = create_rep(us_params_calc, row, f, r)
+                findings['findings'][f] = rep_temp
+            elif f == 'lymphNodes':
+                rep_temp = create_rep(us_params_l_nodes, row, f, r)
+                findings['findings'][f] = rep_temp
+            else:
+                rep_temp = create_rep(us_params_sp_cases, row, f, r)
+                findings['findings'][f] = rep_temp
+            report = json.dumps(findings)
+        print(report)
     elif r == 'MRI':
-        f_list = df['Relevant findings'].values.tolist()[15:25]
-        mri_params_mass = ['Shape', 'Margin', 'Internal enhancement']
-        mri_params_mri_f = ['MRI features']
-        mri_params_kin_c_a = ['Kinetic curve assessment']
-        mri_params_nme = ['Distribution', 'Internal enhancement patterns']
-        mri_params_nef = ['Non-enhancing patterns']
-        mri_params_l_nodes = ['Lymph Nodes']
-        mri_params_fcl = ['Fat containing lesions']
+        f_temp = df['Relevant findings'].values.tolist()[15:25]
+        f_list = [x for i, x in enumerate(f_temp) if i == f_temp.index(x)]
+        f_num_total = len(f_list)
+        f_rand = random.randrange(1, f_num_total + 1)
+        mri_params_mass = ['shape', 'margin', 'internalEnhancement']
+        mri_params_mri_f = ['mriFeatures']
+        mri_params_kin_c_a = ['kineticCurveAssessment']
+        mri_params_nme = ['distribution', 'internalEnhancementPatterns']
+        mri_params_nef = ['nonEnhancingPatterns']
+        mri_params_l_nodes = ['lymphNodes']
+        mri_params_fcl = ['fatContainingLesions']
         f = random.choice(f_list)
-        dict_report.update({'Relevant finding': f})
-        if f == 'Mass':
-            report = create_rep(mri_params_mass, dict_report, row, f, r)
-        elif f == 'MRI features':
-            report = create_rep(mri_params_mri_f, dict_report, row, f, r)
-        elif f == 'Kinetic curve assessment':
-            report = create_rep(mri_params_kin_c_a, dict_report, row, f, r)
-        elif f == 'Non-mass enhancement (NME)':
-            report = create_rep(mri_params_nme, dict_report, row, f, r)
-        elif f == 'Non-enhancing findings':
-            report = create_rep(mri_params_nef, dict_report, row, f, r)
-        elif f == 'Lymph nodes':
-            report = create_rep(mri_params_l_nodes, dict_report, row, f, r)
-        else:
-            report = create_rep(mri_params_fcl, dict_report, row, f, r)
-
+        dict_report.update({'relevantFinding': f})
+        findings = {}
+        findings['findings'] = {}
+        for i in range(f_rand + 1):
+            f = camelCase(random.choice(f_list))
+            print(f)
+            if f == 'mass':
+                rep_temp = create_rep(mri_params_mass, row, f, r)
+                findings['findings'][f] = rep_temp
+            elif f == 'mriFeatures':
+                rep_temp = create_rep(mri_params_mri_f, row, f, r)
+                findings['findings'][f] = rep_temp
+            elif f == 'kineticCurveAssessment':
+                rep_temp = create_rep(mri_params_kin_c_a, row, f, r)
+                findings['findings'][f] = rep_temp
+            elif f == 'nonMassEnhancement(NME)':
+                rep_temp = create_rep(mri_params_nme, row, f, r)
+                findings['findings'][f] = rep_temp
+            elif f == 'nonEnhancingFindings':
+                rep_temp = create_rep(mri_params_nef, row, f, r)
+                findings['findings'][f] = rep_temp
+            elif f == 'lymphNodes':
+                rep_temp = create_rep(mri_params_l_nodes, row, f, r)
+                findings['findings'][f] = rep_temp
+            else:
+                rep_temp = create_rep(mri_params_fcl, row, f, r)
+                findings['findings'][f] = rep_temp
+            report = json.dumps(findings)
+        print(report)
     #print(report)
 
 
