@@ -178,6 +178,7 @@ def generate_report(infile):
     p_id = random.randrange(100)
     p_age = random.randrange(25, 65)
     br_p = normalize(b)
+    print(br_p)
     br = random.choices(a, br_p, k=1)
     name = get_cond_name()
     names = get_numcond()
