@@ -195,6 +195,7 @@ def generate_report(infile):
     br = random.choices(a, br_p, k=1)
     name = get_cond_name()
     names = get_numcond()
+    num_cond = random.randrange(1,5)
     row = check_row(name)
     "create list of values and slice empty entities from list"
     rm = df['Relevant modalities'].values.tolist()[0:26]
@@ -214,24 +215,31 @@ def generate_report(infile):
         iter_params_calc = ['typicallyBenign', 'suspiciousMorphology', 'distribution']
         iter_params_a = ['assymetry']
         iter_params_lymph = ['lymphNodes']
-        for i in range(f_rand+1):
-            f = camelCase(random.choice(f_list))
-            if f == 'mass':
-                rep_temp = create_rep(iter_params_mass, row, f, r)
-                findings['conditions']['conditionName'][name]['relevantFindings']['relevantFinding'][f] = rep_temp
+        findings['params'] = {}
+        findings['params']['id'] = p_id
+        findings['params']['name'] = person_name
+        findings['params']['numberOfConditions'] = num_cond
+        for i in range(num_cond):
+            cond = camelCase(get_cond_name())
+            print(cond)
+            for k in range(f_rand+1):
+                f = camelCase(random.choice(f_list))
+                #f = 'mass'
+                if f == 'mass':
+                    rep_temp = create_rep(iter_params_mass, row, f, r)
+                    findings[cond]['relevantFinding'][f] = rep_temp
 
-            elif f == 'calcifications':
-                rep_temp = create_rep(iter_params_calc, row, f, r)
-                findings['conditions']['conditionName'][name]['relevantFindings']['relevantFinding'][f] = rep_temp
+                elif f == 'calcifications':
+                    rrep_temp = create_rep(iter_params_mass, row, f, r)
+                    findings[cond]['relevantFinding'][f] = rep_temp
 
-            elif f == 'assymetry':
-                rep_temp = create_rep(iter_params_a, row, f, r)
-                findings['conditions']['conditionName'][name]['relevantFindings']['relevantFinding'][f] = rep_temp
+                elif f == 'assymetry':
+                    rep_temp = create_rep(iter_params_mass, row, f, r)
+                    findings[cond]['relevantFinding'][f] = rep_temp
 
-
-            else:
-                rep_temp = create_rep(iter_params_lymph, row, f, r)
-                findings['conditions']['conditionName'][name]['relevantFindings']['relevantFinding'][f] = rep_temp
+                else:
+                    rep_temp = create_rep(iter_params_mass, row, f, r)
+                    findings[cond]['relevantFinding'][f] = rep_temp
 
             report = json.dumps(findings)
         print(report)
