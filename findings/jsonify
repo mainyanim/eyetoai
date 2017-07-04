@@ -199,7 +199,7 @@ def generate_report(infile):
     row = check_row(name)
     "create list of values and slice empty entities from list"
     rm = df['Relevant modalities'].values.tolist()[0:26]
-    #r = 'US'
+    #r = 'Mammography'
     r = random.choice(rm)
     dict_report = {'Id': p_id, 'First name': person_name, 'Age': p_age, 'Condition Name': {}, 'BiRad': br,
                    'Relevant Modality': r}
@@ -208,8 +208,8 @@ def generate_report(infile):
     findings['params'] = {}
     findings['params']['id'] = p_id
     findings['params']['name'] = person_name
+    findings['params']['relevantModality'] = r
     findings['params']['numberOfConditions'] = num_cond
-
     if r == 'Mammography':
         f_temp = df['Relevant findings'].values.tolist()[0:8]
         f_list = [x for i, x in enumerate(f_temp) if i == f_temp.index(x)]
@@ -223,8 +223,8 @@ def generate_report(infile):
         for i in range(num_cond):
             cond = camelCase(get_cond_name())
             for k in range(f_rand+1):
-                f = camelCase(random.choice(f_list))
-                #f = 'mass'
+                #f = camelCase(random.choice(f_list))
+                f = 'mass'
                 if f == 'mass':
                     rep_temp = create_rep(iter_params_mass, row, f, r)
                     findings[cond]['relevantFinding'][f] = rep_temp
