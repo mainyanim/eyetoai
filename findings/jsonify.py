@@ -174,10 +174,20 @@ def check_row(cond_name):
                 if cell.value == cond_name:
                     return rowidx + 1
 
-
+def get_birad(row, col, width):
+    val_head = list(df)[2:9]
+    val_arr = []
+    prob_arr = []
+    for i in range(width):
+        value = df.iloc[row - 2, col]
+        val_arr += [val_head[i]]
+        prob_arr += [value]
+        col += 1
+    randparameter = (", ".join(random.choices(val_arr, prob_arr, k=1)))
+    return randparameter
 # Create random with parameter of report numbers
+
 def generate_report(infile):
-    # for i in range(items):
     name = get_cond_name()
     row = check_row(name)
     # Read BiRads Probabilities into list
@@ -190,8 +200,8 @@ def generate_report(infile):
 
     "create list of values and slice empty entities from list"
     rm = df['Relevant modalities'].values.tolist()[0:26]
-    #r = 'Mammography'
-    r = random.choice(rm)
+    r = 'Mammography'
+    #r = random.choice(rm)
     # mammo params
     findings = AutoTree()
     findings['params'] = {}
@@ -200,6 +210,7 @@ def generate_report(infile):
     findings['params']['age'] = p_age
     findings['params']['relevantModality'] = r
     findings['params']['numberOfConditions'] = num_cond
+
     if r == 'Mammography':
         f_temp = df['Relevant findings'].values.tolist()[0:8]
         f_list = [x for i, x in enumerate(f_temp) if i == f_temp.index(x)]
@@ -209,12 +220,13 @@ def generate_report(infile):
         iter_params_calc = ['typicallyBenign', 'suspiciousMorphology', 'distribution']
         iter_params_a = ['assymetry']
         iter_params_lymph = ['lymphNodes']
-
         for i in range(num_cond):
+            br = get_birad(row, 2, 7)
             cond = camelCase(get_cond_name())
+            findings[cond]['biRad'] = br
             for k in range(f_rand+1):
-                #f = camelCase(random.choice(f_list))
-                f = 'mass'
+                f = camelCase(random.choice(f_list))
+                #f = 'mass'
                 if f == 'mass':
                     rep_temp = create_rep(iter_params_mass, row, f, r)
                     findings[cond]['relevantFinding'][f] = rep_temp
@@ -309,5 +321,4 @@ def generate_report(infile):
 def main():
     for i in range(1):
        generate_report("first-names.txt")
-
 main()
