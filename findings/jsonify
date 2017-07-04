@@ -127,12 +127,10 @@ def create_rep(arr, row_data, condname, modality):  # get findings
 
     elif condname == 'fatContainingLesions' and modality == 'MRI':
         for i in range(len(arr)):
-            params += grab_data(row_data, 23, 14, 19)
+            params += grab_data(row_data, 24, 14, 19)
             row_data += 1
-
-
-    findings = get_dic_from_two_lists(arr, params)
-    return findings
+    fs = get_dic_from_two_lists(arr, params)
+    return fs
 
 
 def get_name(infile):
@@ -308,7 +306,7 @@ def generate_report(infile):
                 elif f == 'lymphNodes':
                     rep_temp = create_rep(mri_params_l_nodes, row, f, r)
                     findings[cond]['relevantFinding'][f] = rep_temp
-                else:
+                elif f == 'fatContainingLesions':
                     rep_temp = create_rep(mri_params_fcl, row, f, r)
                     findings[cond]['relevantFinding'][f] = rep_temp
             report = json.dumps(findings)
@@ -317,7 +315,7 @@ def generate_report(infile):
 
 
 def main():
-    for i in range(1):
-        generate_report("first-names.txt")
+    for i in range(100):
+       generate_report("first-names.txt")
 
 main()
