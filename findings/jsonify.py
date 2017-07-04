@@ -17,7 +17,6 @@ df = pd.read_excel("output.xlsx")
 wb = load_workbook('output.xlsx')
 ws = wb.get_sheet_by_name('Sheet1')  # Define worksheet
 
-
 def get_dic_from_two_lists(keys, values):
     return {keys[i]: values[i] for i in range(len(keys))}
 
@@ -25,7 +24,6 @@ def get_dic_from_two_lists(keys, values):
 # Define function to normalize arr values
 def normalize(items):
     problist = [x / sum(items) for x in items]
-
 
 # def probslist
 
