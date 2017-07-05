@@ -8,7 +8,6 @@ import numpy as np
 import math
 from collections import defaultdict
 
-
 # define values check and append to arr
 # define probability array
 # read excel
@@ -17,6 +16,7 @@ df = pd.read_excel("output.xlsx")
 wb = load_workbook('output.xlsx')
 ws = wb.get_sheet_by_name('Sheet1')  # Define worksheet
 
+
 def get_dic_from_two_lists(keys, values):
     return {keys[i]: values[i] for i in range(len(keys))}
 
@@ -24,6 +24,7 @@ def get_dic_from_two_lists(keys, values):
 # Define function to normalize arr values
 def normalize(items):
     problist = [x / sum(items) for x in items]
+
 
 # def probslist
 
@@ -155,14 +156,17 @@ def get_cond_name():
     rand_cond_name = random.choice(n_arr)
     return rand_cond_name
 
+
 def camelCase(st):
     output = ''.join(x for x in st.title() if x.isalpha())
     return output[0].lower() + output[1:]
+
 
 class AutoTree(dict):
     def __missing__(self, key):
         value = self[key] = type(self)()
         return value
+
 
 def check_row(cond_name):
     from xlrd import open_workbook
@@ -174,6 +178,7 @@ def check_row(cond_name):
                 if cell.value == cond_name:
                     return rowidx + 1
 
+
 def get_birad(row, col, width):
     val_head = list(df)[2:9]
     val_arr = []
@@ -183,142 +188,149 @@ def get_birad(row, col, width):
         val_arr += [val_head[i]]
         prob_arr += [value]
         col += 1
-    randparameter = (", ".join(random.choices(val_arr, prob_arr, k=1)))
-    return randparameter
+    randp = (", ".join(random.choices(val_arr, prob_arr, k=1)))
+    return randp
+
+
 # Create random with parameter of report numbers
 
-def generate_report(infile):
-    name = get_cond_name()
-    row = check_row(name)
-    # Read BiRads Probabilities into list
-    # Read BiRads into list
-    person_name = get_name(infile)
-    p_id = random.randrange(100)
-    p_age = random.randrange(25, 65)
+def generate_report(infile, items):
+    for i in range(items):
+        name = get_cond_name()
+        row = check_row(name)
+        # Read BiRads Probabilities into list
+        # Read BiRads into list
+        person_name = get_name(infile)
+        p_id = random.randrange(100)
+        p_age = random.randrange(25, 65)
 
-    num_cond = random.randrange(1,5)
+        num_cond = random.randrange(1, 5)
 
-    "create list of values and slice empty entities from list"
-    rm = df['Relevant modalities'].values.tolist()[0:26]
-    r = 'Mammography'
-    #r = random.choice(rm)
-    # mammo params
-    findings = AutoTree()
-    findings['params'] = {}
-    findings['params']['id'] = p_id
-    findings['params']['name'] = person_name
-    findings['params']['age'] = p_age
-    findings['params']['relevantModality'] = r
-    findings['params']['numberOfConditions'] = num_cond
+        "create list of values and slice empty entities from list"
+        rm = df['Relevant modalities'].values.tolist()[0:26]
+        # r = 'Mammography'
+        r = random.choice(rm)
+        # mammo params
+        findings = AutoTree()
+        findings['params'] = {}
+        findings['params']['id'] = p_id
+        findings['params']['name'] = person_name
+        findings['params']['age'] = p_age
+        findings['params']['relevantModality'] = r
+        findings['params']['numberOfConditions'] = num_cond
 
-    if r == 'Mammography':
-        f_temp = df['Relevant findings'].values.tolist()[0:8]
-        f_list = [x for i, x in enumerate(f_temp) if i == f_temp.index(x)]
-        f_num_total = len(f_list)
-        f_rand = random.randrange(1, f_num_total+1)
-        iter_params_mass = ['shape', 'margin', 'density']
-        iter_params_calc = ['typicallyBenign', 'suspiciousMorphology', 'distribution']
-        iter_params_a = ['assymetry']
-        iter_params_lymph = ['lymphNodes']
-        for i in range(num_cond):
-            br = get_birad(row, 2, 7)
-            cond = camelCase(get_cond_name())
-            findings[cond]['biRad'] = br
-            for k in range(f_rand+1):
-                f = camelCase(random.choice(f_list))
-                #f = 'mass'
-                if f == 'mass':
-                    rep_temp = create_rep(iter_params_mass, row, f, r)
-                    findings[cond]['relevantFinding'][f] = rep_temp
+        if r == 'Mammography':
+            f_temp = df['Relevant findings'].values.tolist()[0:8]
+            f_list = [x for i, x in enumerate(f_temp) if i == f_temp.index(x)]
+            f_num_total = len(f_list)
+            f_rand = random.randrange(1, f_num_total + 1)
+            iter_params_mass = ['shape', 'margin', 'density']
+            iter_params_calc = ['typicallyBenign', 'suspiciousMorphology', 'distribution']
+            iter_params_a = ['assymetry']
+            iter_params_lymph = ['lymphNodes']
+            for i in range(num_cond):
+                br = get_birad(row, 2, 7)
+                cond = camelCase(get_cond_name())
+                findings[cond]['biRad'] = br
+                for k in range(f_rand + 1):
+                    f = camelCase(random.choice(f_list))
+                    # f = 'mass'
+                    if f == 'mass':
+                        rep_temp = create_rep(iter_params_mass, row, f, r)
+                        findings[cond]['relevantFinding'][f] = rep_temp
 
-                elif f == 'calcifications':
-                    rep_temp = create_rep(iter_params_calc, row, f, r)
-                    findings[cond]['relevantFinding'][f] = rep_temp
+                    elif f == 'calcifications':
+                        rep_temp = create_rep(iter_params_calc, row, f, r)
+                        findings[cond]['relevantFinding'][f] = rep_temp
 
-                elif f == 'assymetry':
-                    rep_temp = create_rep(iter_params_a, row, f, r)
-                    findings[cond]['relevantFinding'][f] = rep_temp
+                    elif f == 'assymetry':
+                        rep_temp = create_rep(iter_params_a, row, f, r)
+                        findings[cond]['relevantFinding'][f] = rep_temp
 
-                else:
-                    rep_temp = create_rep(iter_params_lymph, row, f, r)
-                    findings[cond]['relevantFinding'][f] = rep_temp
+                    else:
+                        rep_temp = create_rep(iter_params_lymph, row, f, r)
+                        findings[cond]['relevantFinding'][f] = rep_temp
 
-            report = json.dumps(findings)
-        print(report)
+                report = json.dumps(findings)
+            print(report)
 
-    elif r == 'US':
-        f_temp = df['Relevant findings'].values.tolist()[8:15]
-        f_list = [x for i, x in enumerate(f_temp) if i == f_temp.index(x)]
-        f_num_total = len(f_list)
-        f_rand = random.randrange(1, f_num_total + 1)
+        elif r == 'US':
+            f_temp = df['Relevant findings'].values.tolist()[8:15]
+            f_list = [x for i, x in enumerate(f_temp) if i == f_temp.index(x)]
+            f_num_total = len(f_list)
+            f_rand = random.randrange(1, f_num_total + 1)
 
-        us_params_mass = ['shape', 'margin', 'echo', 'posterior']
-        us_params_calc = ['calcifications']
-        us_params_l_nodes = ['lymphNodes']
-        us_params_sp_cases = ['specialCases']
+            us_params_mass = ['shape', 'margin', 'echo', 'posterior']
+            us_params_calc = ['calcifications']
+            us_params_l_nodes = ['lymphNodes']
+            us_params_sp_cases = ['specialCases']
 
-        for i in range(num_cond):
-            cond = camelCase(get_cond_name())
-            for k in range(f_rand+1):
-                f = camelCase(random.choice(f_list))
-                if f == 'mass':
-                    rep_temp = create_rep(us_params_mass, row, f, r)
-                    findings[cond]['relevantFinding'][f] = rep_temp
-                elif f == 'calcificationsUs':
-                    rep_temp = create_rep(us_params_calc, row, f, r)
-                    findings[cond]['relevantFinding'][f] = rep_temp
-                elif f == 'lymphNodes':
-                    rep_temp = create_rep(us_params_l_nodes, row, f, r)
-                    findings[cond]['relevantFinding'][f] = rep_temp
-                else:
-                    rep_temp = create_rep(us_params_sp_cases, row, f, r)
-                    findings[cond]['relevantFinding'][f] = rep_temp
-            report = json.dumps(findings)
-        print(report)
-    elif r == 'MRI':
-        f_temp = df['Relevant findings'].values.tolist()[15:25]
-        f_list = [x for i, x in enumerate(f_temp) if i == f_temp.index(x)]
-        f_num_total = len(f_list)
-        f_rand = random.randrange(1, f_num_total + 1)
-        mri_params_mass = ['shape', 'margin', 'internalEnhancement']
-        mri_params_mri_f = ['mriFeatures']
-        mri_params_kin_c_a = ['kineticCurveAssessment']
-        mri_params_nme = ['distribution', 'internalEnhancementPatterns']
-        mri_params_nef = ['nonEnhancingPatterns']
-        mri_params_l_nodes = ['lymphNodes']
-        mri_params_fcl = ['fatContainingLesions']
+            for i in range(num_cond):
+                cond = camelCase(get_cond_name())
+                br = get_birad(row, 2, 7)
+                findings[cond]['biRad'] = br
+                for k in range(f_rand + 1):
+                    f = camelCase(random.choice(f_list))
+                    if f == 'mass':
+                        rep_temp = create_rep(us_params_mass, row, f, r)
+                        findings[cond]['relevantFinding'][f] = rep_temp
+                    elif f == 'calcificationsUs':
+                        rep_temp = create_rep(us_params_calc, row, f, r)
+                        findings[cond]['relevantFinding'][f] = rep_temp
+                    elif f == 'lymphNodes':
+                        rep_temp = create_rep(us_params_l_nodes, row, f, r)
+                        findings[cond]['relevantFinding'][f] = rep_temp
+                    else:
+                        rep_temp = create_rep(us_params_sp_cases, row, f, r)
+                        findings[cond]['relevantFinding'][f] = rep_temp
+                report = json.dumps(findings)
+            print(report)
+        elif r == 'MRI':
+            f_temp = df['Relevant findings'].values.tolist()[15:25]
+            f_list = [x for i, x in enumerate(f_temp) if i == f_temp.index(x)]
+            f_num_total = len(f_list)
+            f_rand = random.randrange(1, f_num_total + 1)
+            mri_params_mass = ['shape', 'margin', 'internalEnhancement']
+            mri_params_mri_f = ['mriFeatures']
+            mri_params_kin_c_a = ['kineticCurveAssessment']
+            mri_params_nme = ['distribution', 'internalEnhancementPatterns']
+            mri_params_nef = ['nonEnhancingPatterns']
+            mri_params_l_nodes = ['lymphNodes']
+            mri_params_fcl = ['fatContainingLesions']
 
-        for i in range(num_cond):
-            cond = camelCase(get_cond_name())
-            for k in range(f_rand+1):
-                f = camelCase(random.choice(f_list))
-                if f == 'mass':
-                    rep_temp = create_rep(mri_params_mass, row, f, r)
-                    findings[cond]['relevantFinding'][f] = rep_temp
-                elif f == 'mriFeatures':
-                    rep_temp = create_rep(mri_params_mri_f, row, f, r)
-                    findings[cond]['relevantFinding'][f] = rep_temp
-                elif f == 'kineticCurveAssessment':
-                    rep_temp = create_rep(mri_params_kin_c_a, row, f, r)
-                    findings[cond]['relevantFinding'][f] = rep_temp
-                elif f == 'nonMassEnhancement(NME)':
-                    rep_temp = create_rep(mri_params_nme, row, f, r)
-                    findings[cond]['relevantFinding'][f] = rep_temp
-                elif f == 'nonEnhancingFindings':
-                    rep_temp = create_rep(mri_params_nef, row, f, r)
-                    findings[cond]['relevantFinding'][f] = rep_temp
-                elif f == 'lymphNodes':
-                    rep_temp = create_rep(mri_params_l_nodes, row, f, r)
-                    findings[cond]['relevantFinding'][f] = rep_temp
-                elif f == 'fatContainingLesions':
-                    rep_temp = create_rep(mri_params_fcl, row, f, r)
-                    findings[cond]['relevantFinding'][f] = rep_temp
-            report = json.dumps(findings)
-        return(report)
-    #print(report)
+            for i in range(num_cond):
+                cond = camelCase(get_cond_name())
+                br = get_birad(row, 2, 7)
+                findings[cond]['biRad'] = br
+                for k in range(f_rand + 1):
+                    f = camelCase(random.choice(f_list))
+                    if f == 'mass':
+                        rep_temp = create_rep(mri_params_mass, row, f, r)
+                        findings[cond]['relevantFinding'][f] = rep_temp
+                    elif f == 'mriFeatures':
+                        rep_temp = create_rep(mri_params_mri_f, row, f, r)
+                        findings[cond]['relevantFinding'][f] = rep_temp
+                    elif f == 'kineticCurveAssessment':
+                        rep_temp = create_rep(mri_params_kin_c_a, row, f, r)
+                        findings[cond]['relevantFinding'][f] = rep_temp
+                    elif f == 'nonMassEnhancement(NME)':
+                        rep_temp = create_rep(mri_params_nme, row, f, r)
+                        findings[cond]['relevantFinding'][f] = rep_temp
+                    elif f == 'nonEnhancingFindings':
+                        rep_temp = create_rep(mri_params_nef, row, f, r)
+                        findings[cond]['relevantFinding'][f] = rep_temp
+                    elif f == 'lymphNodes':
+                        rep_temp = create_rep(mri_params_l_nodes, row, f, r)
+                        findings[cond]['relevantFinding'][f] = rep_temp
+                    elif f == 'fatContainingLesions':
+                        rep_temp = create_rep(mri_params_fcl, row, f, r)
+                        findings[cond]['relevantFinding'][f] = rep_temp
+                report = json.dumps(findings)
+            print(report)
 
 
 def main():
-    for i in range(1):
-       generate_report("first-names.txt")
+    generate_report("first-names.txt", 100)
+
+
 main()
