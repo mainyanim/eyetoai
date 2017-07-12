@@ -259,7 +259,75 @@ def define_calcifications_us():
 
     return calcifications
 
+def define_sp_cases_us():
+    sp_c_parameters = list()
+    sp_c_parameters.append(Parameter(par_type='string', name = 'Special Cases',
+                                     values = ['Simple cyst', 'Clustered microcysts', 'Complicated cyst',
+                                               'Mass in or on skin', 'Foreign body including implants',
+                                               'Vascular: AVMs', 'Vascular: Mondor disease',
+                                               'Postsurgical fluid collection', 'Fat necrosis']))
+    special_cases = Finding(parameters=sp_c_parameters, name = 'Special Cases')
+    return special_cases
 
+def define_mass_mri():
+    mass_parameters = list()
+    mass_parameters.append(Parameter(par_type='int', name = 'Number'))
+    mass_parameters.append(Parameter(par_type='string', name = 'Shape',
+                                     values = ['Oval', 'Round', 'Irregular']))
+    mass_parameters.append(Parameter(par_type='int', name = 'Margin',
+                                     values=['Circumscribed', 'Not circumscribed', 'Irregular (Not circumscribed)',
+                                             'Spiculated (Not circumscribed)']))
+    mass_parameters.append(Parameter(par_type='int', name = 'Internal Enhancement',
+                                     values= ['Homogeneous Medium', 'Heterogeneous Fast',
+                                              'Rim enhancement Delayed phase Persistent',
+                                              'Dark internal septations']))
+    mass = Finding(parameters=mass_parameters, name = 'Mass')
+    return mass
+
+def define_mri_features():
+    mri_f_parameters = list()
+    mri_f_parameters.append(Parameter(par_type='string', name = 'MRI Features',
+                                      values= ['T1', 'T2', 'T1+C']))
+    mri_features = Finding(parameters=mri_f_parameters, name = 'MRI Features')
+    return  mri_features
+
+
+def define_kin_c_a():
+    kin_c_a_parameters = list()
+    kin_c_a_parameters.append(Parameter(par_type='string', name = 'Kinetic curve assessment',
+                                        values=['Initial phase: Slow', 'Initial phase: Medium', 'Initial phase: Fast',
+                                                'Delayed phase: Persistent', 'Delayed phase: Plateau',
+                                                'Delayed phase: Washout']))
+    kinetic_c_a = Finding(parameters=kin_c_a_parameters,name = 'Kinetic curve assessment')
+    return kinetic_c_a
+
+def define_nme():
+    nme_parameters = list()
+    nme_parameters.append(Parameter(par_type='string', name = 'Distribution',
+                                    values= ['Focal', 'Linear', 'Segmental', 'Regional', 'Multiple regions', 'Diffuse']))
+    nme_parameters.append(Parameter(par_type='string', name = 'Internal enhancement patterns',
+                                    values=['Homogeneous', 'Heterogeneous', 'Clumped', 'Clustered ring']))
+    nme = Finding(parameters=nme_parameters, name = 'Non-mass enhancement (NME)')
+    return nme
+
+def define_nef():
+    nef_parameters = list()
+    nef_parameters.append(Parameter(par_type='string', name = 'Non-enhancing findings',
+                                   values = ['Ductal precontrast high signal on T1W', 'Cyst',
+                                             'Postoperative collections (hematoma/seroma)',
+                                             'Post-therapy skin thickening and trabecular thickening',
+                                             'Non-enhancing mass', 'Architectural distortion',
+                                             'Signal void from foreign bodies, clips, etc']))
+    nef = Finding(parameters=nef_parameters, name = 'Non-enhancing findings')
+    return nef
+
+def define_fcl():
+    fcl_parameters = list()
+    fcl_parameters.append(Parameter(par_type='string', name = 'Fat containing lesions',
+                                    values = ['Lymph nodes – Normal', 'Lymph nodes – Abnormal', 'Fat necrosis',
+                                              'Hamartoma', 'Postoperative seroma/hematoma with fat']))
+    fcl = Finding(parameters=nef_parameters, name = 'Fat cotaining lesions')
+    return fcl
 
 def define_findings_set():
     finding_list = list()
@@ -270,7 +338,6 @@ def define_findings_set():
 
     return finding_list
 
-#check
 
 if __name__ == "__main__":
     # Here we will keep all the findings
