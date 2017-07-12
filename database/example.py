@@ -114,6 +114,7 @@ class Condition:
         Set parameters of a finding according to the predefined probabilities
         :return:
         """
+        print(finding_name)
         id = -1
         for ind, finding in enumerate(self.findings):
             if finding.get_name() == finding_name:
@@ -126,11 +127,15 @@ class Condition:
         # TODO: go over all parameter_names
         # dict = {}
         # for param in self.findings[id]
+        # Shape, Density, Margin - choose x parameters (x in [1,3])
+        # parameter_names <- only chosen parameters
         for name in parameter_names:
             # TODO - currently works only for shape
-            if name != 'Shape':
+            # TODO - create random generator for boolean (or replace boolean with strings),
+            if name != 'Margin':
                 continue
             # self.findings[id].dict_of_distributions[name]
+            print(name)
             # TODO: Decide where to keep it
             chosen_param = np.random.choice(list(self.findings[id].dict_of_distributions[name].keys()),
                              p=list(self.findings[id].dict_of_distributions[name].values()))
@@ -158,7 +163,7 @@ def define_fibroadenoma(finding_list):
     Define fibroadenoma
     :return:
     """
-    # name_list = ['Mass','Calcification','Assymetry','Lymph nodes']
+    #name_list = ['Mass','Calcification','Assymetry','Lymph nodes', 'Additional Findings']
     name_list = ['Mass']
     fibroadenoma = Condition(finding_list=finding_list, finding_names_list=name_list)
     # for mass. Mass has 4 parameters
@@ -168,11 +173,9 @@ def define_fibroadenoma(finding_list):
     fibroadenoma.findings[0].dict_of_distributions['Shape'] = {'Round': 50.0, 'Oval': 50.0, 'Irregular': 1.0}
     fibroadenoma.findings[0].dict_of_distributions['Shape'] = \
         normalize_prob_dictionary(fibroadenoma.findings[0].dict_of_distributions['Shape'])
-    """
-    fibroadenoma.findings[1].dict_of_distributions['Margin'] = {'Circumscribed': 50.0, 'Obscured': 5.0, 'Microlobulated': 5.0, 'Indistinct': 5.0, 'Spiculated': 5.0}
-    fibroadenoma.findings[1].dict_of_distributions['Margin'] = \
-        normalize_prob_dictionary(fibroadenoma.findings[1].dict_of_distributions['Margin'])
-    """
+    fibroadenoma.findings[0].dict_of_distributions['Margin'] = {'Circumscribed': 50.0, 'Obscured': 5.0, 'Microlobulated': 5.0, 'Indistinct': 5.0, 'Spiculated': 5.0}
+    fibroadenoma.findings[0].dict_of_distributions['Margin'] = \
+        normalize_prob_dictionary(fibroadenoma.findings[0].dict_of_distributions['Margin'])
     return fibroadenoma
 
 
@@ -369,10 +372,8 @@ def define_birad():
 
 def define_findings_set():
     finding_list = list()
-    mass = define_mass()
-    # density = define_density()
+    mass = define_mass_mammo()
     finding_list.append(mass)
-    # finding_list.append(density) - but density is finding's parameter - how to resolve?
 
     return finding_list
 
@@ -384,6 +385,9 @@ if __name__ == "__main__":
     # Set medical database
     fibroadenoma = define_fibroadenoma(finding_list)
     conditions_list.append(fibroadenoma)
+
+
+
     # choose parameter
     fibroadenoma.generate_parameters('Mass')
 
