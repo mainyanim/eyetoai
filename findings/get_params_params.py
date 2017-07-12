@@ -22,14 +22,14 @@ class GetParams:
         self.mammo_calcifications_suspicious_morphology = self.get_params(31, 35)
         self.mammo_calcifications_suspicious_distribution = self.get_params(35, 40)
         self.mammo_asymmetries = self.get_params(40, 44)
-
+        self.mammo_additional = self.get_params(46,52)
         # US params
         self.us_mass_margin = self.get_params(57, 63)
         self.us_mass_echo_pattern = self.get_params(63, 69)
         self.us_mass_posterior_features = self.get_params(69, 73)
         self.us_calcifications = self.get_params(73, 76)
         self.us_special_cases = self.get_params(88, 97)
-
+        self.us_additional = self.get_params(78, 88)
         # MRI params
         self.mri_mass_margin = self.get_params(102, 106)
         self.mri_mass_internal_enhacement = self.get_params(106, 110)
@@ -42,6 +42,9 @@ class GetParams:
         self.mri_nef = self.get_params(130, 137)
         # Fat containing lesions
         self.mri_fcl = self.get_params(139, 144)
+        self.mri_additional = self.get_params(144, 152)
+        self.birads = self.get_params(153, 160)
+
 
     def get_params(self, start, stop):
         params = [x.split('[')[1][:-1] for x in self.row[start:stop]]

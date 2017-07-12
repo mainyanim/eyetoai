@@ -229,6 +229,15 @@ def define_assymetry_mammo():
 
     return assymetry
 
+def define_additional_mammo():
+    add_f_parameters = list()
+    add_f_parameters.append(Parameter(par_type='string', name = 'Additional Findings',
+                                      values = ['Architectural distortion', 'Skin retraction', 'Nipple retraction',
+                                                'Skin thickening', 'Trabecular thickening', 'Solitary dilated duct']))
+    add_findings = Finding(parameters=add_f_parameters, name = 'Additional Findings')
+    return add_findings
+
+
 def define_mass_us():
     mass_parameters = list()
     mass_parameters.append(Parameter(par_type='int', name = 'Number'))
@@ -268,6 +277,17 @@ def define_sp_cases_us():
                                                'Postsurgical fluid collection', 'Fat necrosis']))
     special_cases = Finding(parameters=sp_c_parameters, name = 'Special Cases')
     return special_cases
+
+def define_add_f_us():
+    add_f_parameters = list()
+    add_f_parameters.append(Parameter(par_type='string', name='Additional Findings',
+                                      values=['Architectural distortion', 'Skin thickening', 'Skin retraction', 'Edema',
+                                              'Vascularity: Absent', 'Vascularity: Internal vascularity',
+                                              'Vascularity: Vessels in rim', 'Elasticity:  Soft',
+                                              'Elasticity:  Intermediate', 'Elasticity:  Hard']))
+    add_findings = Finding(parameters=add_f_parameters, name='Additional Findings')
+    return add_findings
+
 
 def define_mass_mri():
     mass_parameters = list()
@@ -328,6 +348,24 @@ def define_fcl():
                                               'Hamartoma', 'Postoperative seroma/hematoma with fat']))
     fcl = Finding(parameters=nef_parameters, name = 'Fat cotaining lesions')
     return fcl
+
+def define_add_f_mri():
+    add_f_parameters = list()
+    add_f_parameters.append(Parameter(par_type='string', name='Additional Findings',
+                                      values=['Architectural distortion', 'Skin thickening', 'Skin retraction',
+                                              'Nipple retraction', 'Skin invasion: Direct invasion',
+                                              'Skin invasion: Inflammatory cancer', 'Pectoralis muscle invasion',
+                                              'Chest wall invasion']))
+    add_findings = Finding(parameters=add_f_parameters, name='Additional Findings')
+    return add_findings
+
+def define_birad():
+    br_parameters = list()
+    br_parameters.append(Parameter(par_type='int', name = 'Bi-Rads',
+                                   values = ['0', '1', '2', '3', '4', '5', '6']))
+    br_parameters= Finding(parameters=br_parameters, name = 'Bi-Rads')
+    return br_parameters
+
 
 def define_findings_set():
     finding_list = list()
