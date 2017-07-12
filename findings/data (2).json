@@ -1,0 +1,58 @@
+{
+   "params":{
+      "id":99,
+      "name":"Tootsie",
+      "numberOfConditions":4
+   },
+   "sebaceousCysts":{
+      "relevantFinding":{
+         "lymphNodes":{
+            "shape":"Lymph nodes \u2013 intramammary",
+            "margin":"Round",
+            "density":"Microlobulated (Not circumscribed)"
+         },
+         "assymetry":{
+            "shape":"Asymmetry",
+            "margin":"Lymph nodes \u2013 axillary",
+            "density":"Oval"
+         }
+      }
+   },
+   "intramammaryLymphNodes":{
+      "relevantFinding":{
+         "mass":{
+            "shape":"Round",
+            "margin":"Spiculated",
+            "density":"Fat-containing"
+         }
+      }
+   },
+   "galactocele":{
+      "relevantFinding":{
+         "mass":{
+            "shape":"Irregular",
+            "margin":"Microlobulated",
+            "density":"Low density"
+         },
+         "lymphNodes":{
+            "shape":"Lymph nodes \u2013 axillary",
+            "margin":"Oval",
+            "density":"Spiculated (Not circumscribed)"
+         }
+      }
+   },
+   "papilloma":{
+      "relevantFinding":{
+         "lymphNodes":{
+            "shape":"Lymph nodes \u2013 axillary",
+            "margin":"Oval",
+            "density":"Spiculated (Not circumscribed)"
+         },
+         "calcifications":{
+            "shape":"Lymph nodes \u2013 axillary",
+            "margin":"Oval",
+            "density":"Spiculated (Not circumscribed)"
+         }
+      }
+   }
+}

@@ -1,0 +1,15 @@
+{
+   "conditions":{
+      "conditionName":"Hamartoma",
+      "relevantFinding":{
+         "assymetry":{
+            "assymetry":"Global asymmetry"
+         },
+         "calcifications":{
+            "typicallyBenign":"Milk of calcium",
+            "suspiciousMorphology":"Fine linear or fine-linear branching",
+            "distribution":"Linear"
+         }
+      }
+   }
+}

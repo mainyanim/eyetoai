@@ -2,7 +2,7 @@ from openpyxl import load_workbook
 from openpyxl import Workbook
 
 INPUT_FILE = 'google_form_pure.xlsx'
-OUTPUT_FILE = 'output.xlsx'
+OUTPUT_FILE = 'output_list.xlsx'
 
 
 class GetParams:
@@ -12,7 +12,7 @@ class GetParams:
 
         # BiRad params
 
-        self.mass_shape = self.get_params(10, 13)
+        self.mass_shape =  self.get_params(10, 13)
         self.lymph_nodes = self.get_params(44, 46)
 
         # Mammography params
@@ -44,8 +44,9 @@ class GetParams:
         self.mri_fcl = self.get_params(139, 144)
 
     def get_params(self, start, stop):
-        as_list = [x.split('[')[1][:-1] for x in self.row[start:stop]]
-        return as_dict
+        params = [x.split('[')[1][:-1] for x in self.row[start:stop]]
+        print(params, self.row[start].split('[')[0][:-1])
+        return params
 
 
 class SetParams:

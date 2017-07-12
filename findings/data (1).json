@@ -1,0 +1,22 @@
+{
+   "conditions":{
+      "conditionName":{
+         "fibroadenoma":{
+            "relevantFindings":{
+               "relevantFinding":{
+                  "mass":{
+                     "shape":"Round",
+                     "margin":"Spiculated",
+                     "density":"High density"
+                  },
+                  "calcifications":{
+                     "typicallyBenign":"Suture",
+                     "suspiciousMorphology":"Coarse heterogeneous",
+                     "distribution":"Grouped"
+                  }
+               }
+            }
+         }
+      }
+   }
+}
