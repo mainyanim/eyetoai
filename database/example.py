@@ -270,6 +270,7 @@ def define_findings_set():
 
     return finding_list
 
+#check
 
 if __name__ == "__main__":
     # Here we will keep all the findings
