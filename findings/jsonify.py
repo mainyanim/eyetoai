@@ -212,12 +212,12 @@ def generate_report(infile, items):
         r = random.choice(rm)
         # mammo params
         findings = AutoTree()
-        findings['params'] = {}
-        findings['params']['id'] = p_id
-        findings['params']['name'] = person_name
-        findings['params']['age'] = p_age
-        findings['params']['relevantModality'] = r
-        findings['params']['numberOfConditions'] = num_cond
+        findings['report'] = {}
+        findings['report']['id'] = p_id
+        findings['report']['name'] = person_name
+        findings['report']['age'] = p_age
+        findings['report']['relevantModality'] = r
+        findings['report']['numberOfConditions'] = num_cond
 
         if r == 'Mammography':
             f_temp = df['Relevant findings'].values.tolist()[0:8]
@@ -250,8 +250,7 @@ def generate_report(infile, items):
                     else:
                         rep_temp = create_rep(iter_params_lymph, row, f, r)
                         findings[cond]['relevantFinding'][f] = rep_temp
-
-                report = json.dumps(findings)
+                report = json.dumps(findings, indent = 4)
             print(report)
 
         elif r == 'US':
@@ -283,7 +282,7 @@ def generate_report(infile, items):
                     else:
                         rep_temp = create_rep(us_params_sp_cases, row, f, r)
                         findings[cond]['relevantFinding'][f] = rep_temp
-                report = json.dumps(findings)
+                report = json.dumps(findings, indent=4)
             print(report)
         elif r == 'MRI':
             f_temp = df['Relevant findings'].values.tolist()[15:25]
@@ -325,7 +324,7 @@ def generate_report(infile, items):
                     elif f == 'fatContainingLesions':
                         rep_temp = create_rep(mri_params_fcl, row, f, r)
                         findings[cond]['relevantFinding'][f] = rep_temp
-                report = json.dumps(findings)
+                report = json.dumps(findings, indent = 4)
             print(report)
 
 
