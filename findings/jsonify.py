@@ -195,7 +195,9 @@ def get_birad(row, col, width):
 # Create random with parameter of report numbers
 
 def generate_report(infile, items):
-    for i in range(items):
+    file = open("reports.txt", "w")
+
+    for c in range(items):
         name = get_cond_name()
         row = check_row(name)
         # Read BiRads Probabilities into list
@@ -247,11 +249,15 @@ def generate_report(infile, items):
                         rep_temp = create_rep(iter_params_a, row, f, r)
                         findings[cond]['relevantFinding'][f] = rep_temp
 
-                    else:
+                    elif f == 'lymphNodes':
                         rep_temp = create_rep(iter_params_lymph, row, f, r)
                         findings[cond]['relevantFinding'][f] = rep_temp
                 report = json.dumps(findings, indent = 4)
             print(report)
+            file.write(report)
+            file.flush()
+
+
 
         elif r == 'US':
             f_temp = df['Relevant findings'].values.tolist()[8:15]
@@ -284,6 +290,10 @@ def generate_report(infile, items):
                         findings[cond]['relevantFinding'][f] = rep_temp
                 report = json.dumps(findings, indent=4)
             print(report)
+            file.write(report)
+            file.flush()
+
+
         elif r == 'MRI':
             f_temp = df['Relevant findings'].values.tolist()[15:25]
             f_list = [x for i, x in enumerate(f_temp) if i == f_temp.index(x)]
@@ -326,10 +336,14 @@ def generate_report(infile, items):
                         findings[cond]['relevantFinding'][f] = rep_temp
                 report = json.dumps(findings, indent = 4)
             print(report)
+            file.write(report)
+            file.flush()
 
+    file.close()
 
 def main():
+    
     generate_report("first-names.txt", 100)
 
-
-main()
+if __name__== "__main__":
+  main()
