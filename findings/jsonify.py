@@ -338,11 +338,9 @@ def generate_report(infile, items):
             print(report)
             file.write(report)
             file.flush()
-
     file.close()
 
 def main():
-    
     generate_report("first-names.txt", 100)
 
 if __name__== "__main__":
