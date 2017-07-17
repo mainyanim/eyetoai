@@ -195,7 +195,7 @@ def get_birad(row, col, width):
 # Create random with parameter of report numbers
 
 def generate_report(infile, items):
-    file = open("reports.txt", "w")
+    file = open("reports.txt", "a")
 
     for c in range(items):
         name = get_cond_name()
@@ -255,6 +255,7 @@ def generate_report(infile, items):
                 report = json.dumps(findings, indent = 4)
             print(report)
             file.write(report)
+            file.write(',')
             file.flush()
 
 
@@ -291,6 +292,7 @@ def generate_report(infile, items):
                 report = json.dumps(findings, indent=4)
             print(report)
             file.write(report)
+            file.write(',')
             file.flush()
 
 
@@ -337,6 +339,7 @@ def generate_report(infile, items):
                 report = json.dumps(findings, indent = 4)
             print(report)
             file.write(report)
+            file.write(',')
             file.flush()
     file.close()
 
