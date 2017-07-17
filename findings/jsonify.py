@@ -3,8 +3,8 @@ import numpy as np
 import random
 import json
 from openpyxl import load_workbook
+import os
 from openpyxl import Workbook
-import numpy as np
 import math
 from collections import defaultdict
 
@@ -195,9 +195,9 @@ def get_birad(row, col, width):
 # Create random with parameter of report numbers
 
 def generate_report(infile, items):
-    file = open("reports.txt", "a")
 
     for c in range(items):
+        filename = 'report' + str(c) + '.json'
         name = get_cond_name()
         row = check_row(name)
         # Read BiRads Probabilities into list
@@ -252,11 +252,8 @@ def generate_report(infile, items):
                     elif f == 'lymphNodes':
                         rep_temp = create_rep(iter_params_lymph, row, f, r)
                         findings[cond]['relevantFinding'][f] = rep_temp
-                report = json.dumps(findings, indent = 4)
-            print(report)
-            file.write(report)
-            file.write(',')
-            file.flush()
+            with open(filename, 'w') as f:
+                json.dump(findings, f, indent = 4)
 
 
 
@@ -289,11 +286,10 @@ def generate_report(infile, items):
                     else:
                         rep_temp = create_rep(us_params_sp_cases, row, f, r)
                         findings[cond]['relevantFinding'][f] = rep_temp
-                report = json.dumps(findings, indent=4)
-            print(report)
-            file.write(report)
-            file.write(',')
-            file.flush()
+
+            with open(filename, 'w') as f:
+                json.dump(findings, f, indent = 4)
+
 
 
         elif r == 'MRI':
@@ -336,12 +332,9 @@ def generate_report(infile, items):
                     elif f == 'fatContainingLesions':
                         rep_temp = create_rep(mri_params_fcl, row, f, r)
                         findings[cond]['relevantFinding'][f] = rep_temp
-                report = json.dumps(findings, indent = 4)
-            print(report)
-            file.write(report)
-            file.write(',')
-            file.flush()
-    file.close()
+            with open(filename, 'w') as f:
+                json.dump(findings, f, indent = 4)
+
 
 def main():
     generate_report("first-names.txt", 100)
