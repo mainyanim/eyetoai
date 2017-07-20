@@ -20,14 +20,16 @@ conn = pyodbc.connect(
 
 cursor = conn.cursor()
 
-def c_i(c):
+def c_i(c, f):
     cursor.execute("SELECT DISTINCT ReportId, COUNT ( DISTINCT ConditionId) " 
-                   "FROM ReportConditionFindingOptions GROUP BY ReportId") #query to get a reportid with number of conditions
+                   "FROM ReportConditionFindingOptions GROUP BY ReportId")
+    #query to get a reportid with number of conditions
     results = cursor.fetchall()
     condstotal = 0
     for result in results:
         condstotal += result[1]
-    #print (condstotal) #total number of conditions for reports
+    #print (condstotal)
+    #total number of conditions for reports
     cursor.execute("SELECT (Conditions.Name), COUNT (DISTINCT ReportId)"
                    " from Conditions"
                    " INNER JOIN ReportConditionFindingOptions "
@@ -37,13 +39,25 @@ def c_i(c):
     freq = freq_tmp[1]
     #print(freq)
     cond_i = freq/condstotal
-    print(cond_i)
-    return cond_i
-
+    #print(cond_i)
+    cursor.execute("SELECT FindingId, COUNT (DISTINCT ReportId) "
+                   " FROM ReportConditionFindingOptions "
+                   " WHERE FindingId IN (SELECT Id FROM Findings "
+                   " WHERE Name = ? ) AND ConditionId IN (SELECT Id FROM Conditions WHERE Name = ?)"
+                   " GROUP BY FindingId", f, c)
+    find_tmp = cursor.fetchone()
+    find = find_tmp[1]
+    #print(find)
+    find_i = find/freq
+    #print(find_i)
+    result = cond_i*find_i
+    print(result)
+    return result
 
 
 
 if __name__ == '__main__':
-    c_i('Fibroadenoma')
+    c_i('Fibroadenoma', 'Lymph nodes')
+    c_i('Fibroadenoma', 'Mass')
 
 
