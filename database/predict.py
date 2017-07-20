@@ -57,7 +57,9 @@ def c_i(c, f):
 
 
 if __name__ == '__main__':
-    c_i('Fibroadenoma', 'Lymph nodes')
-    c_i('Fibroadenoma', 'Mass')
+    a = c_i('Fibroadenoma', 'Lymph nodes')
+    b = c_i('Fibroadenoma', 'Mass')
+    result_final = a*b
+    print(result_final)
 
 
