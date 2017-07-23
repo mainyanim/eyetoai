@@ -18,7 +18,11 @@ ws = wb.get_sheet_by_name('Sheet1')  # Define worksheet
 
 
 def get_dic_from_two_lists(keys, values):
-    return {keys[i]: values[i] for i in range(len(keys))}
+    try:
+        return {keys[i]: values[i] for i in range(len(keys))}
+    except IndexError:
+        pass
+
 
 
 # Define function to normalize arr values
@@ -56,8 +60,11 @@ def create_rep(arr, row_data, condname, modality):  # get findings
     # to_json = []
     if condname == 'mass' and modality == 'Mammography':
         for i in range(len(arr)):
-            params += grab_data(row_data, 0, 14, 19)
-            row_data += 1
+            try:
+                params += grab_data(row_data, 0, 14, 19)
+                row_data += 1
+            except IndexError:
+                continue
 
     elif condname == 'calcifications' and modality == 'Mammography':
         for i in range(len(arr)):
@@ -344,8 +351,5 @@ def generate_report(infile, items):
                 json.dump(findings, f, indent = 4)
 
 
-def main():
-    generate_report("first-names.txt", 10)
-
-if __name__== "__main__":
-  main()
+if __name__ == "__main__":
+    generate_report("first-names.txt", 5000)
