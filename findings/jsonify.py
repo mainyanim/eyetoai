@@ -210,8 +210,8 @@ def generate_report(infile, items):
 
         "create list of values and slice empty entities from list"
         rm = df['Relevant modalities'].values.tolist()[0:26]
-        r = 'Mammography'
-        #r = random.choice(rm)
+        #r = 'Mammography'
+        r = random.choice(rm)
         # mammo params
         findings = AutoTree()
         findings['report'] = {}
@@ -272,23 +272,26 @@ def generate_report(infile, items):
             us_params_sp_cases = ['specialCases']
 
             for i in range(num_cond):
-                cond = camelCase(get_cond_name())
                 br = get_birad(row, 2, 7)
+                cond = camelCase(get_cond_name())
                 findings[cond]['biRad'] = br
+                findings[cond]['relevantFinding'] = []
+                # f = 'mass'
                 for k in range(f_rand + 1):
                     f = camelCase(random.choice(f_list))
                     if f == 'mass':
                         rep_temp = create_rep(us_params_mass, row, f, r)
-                        findings[cond]['relevantFinding'][f] = rep_temp
+                        findings[cond]['relevantFinding'] += [{f: rep_temp}]
+
                     elif f == 'calcificationsUs':
                         rep_temp = create_rep(us_params_calc, row, f, r)
-                        findings[cond]['relevantFinding'][f] = rep_temp
+                        findings[cond]['relevantFinding'] += [{f: rep_temp}]
                     elif f == 'lymphNodes':
                         rep_temp = create_rep(us_params_l_nodes, row, f, r)
-                        findings[cond]['relevantFinding'][f] = rep_temp
+                        findings[cond]['relevantFinding'] += [{f: rep_temp}]
                     else:
                         rep_temp = create_rep(us_params_sp_cases, row, f, r)
-                        findings[cond]['relevantFinding'][f] = rep_temp
+                        findings[cond]['relevantFinding'] += [{f: rep_temp}]
 
             with open(filename, 'w') as f:
                 json.dump(findings, f, indent = 4)
@@ -307,40 +310,42 @@ def generate_report(infile, items):
             mri_params_nef = ['nonEnhancingPatterns']
             mri_params_l_nodes = ['lymphNodes']
             mri_params_fcl = ['fatContainingLesions']
-
             for i in range(num_cond):
-                cond = camelCase(get_cond_name())
                 br = get_birad(row, 2, 7)
+                cond = camelCase(get_cond_name())
                 findings[cond]['biRad'] = br
+                findings[cond]['relevantFinding'] = []
+                # f = 'mass'
                 for k in range(f_rand + 1):
                     f = camelCase(random.choice(f_list))
                     if f == 'mass':
                         rep_temp = create_rep(mri_params_mass, row, f, r)
-                        findings[cond]['relevantFinding'][f] = rep_temp
+                        findings[cond]['relevantFinding'] += [{f: rep_temp}]
+
                     elif f == 'mriFeatures':
                         rep_temp = create_rep(mri_params_mri_f, row, f, r)
-                        findings[cond]['relevantFinding'][f] = rep_temp
+                        findings[cond]['relevantFinding'] += [{f: rep_temp}]
                     elif f == 'kineticCurveAssessment':
                         rep_temp = create_rep(mri_params_kin_c_a, row, f, r)
-                        findings[cond]['relevantFinding'][f] = rep_temp
+                        findings[cond]['relevantFinding'] += [{f: rep_temp}]
                     elif f == 'nonMassEnhancement(NME)':
                         rep_temp = create_rep(mri_params_nme, row, f, r)
-                        findings[cond]['relevantFinding'][f] = rep_temp
+                        findings[cond]['relevantFinding'] += [{f: rep_temp}]
                     elif f == 'nonEnhancingFindings':
                         rep_temp = create_rep(mri_params_nef, row, f, r)
-                        findings[cond]['relevantFinding'][f] = rep_temp
+                        findings[cond]['relevantFinding'] += [{f: rep_temp}]
                     elif f == 'lymphNodes':
                         rep_temp = create_rep(mri_params_l_nodes, row, f, r)
-                        findings[cond]['relevantFinding'][f] = rep_temp
+                        findings[cond]['relevantFinding'] += [{f: rep_temp}]
                     elif f == 'fatContainingLesions':
                         rep_temp = create_rep(mri_params_fcl, row, f, r)
-                        findings[cond]['relevantFinding'][f] = rep_temp
+                        findings[cond]['relevantFinding'] += [{f: rep_temp}]
             with open(filename, 'w') as f:
                 json.dump(findings, f, indent = 4)
 
 
 def main():
-    generate_report("first-names.txt", 1)
+    generate_report("first-names.txt", 10)
 
 if __name__== "__main__":
   main()
