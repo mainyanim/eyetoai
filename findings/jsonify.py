@@ -235,26 +235,26 @@ def generate_report(infile, items):
                 cond = camelCase(get_cond_name())
                 findings[cond]['biRad'] = br
 
-                #f = camelCase(random.choice(f_list))
                 findings[cond]['relevantFinding'] = []
-                f = 'mass'
-                if f == 'mass':
-                    for k in range(f_rand + 1):
-                        rep_temp = create_rep(iter_params_mass, row, f, r)
-                        findings[cond]['relevantFinding'] += [{f:rep_temp}]
-
-
-                    """elif f == 'calcifications':
-                        rep_temp = create_rep(iter_params_calc, row, f, r)
-                        findings[cond]['relevantFinding'][f] = rep_temp
-
+                #f = 'mass'
+                for k in range(f_rand + 1):
+                    f = camelCase(random.choice(f_list))
+                    if f == 'mass':
+                            rep_temp = create_rep(iter_params_mass, row, f, r)
+                            findings[cond]['relevantFinding'] += [{f:rep_temp}]
+                            pass
+                    elif f == 'calcifications':
+                            rep_temp = create_rep(iter_params_calc, row, f, r)
+                            findings[cond]['relevantFinding'] += [{f:rep_temp}]
+                            pass
                     elif f == 'assymetry':
-                        rep_temp = create_rep(iter_params_a, row, f, r)
-                        findings[cond]['relevantFinding'][f] = rep_temp
-
+                            rep_temp = create_rep(iter_params_a, row, f, r)
+                            findings[cond]['relevantFinding'] += [{f:rep_temp}]
+                            pass
                     elif f == 'lymphNodes':
-                        rep_temp = create_rep(iter_params_lymph, row, f, r)
-                        findings[cond]['relevantFinding'][f] = rep_temp"""
+                            rep_temp = create_rep(iter_params_lymph, row, f, r)
+                            findings[cond]['relevantFinding'] += [{f:rep_temp}]
+                            pass
             with open(filename, 'w') as f:
                 json.dump(findings, f, indent = 4)
 
