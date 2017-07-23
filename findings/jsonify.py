@@ -210,8 +210,8 @@ def generate_report(infile, items):
 
         "create list of values and slice empty entities from list"
         rm = df['Relevant modalities'].values.tolist()[0:26]
-        # r = 'Mammography'
-        r = random.choice(rm)
+        r = 'Mammography'
+        #r = random.choice(rm)
         # mammo params
         findings = AutoTree()
         findings['report'] = {}
@@ -234,14 +234,17 @@ def generate_report(infile, items):
                 br = get_birad(row, 2, 7)
                 cond = camelCase(get_cond_name())
                 findings[cond]['biRad'] = br
-                for k in range(f_rand + 1):
-                    f = camelCase(random.choice(f_list))
-                    # f = 'mass'
-                    if f == 'mass':
-                        rep_temp = create_rep(iter_params_mass, row, f, r)
-                        findings[cond]['relevantFinding'][f] = rep_temp
 
-                    elif f == 'calcifications':
+                #f = camelCase(random.choice(f_list))
+                findings[cond]['relevantFinding'] = []
+                f = 'mass'
+                if f == 'mass':
+                    for k in range(f_rand + 1):
+                        rep_temp = create_rep(iter_params_mass, row, f, r)
+                        findings[cond]['relevantFinding'] += [{f:rep_temp}]
+
+
+                    """elif f == 'calcifications':
                         rep_temp = create_rep(iter_params_calc, row, f, r)
                         findings[cond]['relevantFinding'][f] = rep_temp
 
@@ -251,7 +254,7 @@ def generate_report(infile, items):
 
                     elif f == 'lymphNodes':
                         rep_temp = create_rep(iter_params_lymph, row, f, r)
-                        findings[cond]['relevantFinding'][f] = rep_temp
+                        findings[cond]['relevantFinding'][f] = rep_temp"""
             with open(filename, 'w') as f:
                 json.dump(findings, f, indent = 4)
 
@@ -337,7 +340,7 @@ def generate_report(infile, items):
 
 
 def main():
-    generate_report("first-names.txt", 100)
+    generate_report("first-names.txt", 1)
 
 if __name__== "__main__":
   main()
