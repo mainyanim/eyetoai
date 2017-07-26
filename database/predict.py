@@ -20,46 +20,50 @@ conn = pyodbc.connect(
 
 cursor = conn.cursor()
 
-def c_i(c, f):
-    cursor.execute("SELECT DISTINCT ReportId, COUNT ( DISTINCT ConditionId) " 
-                   "FROM ReportConditionFindingOptions GROUP BY ReportId")
-    #query to get a reportid with number of conditions
-    results = cursor.fetchall()
-    condstotal = 0
-    for result in results:
-        condstotal += result[1]
-    #print (condstotal)
-    #total number of conditions for reports
-    cursor.execute("SELECT (Conditions.Name), COUNT (DISTINCT ReportId)"
-                   " from Conditions"
-                   " INNER JOIN ReportConditionFindingOptions "
-                   "ON Conditions.Id = ReportConditionFindingOptions.ConditionId"
-                   " WHERE Name = ? GROUP BY Conditions.Name", c)
-    freq_tmp = cursor.fetchone()
-    freq = freq_tmp[1]
-    #print(freq)
-    cond_i = freq/condstotal
-    #print(cond_i)
-    cursor.execute("SELECT FindingId, COUNT (DISTINCT ReportId) "
+def condition_i(c,f):
+    """
+    rep_num returns number of reports with specific condition
+    cond_freq returns condition frequency in all reports
+    :param cond: string, condition name
+    :return: prior probability of specific condition (?)
+    """
+    """
+    rep_num is an array returning tuples of pairs (condition, number of reports with this condition),
+    condtotal is total number of conditions in the reports since one report can contain several conditions
+    cond_freq is number of reports where cond_0 appears
+    """
+
+    cursor.execute("SELECT  Conditions.Name, COUNT (DISTINCT ReportId) " 
+                   "FROM ReportConditionFindingOptions "
+                   "INNER JOIN Conditions "
+                   "ON ReportConditionFindingOptions.ConditionId = Conditions.Id "
+                   "GROUP BY Conditions.Name ")
+    rep_num = cursor.fetchall()
+    cond_total = [sum(rep_num[x][1] for x in range(len(rep_num)))][0]
+    cursor.execute("SELECT COUNT (DISTINCT ReportId) " 
+                   "FROM ReportConditionFindingOptions "
+                   "INNER JOIN Conditions "
+                   "ON ReportConditionFindingOptions.ConditionId = Conditions.Id "
+                   "WHERE Name = ? GROUP BY Conditions.Name", c)
+    cond_freq = cursor.fetchval()
+    pr_cond_0 = cond_freq/cond_total
+    print(pr_cond_0)
+
+    """
+    I CAN'T WORK WITH FINDINGS. PLEASE FIX THE DATABASE!
+    """
+    cursor.execute(" SELECT COUNT (FindingId) "
                    " FROM ReportConditionFindingOptions "
+                   " INNER JOIN Findings "
+                   " ON ReportConditionFindingOptions.FindingId = Findings.Id"
                    " WHERE FindingId IN (SELECT Id FROM Findings "
                    " WHERE Name = ? ) AND ConditionId IN (SELECT Id FROM Conditions WHERE Name = ?)"
-                   " GROUP BY FindingId", f, c)
-    find_tmp = cursor.fetchone()
-    find = find_tmp[1]
-    #print(find)
-    find_i = find/freq
-    #print(find_i)
-    result = cond_i*find_i
-    print(result)
-    return result
+                   " GROUP BY ReportId", f, c)
+    find_0 = cursor.fetchall()
+    print(find_0)
 
+    return pr_cond_0
 
 
 if __name__ == '__main__':
-    a = c_i('Fibroadenoma', 'Mass')
-    b = c_i('Fibroadenoma', 'Assymetry')
-    result_final = a*b
-    print(result_final)
-
-
+    condition_i('Fibroadenoma', 'Mass')
