@@ -57,9 +57,7 @@ def condition_i(c,f):
                    " GROUP BY ReportId", f, c)
     find_0 = cursor.fetchall()
     print(find_0)
-
     return pr_cond_0
-
 
 if __name__ == '__main__':
     condition_i('Fibroadenoma', 'Mass')
