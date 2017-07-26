@@ -22,11 +22,15 @@ cursor = conn.cursor()
 
 def condition_i(c,f):
     """
+    rep_num returns number of reports with specific condition
+    cond_freq returns condition frequency in all reports
+    :param cond: string, condition name
+    :return: prior probability of specific condition (?)
+    """
+    """
     rep_num is an array returning tuples of pairs (condition, number of reports with this condition),
-    cond_total is total number of conditions in the reports since one report can contain several conditions
+    condtotal is total number of conditions in the reports since one report can contain several conditions
     cond_freq is number of reports where cond_0 appears
-    :param c,f: strings, condition and finding name
-    :return: prior probability of specific condition (for now)
     """
 
     cursor.execute("SELECT  Conditions.Name, COUNT (DISTINCT ReportId) " 
@@ -44,10 +48,6 @@ def condition_i(c,f):
     cond_freq = cursor.fetchval()
     pr_cond_0 = cond_freq/cond_total
     print(pr_cond_0)
-
-    """
-    I CAN'T WORK WITH FINDINGS. PLEASE FIX THE DATABASE!
-    """
     cursor.execute(" SELECT COUNT (FindingId) "
                    " FROM ReportConditionFindingOptions "
                    " INNER JOIN Findings "
@@ -57,7 +57,6 @@ def condition_i(c,f):
                    " GROUP BY ReportId", f, c)
     find_0 = cursor.fetchall()
     print(find_0)
-
     return pr_cond_0
 
 
