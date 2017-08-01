@@ -55,10 +55,10 @@ def grab_data(r, s, x, y):
     return ps
 
 
-def create_rep(arr, row_data, condname, modality):  # get findings
+def create_rep(arr, row_data, fname, modality):  # get findings
     params = []
     # to_json = []
-    if condname == 'mass' and modality == 'Mammography':
+    if fname == 'mass' and modality == 'Mammography':
         for i in range(len(arr)):
             try:
                 params += grab_data(row_data, 0, 14, 19)
@@ -66,72 +66,72 @@ def create_rep(arr, row_data, condname, modality):  # get findings
             except IndexError:
                 continue
 
-    elif condname == 'calcifications' and modality == 'Mammography':
+    elif fname == 'calcifications' and modality == 'Mammography':
         for i in range(len(arr)):
             params += grab_data(row_data, 3, 14, 19)
             row_data += 1
 
-    elif condname == 'assymetry' and modality == 'Mammography':
+    elif fname == 'assymetry' and modality == 'Mammography':
         for i in range(len(arr)):
             params += grab_data(row_data, 6, 14, 19)
             row_data += 1
 
-    elif condname == 'lymphNodes' and modality == 'Mammography':
+    elif fname == 'lymphNodes' and modality == 'Mammography':
         for i in range(len(arr)):
             params += grab_data(row_data, 7, 14, 19)
             row_data += 1
 
-    elif condname == 'mass' and modality == 'US':
+    elif fname == 'mass' and modality == 'US':
         for i in range(len(arr)):
             params += grab_data(row_data, 8, 14, 19)
             row_data += 1
 
-    elif condname == 'calcificationsUs' and modality == 'US':
+    elif fname == 'calcificationsUs' and modality == 'US':
         for i in range(len(arr)):
             params += grab_data(row_data, 12, 14, 19)
             row_data += 1
 
-    elif condname == 'lymphNodes' and modality == 'US':
+    elif fname == 'lymphNodes' and modality == 'US':
         for i in range(len(arr)):
             params += grab_data(row_data, 13, 14, 19)
             row_data += 1
 
-    elif condname == 'specialCases' and modality == 'US':
+    elif fname == 'specialCases' and modality == 'US':
         for i in range(len(arr)):
             params += grab_data(row_data, 14, 14, 19)
             row_data += 1
 
-    elif condname == 'mass' and modality == 'MRI':
+    elif fname == 'mass' and modality == 'MRI':
         for i in range(len(arr)):
             params += grab_data(row_data, 15, 14, 19)
             row_data += 1
 
-    elif condname == 'mriFeatures' and modality == 'MRI':
+    elif fname == 'mriFeatures' and modality == 'MRI':
         for i in range(len(arr)):
             params += grab_data(row_data, 18, 14, 19)
             row_data += 1
 
-    elif condname == 'kineticCurveAssessment' and modality == 'MRI':
+    elif fname == 'kineticCurveAssessment' and modality == 'MRI':
         for i in range(len(arr)):
             params += grab_data(row_data, 19, 14, 19)
             row_data += 1
 
-    elif condname == 'nonMassEnhancement(NME)' and modality == 'MRI':
+    elif fname == 'nonMassEnhancement(NME)' and modality == 'MRI':
         for i in range(len(arr)):
             params += grab_data(row_data, 20, 14, 19)
             row_data += 1
 
-    elif condname == 'nonEnhancingFindings' and modality == 'MRI':
+    elif fname == 'nonEnhancingFindings' and modality == 'MRI':
         for i in range(len(arr)):
             params += grab_data(row_data, 22, 14, 19)
             row_data += 1
 
-    elif condname == 'lymphNodes' and modality == 'MRI':
+    elif fname == 'lymphNodes' and modality == 'MRI':
         for i in range(len(arr)):
             params += grab_data(row_data, 22, 14, 19)
             row_data += 1
 
-    elif condname == 'fatContainingLesions' and modality == 'MRI':
+    elif fname == 'fatContainingLesions' and modality == 'MRI':
         for i in range(len(arr)):
             params += grab_data(row_data, 24, 14, 19)
             row_data += 1
@@ -236,22 +236,37 @@ def generate_report(infile, items):
             iter_params_calc = ['typicallyBenign', 'suspiciousMorphology', 'distribution']
             iter_params_a = ['assymetry']
             iter_params_lymph = ['lymphNodes']
-            for i in range(num_cond):
-                br = get_birad(row, 2, 7)
+            #print(f)
+
+            for k in range(num_cond):
+                #br = get_birad(row, 2, 7)
                 cond = camelCase(get_cond_name())
-                report['conditions'] += [{'condition_name': cond,
-                                          'condition_details':
-                                              [{'relevant_finding':[random.choice(f_list) for _ in range(f_rand)]}]}]
+                f_togo = [random.choice(f_list) for _ in range(f_rand)]
+                f = camelCase(random.choice(f_togo))
                 if f == 'mass':
-                        rep_temp = create_rep(iter_params_mass, row, f, r)
+                    rep_temp = create_rep(iter_params_mass, row, f, r)
+                    report['conditions'] += [{'condition_name': cond,
+                                              'condition_details': [
+                                                  {'relevant_finding': [{'finding_name': f,
+                                                       'finding_parameters': rep_temp}
+                                                  ]}
+                                              ]
+                                            }]
+                elif f == 'calcifications':
+                    rep_temp = create_rep(iter_params_calc, row, f, r)
+                    report['conditions'] += [{'condition_name': cond,
+                                              'condition_details': [
+                                                  {'relevant_finding': [{'finding_name': f,
+                                                                         'finding_parameters': rep_temp}
+                                                                        ]}
+                                              ]
+                                              }]
+
 
         json_t = json.dumps(report, indent=2)
         print(json_t)
 
-        """"  elif f == 'calcifications':
-                        rep_temp = create_rep(iter_params_calc, row, f, r)
-                        findings[cond]['relevantFinding'] += [{f:rep_temp}]
-                        pass
+        """" 
                 elif f == 'assymetry':
                         rep_temp = create_rep(iter_params_a, row, f, r)
                         findings[cond]['relevantFinding'] += [{f:rep_temp}]
