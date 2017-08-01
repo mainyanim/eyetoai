@@ -217,16 +217,15 @@ def generate_report(infile, items):
 
         "create list of values and slice empty entities from list"
         rm = df['Relevant modalities'].values.tolist()[0:26]
-        #r = 'Mammography'
-        r = random.choice(rm)
+        r = 'Mammography'
+        #r = random.choice(rm)
         # mammo params
-        findings = AutoTree()
-        findings['report'] = {}
-        findings['report']['id'] = p_id
-        findings['report']['name'] = person_name
-        findings['report']['age'] = p_age
-        findings['report']['relevantModality'] = r
-        findings['report']['numberOfConditions'] = num_cond
+        report = {}
+        report['patient_id'] = p_id
+        report['patient_name'] = person_name
+        report['relevantModality'] = r
+        report['conditions_number'] = num_cond
+        report['conditions'] = []
 
         if r == 'Mammography':
             f_temp = df['Relevant findings'].values.tolist()[0:8]
@@ -240,30 +239,30 @@ def generate_report(infile, items):
             for i in range(num_cond):
                 br = get_birad(row, 2, 7)
                 cond = camelCase(get_cond_name())
-                findings[cond]['biRad'] = br
+                report['conditions'] += [{'condition_name': cond,
+                                          'condition_details':
+                                              [{'relevant_finding':[random.choice(f_list) for _ in range(f_rand)]}]}]
+                if f == 'mass':
+                        rep_temp = create_rep(iter_params_mass, row, f, r)
 
-                findings[cond]['relevantFinding'] = []
-                #f = 'mass'
-                for k in range(f_rand + 1):
-                    f = camelCase(random.choice(f_list))
-                    if f == 'mass':
-                            rep_temp = create_rep(iter_params_mass, row, f, r)
-                            findings[cond]['relevantFinding'] += [{f:rep_temp}]
-                            pass
-                    elif f == 'calcifications':
-                            rep_temp = create_rep(iter_params_calc, row, f, r)
-                            findings[cond]['relevantFinding'] += [{f:rep_temp}]
-                            pass
-                    elif f == 'assymetry':
-                            rep_temp = create_rep(iter_params_a, row, f, r)
-                            findings[cond]['relevantFinding'] += [{f:rep_temp}]
-                            pass
-                    elif f == 'lymphNodes':
-                            rep_temp = create_rep(iter_params_lymph, row, f, r)
-                            findings[cond]['relevantFinding'] += [{f:rep_temp}]
-                            pass
+        json_t = json.dumps(report, indent=2)
+        print(json_t)
+
+        """"  elif f == 'calcifications':
+                        rep_temp = create_rep(iter_params_calc, row, f, r)
+                        findings[cond]['relevantFinding'] += [{f:rep_temp}]
+                        pass
+                elif f == 'assymetry':
+                        rep_temp = create_rep(iter_params_a, row, f, r)
+                        findings[cond]['relevantFinding'] += [{f:rep_temp}]
+                        pass
+                elif f == 'lymphNodes':
+                        rep_temp = create_rep(iter_params_lymph, row, f, r)
+                        findings[cond]['relevantFinding'] += [{f:rep_temp}]
+                        pass
             with open(filename, 'w') as f:
                 json.dump(findings, f, indent = 4)
+
 
 
 
@@ -349,7 +348,7 @@ def generate_report(infile, items):
                         findings[cond]['relevantFinding'] += [{f: rep_temp}]
             with open(filename, 'w') as f:
                 json.dump(findings, f, indent = 4)
-
+"""
 
 if __name__ == "__main__":
-    generate_report("first-names.txt", 5000)
+    generate_report("first-names.txt", 1)
