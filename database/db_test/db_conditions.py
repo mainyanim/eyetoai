@@ -153,8 +153,8 @@ def create_report(infile):
     condition = Condition(cond_name=condname, birads=birads_list, modalities=modalities_list,
                           mammo_findings=mammo_findigs_list,us_findings=us_findings_list,
                           mri_findings=mri_findings_list)
-    modality = random.choice(condition.modalities)
-
+    #modality = random.choice(condition.modalities)
+    modality = 'Mammography'
     report['modality'] = modality
 
 
@@ -167,10 +167,17 @@ def create_report(infile):
 
     arr_temp = []
     for i in range(random.randrange(1,len(findings_list))):
+        #rand_item = random.choice(findings_list)
         rand_item = random.choice(findings_list)
         arr_temp.append(rand_item)
 
-    report['conditions']= {'findings': [{'name': x} for x in arr_temp]}
+    for k in range(len(arr_temp)):
+        if arr_temp[k] in mammo_mass_params:
+            tmp_mass = create_loc_dict(mammo_mass_params,condition.m_mass_loc)
+            tmp = [{"value": condition.get_random_parameter(tmp_mass[arr_temp[k]])} for y in tmp_mass]
+            print(tmp)
+    report['conditions'][condname] = {'findings': [{'name': x} for x in arr_temp]}
+
 
     """report['conditions']['findings'] 
     report['conditions']['findings']['parameters']
