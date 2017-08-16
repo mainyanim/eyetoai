@@ -48,7 +48,7 @@ def condition_i(c,f):
     """
     I CAN'T WORK WITH FINDINGS. PLEASE FIX THE DATABASE!
     """
-    cursor.execute(" SELECT COUNT (FindingId) "
+    cursor.execute(" SELECT (FindingId) "
                    " FROM ReportConditionFindingOptions "
                    " INNER JOIN Findings "
                    " ON ReportConditionFindingOptions.FindingId = Findings.Id"

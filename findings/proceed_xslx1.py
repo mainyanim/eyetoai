@@ -296,6 +296,7 @@ def get_dictionary(file_data):
              'Differential diagnosis': row[162],
              }
         data_list.append(d)
+
     return data_list
 
 
