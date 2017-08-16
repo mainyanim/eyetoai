@@ -1,10 +1,10 @@
-from openpyxl import load_workbook
-from openpyxl import Workbook
 import pandas as pd
 import random
-import numpy as np
+import datetime
 
 df = pd.read_excel("output.xlsx")
+
+conditions_dict = {'Fibroadenoma':0, 'Papilloma':25}
 
 birads_list = ['birad0', 'birad1', 'birad2', 'birad3', 'birad4', 'birad5', 'birad5']
 modalities_list = ['Mammography', 'US', 'MRI']
@@ -51,6 +51,31 @@ class Condition:
         self.us_findings = us_findings
         self.mri_findings = mri_findings
 
+        """
+         Every line contains arrays of rows where needed parameters are located.
+         For instance, mass has 3 params - shape, margin and density and in excel file
+         shape located in the row 0, margin in the row 1, density in the row 3, etc.
+        """
+
+        #Mammography
+        self.m_mass_loc = [0, 1, 2]
+        self.m_calc_loc = [4, 5, 6]
+        self.m_assym_loc = [6]
+        self.m_lymph_n = [7]
+        # US
+        self.us_mass_loc = [8, 9, 10, 11]
+        self.us_calc_loc = [12]
+        self.us_lymph_n = [13]
+        self.us_sp_c = [14]
+        # MRI
+        self.mri_mass = [15, 16, 17]
+        self.mri_features = [18]
+        self.mri_kca_ = [19]
+        self.mri_nme = [20, 21]
+        self.mri_nef = [22]
+        self.mri_lymph_n = [23]
+        self.mri_fcl = [24]
+
     @classmethod
     def get_random_parameter(self, row):
         """
@@ -81,17 +106,6 @@ class Condition:
         randparameter = random.choices(val_arr, prob_arr, k=1)
         return randparameter
 
-class Fibroadenoma:
-    """
-    Every line contains arrays of rows where needed parameters are located.
-    For instance, mass has 3 params - shape, margin and density and in excel file
-    shape located in the row 0, margin in the row 1, density in the row 3, etc.
-    """
-    def __init__(self):
-        self.mass_loc = [0, 1, 2]
-        self.calc_loc = [4, 5, 6]
-        self.assym_loc = [6]
-        self.lymph_n = [7]
 
 def create_loc_dict(modality_param_arr, param_loc):
     """
@@ -103,15 +117,39 @@ def create_loc_dict(modality_param_arr, param_loc):
     data_dict = dict(zip(modality_param_arr, param_loc))
     return data_dict
 
+def get_name(infile):
+    with open(infile, 'r') as f:
+        contents_of_file = f.read()
+        lines = contents_of_file.splitlines()
+    line_number = random.randrange(0, len(lines))
+    person_name = lines[line_number]
+    return person_name
 
-f = Fibroadenoma()
-fibroadenoma_mass = create_loc_dict(mammo_mass_params, f.mass_loc)
-fibroadenoma_lymph = create_loc_dict(mammo_lymph_nodes, f.lymph_n)
+"""
+f_new = [(x + 25) for x in f.m_mass_loc]
+c0_mammo_mass = create_loc_dict(mammo_mass_params, f_new)
+in order to check how can I apply scalar functions to arrs defined these two functions
 
+print(fibroadenoma.get_random_parameter(c0_mammo_mass['Shape']))
+print(fibroadenoma.get_random_parameter(f_mammo_mass['Margin']))
+print(fibroadenoma.get_random_parameter(f_mammo_mass['Density']))
+print(fibroadenoma.get_random_parameter(f_mammo_lymph['Lymph nodes']))
+"""
 
-fibroadenoma = Condition('Fibroadenoma', birads_list, modalities_list, mammo_findigs_list, us_findings_list, mri_findings_list)
+def create_report():
+    conditions_list = [*conditions_dict]
+    condname = random.choice(conditions_list)
+    print(condname)
 
-print(fibroadenoma.get_random_parameter(fibroadenoma_mass['Shape']))
-print(fibroadenoma.get_random_parameter(fibroadenoma_mass['Margin']))
-print(fibroadenoma.get_random_parameter(fibroadenoma_mass['Density']))
-print(fibroadenoma.get_random_parameter(fibroadenoma_lymph['Lymph nodes']))
+    report = {}
+    report['date_created'] = datetime.datetime.now().strftime('%d %m %Y')
+    report['doctor'] = {}
+    report['doctor']['id'] = random.randint(0,5001)
+    report['doctor']['name'] =
+    print(report)
+
+def main():
+    create_report()
+
+if __name__ == '__main__':
+    main()
