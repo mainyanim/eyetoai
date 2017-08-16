@@ -9,7 +9,7 @@ conditions_dict = {'Fibroadenoma':0, 'Papilloma':25}
 birads_list = ['birad0', 'birad1', 'birad2', 'birad3', 'birad4', 'birad5', 'birad5']
 modalities_list = ['Mammography', 'US', 'MRI']
 
-mammo_findigs_list = ['Mass', 'Calcifications', 'Assymetry', 'Lymph nodes']
+mammo_findings_list = ['Mass', 'Calcifications', 'Assymetry', 'Lymph nodes']
 us_findings_list = ['Mass', 'Calcifications US', 'Lymph nodes', 'Special cases']
 mri_findings_list = ['Mass', 'MRI Features', 'Kinetic curve assessment',
                      'Non-mass enhancement (NME)', 'Non-enhancing findings',
@@ -151,7 +151,7 @@ def create_report(infile):
     report['conditions']['name'] = condname
 
     condition = Condition(cond_name=condname, birads=birads_list, modalities=modalities_list,
-                          mammo_findings=mammo_findigs_list,us_findings=us_findings_list,
+                          mammo_findings=mammo_findings_list,us_findings=us_findings_list,
                           mri_findings=mri_findings_list)
     #modality = random.choice(condition.modalities)
     modality = 'Mammography'
@@ -172,9 +172,19 @@ def create_report(infile):
         arr_temp.append(rand_item)
 
     for k in range(len(arr_temp)):
-        if arr_temp[k] in mammo_mass_params:
-            tmp_mass = create_loc_dict(mammo_mass_params,condition.m_mass_loc)
-            tmp = [{"value": condition.get_random_parameter(tmp_mass[arr_temp[k]])} for y in tmp_mass]
+        if arr_temp[k] in mammo_findings_list and modality == 'Mammography':
+            if arr_temp[k] in mammo_mass_params:
+                tmp_mass = create_loc_dict(mammo_mass_params,condition.m_mass_loc)
+                tmp = [{"value": condition.get_random_parameter(tmp_mass[arr_temp[k]])} for y in tmp_mass]
+            elif arr_temp[k] in mammo_calc_params:
+                tmp_calc = create_loc_dict(mammo_calc_params, condition.m_calc_loc)
+                tmp = [{"value": condition.get_random_parameter(tmp_calc[arr_temp[k]])} for y in tmp_calc]
+            elif arr_temp[k] in mammo_assym_params:
+                tmp_assym = create_loc_dict(mammo_assym_params, condition.m_assym_loc)
+                tmp = [{"value": condition.get_random_parameter(tmp_assym[arr_temp[k]])} for y in tmp_assym]
+            elif arr_temp[k] in mammo_lymph_nodes_params:
+                tmp_lymph = create_loc_dict(mammo_lymph_nodes_params, condition.m_lymph_n)
+                tmp = [{"value": condition.get_random_parameter(tmp_lymph[arr_temp[k]])} for y in tmp_lymph]
             print(tmp)
     report['conditions'][condname] = {'findings': [{'name': x} for x in arr_temp]}
 
