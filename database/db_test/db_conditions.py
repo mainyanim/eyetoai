@@ -136,20 +136,49 @@ print(fibroadenoma.get_random_parameter(f_mammo_mass['Density']))
 print(fibroadenoma.get_random_parameter(f_mammo_lymph['Lymph nodes']))
 """
 
-def create_report():
+def create_report(infile):
     conditions_list = [*conditions_dict]
     condname = random.choice(conditions_list)
-    print(condname)
-
     report = {}
     report['date_created'] = datetime.datetime.now().strftime('%d %m %Y')
     report['doctor'] = {}
     report['doctor']['id'] = random.randint(0,5001)
-    report['doctor']['name'] =
+    report['doctor']['name'] = get_name(infile)
+    report['patient'] = {}
+    report['patient']['id'] = random.randint(0, 5001)
+    report['patient']['name'] = get_name(infile)
+    report['conditions'] = {}
+    report['conditions']['name'] = condname
+
+    condition = Condition(cond_name=condname, birads=birads_list, modalities=modalities_list,
+                          mammo_findings=mammo_findigs_list,us_findings=us_findings_list,
+                          mri_findings=mri_findings_list)
+    modality = random.choice(condition.modalities)
+
+    report['modality'] = modality
+
+    if modality == 'Mammography':
+        findings_list = condition.mammo_findings
+    elif modality == 'US':
+        findings_list = condition.us_findings
+    else:
+        findings_list = condition.mri_findings
+
+    arr_temp = []
+    for i in range(random.randrange(1,len(findings_list))):
+        rand_item = random.choice(findings_list)
+        arr_temp.append(rand_item)
+
+    print(arr_temp)
+
+    report['conditions'].setdefault('findings', []).append(arr_temp)
+    """report['conditions']['findings'] 
+    report['conditions']['findings']['parameters']
+    """
     print(report)
 
 def main():
-    create_report()
+    create_report("first-names.txt")
 
 if __name__ == '__main__':
     main()
