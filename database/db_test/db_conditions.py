@@ -157,6 +157,7 @@ def create_report(infile):
 
     report['modality'] = modality
 
+
     if modality == 'Mammography':
         findings_list = condition.mammo_findings
     elif modality == 'US':
@@ -169,9 +170,8 @@ def create_report(infile):
         rand_item = random.choice(findings_list)
         arr_temp.append(rand_item)
 
-    print(arr_temp)
+    report['conditions']= {'findings': [{'name': x} for x in arr_temp]}
 
-    report['conditions'].setdefault('findings', []).append(arr_temp)
     """report['conditions']['findings'] 
     report['conditions']['findings']['parameters']
     """
