@@ -61,11 +61,11 @@ class Condition:
         self.m_mass_loc = [0, 1, 2]
         self.m_calc_loc = [3, 4, 5]
         self.m_assym_loc = [6]
-        self.m_lymph_n = [7]
+        self.m_lymph_n_loc = [7]
         # US
         self.us_mass_loc = [8, 9, 10, 11]
         self.us_calc_loc = [12]
-        self.us_lymph_n = [13]
+        self.us_lymph_n_loc = [13]
         self.us_sp_c = [14]
         # MRI
         self.mri_mass = [15, 16, 17]
@@ -180,15 +180,18 @@ def create_report(infile):
     m_params_lst = [{'name': _} for _ in mass_lst]
 
 
-
-
     #report['conditions'][condname]['findings'] = {'parameters': [{'name': _} for _ in mass_lst]} overrides existed structure
     calc_ps = create_loc_dict(mammo_calc_params, condition.m_calc_loc)
     calc_lst = [*calc_ps]
     calc_params_lst = [{'name': _} for _ in calc_lst]
 
+    assym_ps = create_loc_dict(mammo_assym_params, condition.m_assym_loc)
+    assym_lst = [*assym_ps]
+    assym_params_lst = [{'name': _} for _ in assym_lst]
 
-
+    l_nodes_ps = create_loc_dict(mammo_lymph_nodes_params, condition.m_lymph_n_loc)
+    l_nodes_lst = [*l_nodes_ps]
+    l_nodes_params_lst = [{'name': _} for _ in l_nodes_lst]
 
     def construct_dict(x):
         ret = {'name': x}
@@ -205,8 +208,18 @@ def create_report(infile):
                 new_par_calc += [{'value': x} for x in condition.get_random_parameter(calc_ps[calc_lst[k]])]
             paired_vals_calc = [{**x, **y} for (x, y) in zip(calc_params_lst, new_par_calc)]
             ret['parameters'] = paired_vals_calc
+        elif x == 'Assymetry':
+            new_par_assym = []
+            for k in range(len(assym_lst)):
+                new_par_assym += [{'value': x} for x in condition.get_random_parameter(assym_ps[assym_lst[k]])]
+            paired_vals_assym = [{**x, **y} for (x, y) in zip(assym_params_lst, new_par_assym)]
+            ret['parameters'] = paired_vals_assym
         else:
-            ret['parameters'] = 'regular_test'
+            new_par_l_nodes = []
+            for k in range(len(l_nodes_lst)):
+                new_par_l_nodes += [{'value': x} for x in condition.get_random_parameter(l_nodes_ps[l_nodes_lst[k]])]
+            paired_vals_l_nodes = [{**x, **y} for (x, y) in zip(l_nodes_params_lst, new_par_l_nodes)]
+            ret['parameters'] = paired_vals_l_nodes
         return ret
 
     report['conditions'][condname] = {'findings': [construct_dict(x) for x in arr_temp]}
