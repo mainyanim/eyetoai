@@ -171,19 +171,23 @@ def create_report(infile):
         rand_item = random.choice(mammo_findings_list)
         arr_temp.append(rand_item)
 
-    mass_ps = create_loc_dict(mammo_mass_params, condition.m_mass_loc)
-    print(mass_ps)
-
-    mass_lst = [*mass_ps]
-    print(mass_lst)
-    params_lst = [{'name': _} for _ in mass_lst]
-    print(params_lst)
-
-    for k in range(len(mass_lst)):
-        new_par =[{'value': x} for x in  condition.get_random_parameter(mass_ps[mass_lst[k]])]
-        print(new_par)
-
+    #list of dictionaries for findings
     report['conditions'][condname] = {'findings': [{'name': x} for x in arr_temp]}
+
+    #create a dict for mass parameters
+    mass_ps = create_loc_dict(mammo_mass_params, condition.m_mass_loc)
+    mass_lst = [*mass_ps]
+    params_lst = [{'name': _} for _ in mass_lst]
+    #report['conditions'][condname]['findings'] = {'parameters': [{'name': _} for _ in mass_lst]} overrides existed structure
+
+    #a loop for getting random option for each parameter in a finding (as a test used mass)
+    new_par = []
+    for k in range(len(mass_lst)):
+        new_par +=[{'value': x} for x in  condition.get_random_parameter(mass_ps[mass_lst[k]])]
+
+    paired_vals_mass = [{**x, **y} for (x, y) in zip(params_lst, new_par)]
+    print(paired_vals_mass)
+
 
 
     """report['conditions']['findings'] 
