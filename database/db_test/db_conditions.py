@@ -168,24 +168,21 @@ def create_report(infile):
     arr_temp = []
     for i in range(random.randrange(1,len(findings_list))):
         #rand_item = random.choice(findings_list)
-        rand_item = random.choice(findings_list)
+        rand_item = random.choice(mammo_findings_list)
         arr_temp.append(rand_item)
 
-    for k in range(len(arr_temp)):
-        if arr_temp[k] in mammo_findings_list and modality == 'Mammography':
-            if arr_temp[k] in mammo_mass_params:
-                tmp_mass = create_loc_dict(mammo_mass_params,condition.m_mass_loc)
-                tmp = [{"value": condition.get_random_parameter(tmp_mass[arr_temp[k]])} for y in tmp_mass]
-            elif arr_temp[k] in mammo_calc_params:
-                tmp_calc = create_loc_dict(mammo_calc_params, condition.m_calc_loc)
-                tmp = [{"value": condition.get_random_parameter(tmp_calc[arr_temp[k]])} for y in tmp_calc]
-            elif arr_temp[k] in mammo_assym_params:
-                tmp_assym = create_loc_dict(mammo_assym_params, condition.m_assym_loc)
-                tmp = [{"value": condition.get_random_parameter(tmp_assym[arr_temp[k]])} for y in tmp_assym]
-            elif arr_temp[k] in mammo_lymph_nodes_params:
-                tmp_lymph = create_loc_dict(mammo_lymph_nodes_params, condition.m_lymph_n)
-                tmp = [{"value": condition.get_random_parameter(tmp_lymph[arr_temp[k]])} for y in tmp_lymph]
-            print(tmp)
+    mass_ps = create_loc_dict(mammo_mass_params, condition.m_mass_loc)
+    print(mass_ps)
+
+    mass_lst = [*mass_ps]
+    print(mass_lst)
+    params_lst = [{'name': _} for _ in mass_lst]
+    print(params_lst)
+
+    for k in range(len(mass_lst)):
+        new_par =[{'value': x} for x in  condition.get_random_parameter(mass_ps[mass_lst[k]])]
+        print(new_par)
+
     report['conditions'][condname] = {'findings': [{'name': x} for x in arr_temp]}
 
 
