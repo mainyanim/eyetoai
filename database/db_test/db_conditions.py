@@ -59,7 +59,7 @@ class Condition:
 
         #Mammography
         self.m_mass_loc = [0, 1, 2]
-        self.m_calc_loc = [4, 5, 6]
+        self.m_calc_loc = [3, 4, 5]
         self.m_assym_loc = [6]
         self.m_lymph_n = [7]
         # US
@@ -179,22 +179,13 @@ def create_report(infile):
     mass_lst = [*mass_ps]
     m_params_lst = [{'name': _} for _ in mass_lst]
 
-    # a loop for getting random option for each parameter in a finding (as a test used mass)
-    new_par_mass = []
-    for k in range(len(mass_lst)):
-        new_par_mass += [{'value': x} for x in condition.get_random_parameter(mass_ps[mass_lst[k]])]
 
-    paired_vals_mass = [{**x, **y} for (x, y) in zip(m_params_lst, new_par_mass)]
-    print(paired_vals_mass)
+
+
     #report['conditions'][condname]['findings'] = {'parameters': [{'name': _} for _ in mass_lst]} overrides existed structure
-
     calc_ps = create_loc_dict(mammo_calc_params, condition.m_calc_loc)
     calc_lst = [*calc_ps]
     calc_params_lst = [{'name': _} for _ in calc_lst]
-    new_par_calc = []
-    for k in range(len(calc_lst)):
-        new_par_calc += [{'value': x} for x in condition.get_random_parameter(calc_ps[calc_lst[k]])]
-    paired_vals_calc = [{**x, **y} for (x, y) in zip(calc_params_lst, new_par_calc)]
 
 
 
@@ -202,12 +193,20 @@ def create_report(infile):
     def construct_dict(x):
         ret = {'name': x}
         if x == 'Mass':
+            new_par_mass = []
+            # a loop for getting random option for each parameter in a finding (as a test used mass)
+            for k in range(len(mass_lst)):
+                new_par_mass += [{'value': x} for x in condition.get_random_parameter(mass_ps[mass_lst[k]])]
+            paired_vals_mass = [{**x, **y} for (x, y) in zip(m_params_lst, new_par_mass)]
             ret['parameters'] = paired_vals_mass
         elif x == 'Calcifications':
+            new_par_calc = []
+            for k in range(len(calc_lst)):
+                new_par_calc += [{'value': x} for x in condition.get_random_parameter(calc_ps[calc_lst[k]])]
+            paired_vals_calc = [{**x, **y} for (x, y) in zip(calc_params_lst, new_par_calc)]
             ret['parameters'] = paired_vals_calc
         else:
             ret['parameters'] = 'regular_test'
-
         return ret
 
     report['conditions'][condname] = {'findings': [construct_dict(x) for x in arr_temp]}
