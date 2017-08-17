@@ -177,17 +177,40 @@ def create_report(infile):
     #create a dict for mass parameters
     mass_ps = create_loc_dict(mammo_mass_params, condition.m_mass_loc)
     mass_lst = [*mass_ps]
-    params_lst = [{'name': _} for _ in mass_lst]
+    m_params_lst = [{'name': _} for _ in mass_lst]
+
+    # a loop for getting random option for each parameter in a finding (as a test used mass)
+    new_par_mass = []
+    for k in range(len(mass_lst)):
+        new_par_mass += [{'value': x} for x in condition.get_random_parameter(mass_ps[mass_lst[k]])]
+
+    paired_vals_mass = [{**x, **y} for (x, y) in zip(m_params_lst, new_par_mass)]
+    print(paired_vals_mass)
     #report['conditions'][condname]['findings'] = {'parameters': [{'name': _} for _ in mass_lst]} overrides existed structure
 
-    #a loop for getting random option for each parameter in a finding (as a test used mass)
-    new_par = []
-    for k in range(len(mass_lst)):
-        new_par +=[{'value': x} for x in  condition.get_random_parameter(mass_ps[mass_lst[k]])]
+    calc_ps = create_loc_dict(mammo_calc_params, condition.m_calc_loc)
+    calc_lst = [*calc_ps]
+    calc_params_lst = [{'name': _} for _ in calc_lst]
+    new_par_calc = []
+    for k in range(len(calc_lst)):
+        new_par_calc += [{'value': x} for x in condition.get_random_parameter(calc_ps[calc_lst[k]])]
+    paired_vals_calc = [{**x, **y} for (x, y) in zip(calc_params_lst, new_par_calc)]
 
-    paired_vals_mass = [{**x, **y} for (x, y) in zip(params_lst, new_par)]
-    print(paired_vals_mass)
 
+
+
+    def construct_dict(x):
+        ret = {'name': x}
+        if x == 'Mass':
+            ret['parameters'] = paired_vals_mass
+        elif x == 'Calcifications':
+            ret['parameters'] = paired_vals_calc
+        else:
+            ret['parameters'] = 'regular_test'
+
+        return ret
+
+    report['conditions'][condname] = {'findings': [construct_dict(x) for x in arr_temp]}
 
 
     """report['conditions']['findings'] 
