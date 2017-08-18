@@ -377,6 +377,7 @@ def main():
      2. Grab condition by it's value in dictionary
      3. Create a function to increment location regarding to condition's value
      4. Add several conditions
+     5. Add random findings (not belonging to any condition)
 
     """
     create_report("first-names.txt")
