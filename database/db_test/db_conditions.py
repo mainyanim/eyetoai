@@ -162,6 +162,7 @@ print(fibroadenoma.get_random_parameter(f_mammo_lymph['Lymph nodes']))
 def create_report(infile):
     conditions_list = [*conditions_dict]
     condname = random.choice(conditions_list)
+    condname_id = conditions_dict.get(condname)
     report = {}
     report['date_created'] = datetime.datetime.now().strftime('%d %m %Y')
     report['doctor'] = {}
@@ -177,7 +178,7 @@ def create_report(infile):
                           mammo_findings=mammo_findings_list,us_findings=us_findings_list,
                           mri_findings=mri_findings_list)
     #modality = random.choice(condition.modalities)
-    modality = 'MRI'
+    modality = 'Mammography'
     report['modality'] = modality
 
 
@@ -192,20 +193,20 @@ def create_report(infile):
         report['conditions'][condname] = {'findings': [{'name': x} for x in arr_temp]}
 
         # create a dict for mass parameters
-        mass_ps = create_loc_dict(mammo_mass_params, condition.m_mass_loc)
+        mass_ps = create_loc_dict(mammo_mass_params, [(x + condname_id) for x in condition.m_mass_loc])
         mass_lst = [*mass_ps]
         m_params_lst = [{'name': _} for _ in mass_lst]
 
         # report['conditions'][condname]['findings'] = {'parameters': [{'name': _} for _ in mass_lst]} overrides existed structure
-        calc_ps = create_loc_dict(mammo_calc_params, condition.m_calc_loc)
+        calc_ps = create_loc_dict(mammo_calc_params, [(x + condname_id) for x in condition.m_calc_loc])
         calc_lst = [*calc_ps]
         calc_params_lst = [{'name': _} for _ in calc_lst]
 
-        assym_ps = create_loc_dict(mammo_assym_params, condition.m_assym_loc)
+        assym_ps = create_loc_dict(mammo_assym_params, [(x + condname_id) for x in condition.m_assym_loc])
         assym_lst = [*assym_ps]
         assym_params_lst = [{'name': _} for _ in assym_lst]
 
-        l_nodes_ps = create_loc_dict(mammo_lymph_nodes_params, condition.m_lymph_n_loc)
+        l_nodes_ps = create_loc_dict(mammo_lymph_nodes_params, [(x + condname_id) for x in condition.m_lymph_n_loc])
         l_nodes_lst = [*l_nodes_ps]
         l_nodes_params_lst = [{'name': _} for _ in l_nodes_lst]
 
@@ -249,20 +250,20 @@ def create_report(infile):
         report['conditions'][condname] = {'findings': [{'name': x} for x in arr_temp]}
 
         # create a dict for mass parameters
-        mass_ps = create_loc_dict(us_mass_params, condition.us_mass_loc)
+        mass_ps = create_loc_dict(us_mass_params, [(x + condname_id) for x in condition.us_mass_loc])
         mass_lst = [*mass_ps]
         m_params_lst = [{'name': _} for _ in mass_lst]
 
         # report['conditions'][condname]['findings'] = {'parameters': [{'name': _} for _ in mass_lst]} overrides existed structure
-        calc_ps = create_loc_dict(us_calc_params, condition.us_calc_loc)
+        calc_ps = create_loc_dict(us_calc_params, [(x + condname_id) for x in condition.us_calc_loc])
         calc_lst = [*calc_ps]
         calc_params_lst = [{'name': _} for _ in calc_lst]
 
-        l_nodes_ps = create_loc_dict(us_lymph_nodes_params, condition.us_lymph_n_loc)
+        l_nodes_ps = create_loc_dict(us_lymph_nodes_params, [(x + condname_id) for x in condition.us_lymph_n_loc])
         l_nodes_lst = [*l_nodes_ps]
         l_nodes_params_lst = [{'name': _} for _ in l_nodes_lst]
 
-        sp_cases_ps = create_loc_dict(us_sp_cases_params, condition.us_sp_c)
+        sp_cases_ps = create_loc_dict(us_sp_cases_params, [(x + condname_id) for x in condition.us_sp_c])
         sp_cases_lst = [*sp_cases_ps]
         us_sp_cases_params_lst = [{'name': _} for _ in sp_cases_lst]
 
@@ -306,32 +307,32 @@ def create_report(infile):
         report['conditions'][condname] = {'findings': [{'name': x} for x in arr_temp]}
 
         # create a dict for mass parameters
-        mass_ps = create_loc_dict(mri_mass_params, condition.mri_mass_loc)
+        mass_ps = create_loc_dict(mri_mass_params, [(x + condname_id) for x in condition.mri_mass_loc])
         mass_lst = [*mass_ps]
         m_params_lst = [{'name': _} for _ in mass_lst]
 
         # report['conditions'][condname]['findings'] = {'parameters': [{'name': _} for _ in mass_lst]} overrides existed structure
-        features_ps = create_loc_dict(mri_mri_features_params, condition.mri_features_loc)
+        features_ps = create_loc_dict(mri_mri_features_params, [(x + condname_id) for x in condition.mri_features_loc])
         features_lst = [*features_ps]
         features_params_lst = [{'name': _} for _ in features_lst]
 
-        kin_ca_ps = create_loc_dict(mri_kin_c_a_params , condition.mri_kca_loc)
+        kin_ca_ps = create_loc_dict(mri_kin_c_a_params , [(x + condname_id) for x in condition.mri_kca_loc])
         kin_ca_lst = [*kin_ca_ps]
         kin_ca_params_lst = [{'name': _} for _ in kin_ca_lst]
 
-        nme_ps = create_loc_dict(mri_nme_params, condition.mri_nme_loc)
+        nme_ps = create_loc_dict(mri_nme_params, [(x + condname_id) for x in condition.mri_nme_loc])
         nme_ps_lst = [*nme_ps]
         nme_params_lst = [{'name': _} for _ in nme_ps_lst]
 
-        nef_ps = create_loc_dict(mri_nef_params, condition.mri_nef_loc)
+        nef_ps = create_loc_dict(mri_nef_params, [(x + condname_id) for x in condition.mri_nef_loc])
         nef_ps_lst = [*nef_ps]
         nef_params_lst = [{'name': _} for _ in nef_ps_lst]
 
-        l_nodes_ps = create_loc_dict(mri_lymph_nodes_params, condition.mri_lymph_n_loc)
+        l_nodes_ps = create_loc_dict(mri_lymph_nodes_params, [(x + condname_id) for x in condition.mri_lymph_n_loc])
         l_nodes_lst = [*l_nodes_ps]
         l_nodes_params_lst = [{'name': _} for _ in l_nodes_lst]
 
-        fcl_ps = create_loc_dict(mri_fcl_params, condition.mri_fcl_loc)
+        fcl_ps = create_loc_dict(mri_fcl_params, [(x + condname_id) for x in condition.mri_fcl_loc])
         fcl_ps_lst = [*fcl_ps]
         fcl_params_lst = [{'name': _} for _ in fcl_ps_lst]
 
@@ -386,7 +387,6 @@ def create_report(infile):
                 paired_vals_fcl = [{**x, **y} for (x, y) in zip(fcl_params_lst, new_par_fcl)]
                 ret['parameters'] = paired_vals_fcl
             return ret
-
 
 
     report['conditions'][condname] = {'findings': [construct_dict(x) for x in arr_temp]}
