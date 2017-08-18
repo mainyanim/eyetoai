@@ -4,7 +4,30 @@ import datetime
 
 df = pd.read_excel("output.xlsx")
 
-conditions_dict = {'Fibroadenoma':0, 'Papilloma':25}
+conditions_dict = {'Fibroadenoma':0,
+                   'Papilloma':25,
+                   'Condition 1': 50,
+                   'Invasive ductal carcinoma (IDC)': 75,
+                   'Mastitis': 100,
+                   'Lymphoma': 125,
+                   'Fibroadenoma 2': 150,
+                   'Lipoma': 175,
+                   'INVASIVE LOBULAR CARCINOMA(ILC)' : 200,
+                   'Sebaceous cysts': 225,
+                   'Galactocele': 250,
+                   'Duct ectasia': 275,
+                   'Epidermal inclusion cyst': 300,
+                   'Fibrocystic breast changes': 325,
+                   'Fibroadenoma 3': 350,
+                   'Intramammary lymph nodes': 375,
+                   'Hamartoma': 400,
+                   'Lipoma 2': 425,
+                   'Fibromatosis': 450,
+                   'Fibrosis': 475,
+                   'Adenosis': 500,
+                   'Diabetic mastopathy': 525,
+                   'Granular cell tumor': 550,
+                   'Fat necrosis': 575}
 
 birads_list = ['birad0', 'birad1', 'birad2', 'birad3', 'birad4', 'birad5', 'birad5']
 modalities_list = ['Mammography', 'US', 'MRI']
