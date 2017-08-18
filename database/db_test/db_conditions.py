@@ -154,80 +154,131 @@ def create_report(infile):
                           mammo_findings=mammo_findings_list,us_findings=us_findings_list,
                           mri_findings=mri_findings_list)
     #modality = random.choice(condition.modalities)
-    modality = 'Mammography'
+    modality = 'US'
     report['modality'] = modality
 
 
     if modality == 'Mammography':
         findings_list = condition.mammo_findings
+        arr_temp = []
+        for i in range(random.randrange(1, len(findings_list))):
+            rand_item = random.choice(mammo_findings_list)
+            arr_temp.append(rand_item)
+
+        # list of dictionaries for findings
+        report['conditions'][condname] = {'findings': [{'name': x} for x in arr_temp]}
+
+        # create a dict for mass parameters
+        mass_ps = create_loc_dict(mammo_mass_params, condition.m_mass_loc)
+        mass_lst = [*mass_ps]
+        m_params_lst = [{'name': _} for _ in mass_lst]
+
+        # report['conditions'][condname]['findings'] = {'parameters': [{'name': _} for _ in mass_lst]} overrides existed structure
+        calc_ps = create_loc_dict(mammo_calc_params, condition.m_calc_loc)
+        calc_lst = [*calc_ps]
+        calc_params_lst = [{'name': _} for _ in calc_lst]
+
+        assym_ps = create_loc_dict(mammo_assym_params, condition.m_assym_loc)
+        assym_lst = [*assym_ps]
+        assym_params_lst = [{'name': _} for _ in assym_lst]
+
+        l_nodes_ps = create_loc_dict(mammo_lymph_nodes_params, condition.m_lymph_n_loc)
+        l_nodes_lst = [*l_nodes_ps]
+        l_nodes_params_lst = [{'name': _} for _ in l_nodes_lst]
+
+        def construct_dict(x):
+            ret = {'name': x}
+            if x == 'Mass':
+                new_par_mass = []
+                # a loop for getting random option for each parameter in a finding (as a test used mass)
+                for k in range(len(mass_lst)):
+                    new_par_mass += [{'value': x} for x in condition.get_random_parameter(mass_ps[mass_lst[k]])]
+                paired_vals_mass = [{**x, **y} for (x, y) in zip(m_params_lst, new_par_mass)]
+                ret['parameters'] = paired_vals_mass
+            elif x == 'Calcifications':
+                new_par_calc = []
+                for k in range(len(calc_lst)):
+                    new_par_calc += [{'value': x} for x in condition.get_random_parameter(calc_ps[calc_lst[k]])]
+                paired_vals_calc = [{**x, **y} for (x, y) in zip(calc_params_lst, new_par_calc)]
+                ret['parameters'] = paired_vals_calc
+            elif x == 'Assymetry':
+                new_par_assym = []
+                for k in range(len(assym_lst)):
+                    new_par_assym += [{'value': x} for x in condition.get_random_parameter(assym_ps[assym_lst[k]])]
+                paired_vals_assym = [{**x, **y} for (x, y) in zip(assym_params_lst, new_par_assym)]
+                ret['parameters'] = paired_vals_assym
+            else:
+                new_par_l_nodes = []
+                for k in range(len(l_nodes_lst)):
+                    new_par_l_nodes += [{'value': x} for x in
+                                        condition.get_random_parameter(l_nodes_ps[l_nodes_lst[k]])]
+                paired_vals_l_nodes = [{**x, **y} for (x, y) in zip(l_nodes_params_lst, new_par_l_nodes)]
+                ret['parameters'] = paired_vals_l_nodes
+            return ret
     elif modality == 'US':
         findings_list = condition.us_findings
+        arr_temp = []
+        for i in range(random.randrange(1, len(findings_list))):
+            rand_item = random.choice(us_findings_list)
+            arr_temp.append(rand_item)
+
+        # list of dictionaries for findings
+        report['conditions'][condname] = {'findings': [{'name': x} for x in arr_temp]}
+
+        # create a dict for mass parameters
+        mass_ps = create_loc_dict(us_mass_params, condition.us_mass_loc)
+        mass_lst = [*mass_ps]
+        m_params_lst = [{'name': _} for _ in mass_lst]
+
+        # report['conditions'][condname]['findings'] = {'parameters': [{'name': _} for _ in mass_lst]} overrides existed structure
+        calc_ps = create_loc_dict(us_calc_params, condition.us_calc_loc)
+        calc_lst = [*calc_ps]
+        calc_params_lst = [{'name': _} for _ in calc_lst]
+
+        l_nodes_ps = create_loc_dict(us_lymph_nodes_params, condition.us_lymph_n_loc)
+        l_nodes_lst = [*l_nodes_ps]
+        l_nodes_params_lst = [{'name': _} for _ in l_nodes_lst]
+
+        sp_cases_ps = create_loc_dict(us_sp_cases_params, condition.us_sp_c)
+        sp_cases_lst = [*sp_cases_ps]
+        us_sp_cases_params_lst = [{'name': _} for _ in sp_cases_lst]
+
+        def construct_dict(x):
+            ret = {'name': x}
+            if x == 'Mass':
+                new_par_mass = []
+                # a loop for getting random option for each parameter in a finding (as a test used mass)
+                for k in range(len(mass_lst)):
+                    new_par_mass += [{'value': x} for x in condition.get_random_parameter(mass_ps[mass_lst[k]])]
+                paired_vals_mass = [{**x, **y} for (x, y) in zip(m_params_lst, new_par_mass)]
+                ret['parameters'] = paired_vals_mass
+            elif x == 'Calcifications US':
+                new_par_calc = []
+                for k in range(len(calc_lst)):
+                    new_par_calc += [{'value': x} for x in condition.get_random_parameter(calc_ps[calc_lst[k]])]
+                paired_vals_calc = [{**x, **y} for (x, y) in zip(calc_params_lst, new_par_calc)]
+                ret['parameters'] = paired_vals_calc
+            elif x == 'Special cases':
+                new_par_sp_cases = []
+                for k in range(len(sp_cases_lst)):
+                    new_par_sp_cases += [{'value': x} for x in condition.get_random_parameter(sp_cases_ps[sp_cases_lst[k]])]
+                paired_vals_assym = [{**x, **y} for (x, y) in zip(us_sp_cases_params_lst, new_par_sp_cases)]
+                ret['parameters'] = paired_vals_assym
+            else:
+                new_par_l_nodes = []
+                for k in range(len(l_nodes_lst)):
+                    new_par_l_nodes += [{'value': x} for x in
+                                        condition.get_random_parameter(l_nodes_ps[l_nodes_lst[k]])]
+                paired_vals_l_nodes = [{**x, **y} for (x, y) in zip(l_nodes_params_lst, new_par_l_nodes)]
+                ret['parameters'] = paired_vals_l_nodes
+            return ret
     else:
         findings_list = condition.mri_findings
 
-    arr_temp = []
-    for i in range(random.randrange(1,len(findings_list))):
-        #rand_item = random.choice(findings_list)
-        rand_item = random.choice(mammo_findings_list)
-        arr_temp.append(rand_item)
 
-    #list of dictionaries for findings
-    report['conditions'][condname] = {'findings': [{'name': x} for x in arr_temp]}
-
-    #create a dict for mass parameters
-    mass_ps = create_loc_dict(mammo_mass_params, condition.m_mass_loc)
-    mass_lst = [*mass_ps]
-    m_params_lst = [{'name': _} for _ in mass_lst]
-
-
-    #report['conditions'][condname]['findings'] = {'parameters': [{'name': _} for _ in mass_lst]} overrides existed structure
-    calc_ps = create_loc_dict(mammo_calc_params, condition.m_calc_loc)
-    calc_lst = [*calc_ps]
-    calc_params_lst = [{'name': _} for _ in calc_lst]
-
-    assym_ps = create_loc_dict(mammo_assym_params, condition.m_assym_loc)
-    assym_lst = [*assym_ps]
-    assym_params_lst = [{'name': _} for _ in assym_lst]
-
-    l_nodes_ps = create_loc_dict(mammo_lymph_nodes_params, condition.m_lymph_n_loc)
-    l_nodes_lst = [*l_nodes_ps]
-    l_nodes_params_lst = [{'name': _} for _ in l_nodes_lst]
-
-    def construct_dict(x):
-        ret = {'name': x}
-        if x == 'Mass':
-            new_par_mass = []
-            # a loop for getting random option for each parameter in a finding (as a test used mass)
-            for k in range(len(mass_lst)):
-                new_par_mass += [{'value': x} for x in condition.get_random_parameter(mass_ps[mass_lst[k]])]
-            paired_vals_mass = [{**x, **y} for (x, y) in zip(m_params_lst, new_par_mass)]
-            ret['parameters'] = paired_vals_mass
-        elif x == 'Calcifications':
-            new_par_calc = []
-            for k in range(len(calc_lst)):
-                new_par_calc += [{'value': x} for x in condition.get_random_parameter(calc_ps[calc_lst[k]])]
-            paired_vals_calc = [{**x, **y} for (x, y) in zip(calc_params_lst, new_par_calc)]
-            ret['parameters'] = paired_vals_calc
-        elif x == 'Assymetry':
-            new_par_assym = []
-            for k in range(len(assym_lst)):
-                new_par_assym += [{'value': x} for x in condition.get_random_parameter(assym_ps[assym_lst[k]])]
-            paired_vals_assym = [{**x, **y} for (x, y) in zip(assym_params_lst, new_par_assym)]
-            ret['parameters'] = paired_vals_assym
-        else:
-            new_par_l_nodes = []
-            for k in range(len(l_nodes_lst)):
-                new_par_l_nodes += [{'value': x} for x in condition.get_random_parameter(l_nodes_ps[l_nodes_lst[k]])]
-            paired_vals_l_nodes = [{**x, **y} for (x, y) in zip(l_nodes_params_lst, new_par_l_nodes)]
-            ret['parameters'] = paired_vals_l_nodes
-        return ret
 
     report['conditions'][condname] = {'findings': [construct_dict(x) for x in arr_temp]}
 
-
-    """report['conditions']['findings'] 
-    report['conditions']['findings']['parameters']
-    """
     print(report)
 
 def main():
