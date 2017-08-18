@@ -371,6 +371,14 @@ def create_report(infile):
     print(report)
 
 def main():
+    """
+    TODO:
+     1. Add conditions to conditions dict
+     2. Grab condition by it's value in dictionary
+     3. Create a function to increment location regarding to condition's value
+     4. Add several conditions
+
+    """
     create_report("first-names.txt")
 
 if __name__ == '__main__':
