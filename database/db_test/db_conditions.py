@@ -159,26 +159,21 @@ print(fibroadenoma.get_random_parameter(f_mammo_mass['Density']))
 print(fibroadenoma.get_random_parameter(f_mammo_lymph['Lymph nodes']))
 """
 
-def create_report(infile):
+def create_report():
+
     conditions_list = [*conditions_dict]
     condname = random.choice(conditions_list)
     condname_id = conditions_dict.get(condname)
+
     report = {}
-    report['date_created'] = datetime.datetime.now().strftime('%d %m %Y')
-    report['doctor'] = {}
-    report['doctor']['id'] = random.randint(0,5001)
-    report['doctor']['name'] = get_name(infile)
-    report['patient'] = {}
-    report['patient']['id'] = random.randint(0, 5001)
-    report['patient']['name'] = get_name(infile)
-    report['conditions'] = {}
-    report['conditions']['name'] = condname
 
     condition = Condition(cond_name=condname, birads=birads_list, modalities=modalities_list,
                           mammo_findings=mammo_findings_list,us_findings=us_findings_list,
                           mri_findings=mri_findings_list)
-    #modality = random.choice(condition.modalities)
-    modality = 'Mammography'
+
+
+    modality = random.choice(condition.modalities)
+    #modality = 'Mammography'
     report['modality'] = modality
 
 
@@ -190,7 +185,7 @@ def create_report(infile):
             arr_temp.append(rand_item)
 
         # list of dictionaries for findings
-        report['conditions'][condname] = {'findings': [{'name': x} for x in arr_temp]}
+        report[condname] = {'findings': [{'name': x} for x in arr_temp]}
 
         # create a dict for mass parameters
         mass_ps = create_loc_dict(mammo_mass_params, [(x + condname_id) for x in condition.m_mass_loc])
@@ -247,7 +242,7 @@ def create_report(infile):
             arr_temp.append(rand_item)
 
         # list of dictionaries for findings
-        report['conditions'][condname] = {'findings': [{'name': x} for x in arr_temp]}
+        report[condname] = {'findings': [{'name': x} for x in arr_temp]}
 
         # create a dict for mass parameters
         mass_ps = create_loc_dict(us_mass_params, [(x + condname_id) for x in condition.us_mass_loc])
@@ -304,7 +299,7 @@ def create_report(infile):
             arr_temp.append(rand_item)
 
         # list of dictionaries for findings
-        report['conditions'][condname] = {'findings': [{'name': x} for x in arr_temp]}
+        report[condname] = {'findings': [{'name': x} for x in arr_temp]}
 
         # create a dict for mass parameters
         mass_ps = create_loc_dict(mri_mass_params, [(x + condname_id) for x in condition.mri_mass_loc])
@@ -350,7 +345,7 @@ def create_report(infile):
                 for k in range(len(features_lst)):
                     new_par_feat+= [{'value': x} for x in
                                          condition.get_random_parameter(features_ps[features_lst[k]])]
-                paired_vals_feat = [{**x, **y} for (x, y) in zip(us_sp_cases_params_lst, new_par_feat)]
+                paired_vals_feat = [{**x, **y} for (x, y) in zip(features_params_lst, new_par_feat)]
                 ret['parameters'] = paired_vals_feat
             elif x == mri_findings_list[2]:
                 new_par_kca = []
@@ -388,22 +383,34 @@ def create_report(infile):
                 ret['parameters'] = paired_vals_fcl
             return ret
 
+    report[condname] = {'findings': [construct_dict(x) for x in arr_temp]}
 
-    report['conditions'][condname] = {'findings': [construct_dict(x) for x in arr_temp]}
+    return report
 
-    print(report)
-
+def multi_report(infile):
+    multi_rep = {}
+    multi_rep['date_created'] = datetime.datetime.now().strftime('%d %m %Y')
+    multi_rep['doctor'] = {}
+    multi_rep['doctor']['id'] = random.randint(0, 5001)
+    multi_rep['doctor']['name'] = get_name(infile)
+    multi_rep['patient'] = {}
+    multi_rep['patient']['id'] = random.randint(0, 5001)
+    multi_rep['patient']['name'] = get_name(infile)
+    multi_rep['conditions'] = {}
+    cond_arr =  [(create_report()) for _ in range(1, 4) ]
+    multi_rep['conditions'] = cond_arr
+    print(multi_rep)
 def main():
     """
     TODO:
-     1. Add conditions to conditions dict
-     2. Grab condition by it's value in dictionary
-     3. Create a function to increment location regarding to condition's value
-     4. Add several conditions
+
+     4. Add several conditions:
+     save current condition and add to another, bigger one
+
      5. Add random findings (not belonging to any condition)
 
     """
-    create_report("first-names.txt")
-
+    #create_report("first-names.txt")
+    multi_report(infile="first-names.txt")
 if __name__ == '__main__':
     main()
