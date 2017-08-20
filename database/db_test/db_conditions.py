@@ -179,6 +179,7 @@ def create_report(infile):
     multi_rep['conditions'] = {}
 
 
+
     def subreport():
         report = {}
         condname = random.choice(conditions_list)
@@ -187,16 +188,36 @@ def create_report(infile):
                               mammo_findings=mammo_findings_list, us_findings=us_findings_list,
                               mri_findings=mri_findings_list)
 
-        if modality == 'Mammography':
+        def findings_mammo():
             findings_list = condition.mammo_findings
             arr_temp = []
             for i in range(random.randrange(1, len(findings_list))):
                 rand_item = random.choice(mammo_findings_list)
                 arr_temp.append(rand_item)
+            return arr_temp
 
+        def findings_us():
+            findings_list = condition.us_findings
+            arr_temp = []
+            for i in range(random.randrange(1, len(findings_list))):
+                rand_item = random.choice(us_findings_list)
+                arr_temp.append(rand_item)
+            return arr_temp
+
+        def findings_mri():
+            findings_list = condition.mri_findings
+            arr_temp = []
+            for i in range(random.randrange(1, len(findings_list))):
+                rand_item = random.choice(mri_findings_list)
+                arr_temp.append(rand_item)
+            return arr_temp
+
+
+        if modality == 'Mammography':
+            arr_temp = findings_mammo()
+            add_f = findings_mammo()
             # list of dictionaries for findings
             report[condname] = {'findings': [{'name': x} for x in arr_temp]}
-
             # create a dict for mass parameters
             mass_ps = create_loc_dict(mammo_mass_params, [(x + condname_id) for x in condition.m_mass_loc])
             mass_lst = [*mass_ps]
@@ -243,13 +264,12 @@ def create_report(infile):
                                             condition.get_random_parameter(l_nodes_ps[l_nodes_lst[k]])]
                     paired_vals_l_nodes = [{**x, **y} for (x, y) in zip(l_nodes_params_lst, new_par_l_nodes)]
                     ret['parameters'] = paired_vals_l_nodes
+
                 return ret
+
         elif modality == 'US':
-            findings_list = condition.us_findings
-            arr_temp = []
-            for i in range(random.randrange(1, len(findings_list))):
-                rand_item = random.choice(us_findings_list)
-                arr_temp.append(rand_item)
+            arr_temp = findings_us()
+            add_f = findings_mammo()
 
             # list of dictionaries for findings
             report[condname] = {'findings': [{'name': x} for x in arr_temp]}
@@ -302,11 +322,8 @@ def create_report(infile):
                     ret['parameters'] = paired_vals_l_nodes
                 return ret
         else:
-            findings_list = condition.mri_findings
-            arr_temp = []
-            for i in range(random.randrange(1, len(findings_list))):
-                rand_item = random.choice(mri_findings_list)
-                arr_temp.append(rand_item)
+            arr_temp = findings_mri()
+            add_f = findings_mammo()
 
             # list of dictionaries for findings
             report[condname] = {'findings': [{'name': x} for x in arr_temp]}
@@ -393,10 +410,19 @@ def create_report(infile):
                     ret['parameters'] = paired_vals_fcl
                 return ret
         report[condname] = {'findings': [construct_dict(x) for x in arr_temp]}
+        def randf():
+            c = random.randint(0,1)
+            if c == 0:
+                multi_rep['non-associated findings'] = 'no ungrouped findings'
+            else:
+                multi_rep['non-associated findings'] = {'finding': [construct_dict(x) for x in add_f]}
+
+        randf()
         return report
 
     cond_arr = [subreport() for _ in range(1, 4)]
     multi_rep['conditions'] = cond_arr
+
 
     print(multi_rep)
     return multi_rep
@@ -405,9 +431,6 @@ def create_report(infile):
 def main():
     """
     TODO:
-
-     4. Add several conditions:
-     save current condition and add to another, bigger one
 
      5. Add random findings (not belonging to any condition)
 
