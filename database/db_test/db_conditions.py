@@ -127,8 +127,10 @@ class Condition:
             value_temp = df.iloc[row, col]
             if isinstance(value_temp, float) is False:
                 value = [x.strip() for x in value_temp.split(',')]
+                print(value)
                 len_val = len(value)
                 prob_arr += [prob_head[i] for _ in range(len_val)]
+                print(prob_arr)
                 val_arr += value[0:len_val]
             col += 1
         randparameter = random.choices(val_arr, prob_arr, k=1)
@@ -273,7 +275,7 @@ def create_report(infile):
 
         elif modality == 'US':
             arr_temp = findings_us()
-            add_f = findings_mammo()
+            add_f = findings_us()
 
             # list of dictionaries for findings
             report[condname] = {'findings': [{'name': x} for x in arr_temp]}
@@ -327,7 +329,7 @@ def create_report(infile):
                 return ret
         else:
             arr_temp = findings_mri()
-            add_f = findings_mammo()
+            add_f = findings_mri()
 
             # list of dictionaries for findings
             report[condname] = {'findings': [{'name': x} for x in arr_temp]}
@@ -426,22 +428,23 @@ def create_report(infile):
 
     cond_arr = [subreport() for _ in range(1, 4)]
     multi_rep['conditions'] = cond_arr
-    print(type(multi_rep))
     return multi_rep
 
 
 
 def main():
-
+    import pprint
     client = MongoClient('localhost', 27017)
     db = client.test_database
     reports = db.reports
-    report = create_report(infile="first-names.txt")
-    report_id = reports.insert_one(report).inserted_id
-    print(report_id)
-    import pprint
-    pprint.pprint(reports.find_one())
-
+    """
+    reports_arr = []
+    for _ in range(50):
+        report_new = create_report(infile="first-names.txt")
+        reports_arr.append(report_new)
+    result = reports.insert_many(reports_arr)
+    """
+    print(reports.count())
 
 
 if __name__ == '__main__':
