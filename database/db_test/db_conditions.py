@@ -1,6 +1,12 @@
 import pandas as pd
 import random
 import datetime
+import pymongo
+from pymongo import MongoClient
+import collections
+import bson
+from bson.codec_options import CodecOptions
+
 
 df = pd.read_excel("output.xlsx")
 
@@ -160,10 +166,8 @@ print(fibroadenoma.get_random_parameter(f_mammo_lymph['Lymph nodes']))
 
 def create_report(infile):
 
+
     conditions_list = [*conditions_dict]
-
-
-
     #modality = 'Mammography'
     modality = random.choice(modalities_list)
 
@@ -422,20 +426,23 @@ def create_report(infile):
 
     cond_arr = [subreport() for _ in range(1, 4)]
     multi_rep['conditions'] = cond_arr
-
-
-    print(multi_rep)
+    print(type(multi_rep))
     return multi_rep
 
 
+
 def main():
-    """
-    TODO:
 
-     5. Add random findings (not belonging to any condition)
+    client = MongoClient('localhost', 27017)
+    db = client.test_database
+    reports = db.reports
+    report = create_report(infile="first-names.txt")
+    report_id = reports.insert_one(report).inserted_id
+    print(report_id)
+    import pprint
+    pprint.pprint(reports.find_one())
 
-    """
-    #create_report("first-names.txt")
-    create_report(infile="first-names.txt")
+
+
 if __name__ == '__main__':
     main()

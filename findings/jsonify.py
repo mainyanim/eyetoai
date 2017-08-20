@@ -1,16 +1,13 @@
 import pandas as pd
-import numpy as np
 import random
 import json
 from openpyxl import load_workbook
-import os
-from openpyxl import Workbook
-import math
-from collections import defaultdict
+import pymongo
 
 # define values check and append to arr
 # define probability array
 # read excel
+
 
 df = pd.read_excel("output.xlsx")
 wb = load_workbook('output.xlsx')
