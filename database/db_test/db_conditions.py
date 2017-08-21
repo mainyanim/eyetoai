@@ -127,10 +127,8 @@ class Condition:
             value_temp = df.iloc[row, col]
             if isinstance(value_temp, float) is False:
                 value = [x.strip() for x in value_temp.split(',')]
-                print(value)
                 len_val = len(value)
                 prob_arr += [prob_head[i] for _ in range(len_val)]
-                print(prob_arr)
                 val_arr += value[0:len_val]
             col += 1
         randparameter = random.choices(val_arr, prob_arr, k=1)
@@ -170,8 +168,8 @@ def create_report(infile):
 
 
     conditions_list = [*conditions_dict]
-    #modality = 'Mammography'
-    modality = random.choice(modalities_list)
+    modality = 'Mammography'
+    #modality = random.choice(modalities_list)
 
     multi_rep = {}
     multi_rep['date_created'] = datetime.datetime.now().strftime('%d %m %Y')
@@ -188,6 +186,7 @@ def create_report(infile):
 
     def subreport():
         report = {}
+        report['condition name'] = {}
         condname = random.choice(conditions_list)
         condname_id = conditions_dict.get(condname)
         condition = Condition(cond_name=condname, birads=birads_list,
@@ -223,7 +222,6 @@ def create_report(infile):
             arr_temp = findings_mammo()
             add_f = findings_mammo()
             # list of dictionaries for findings
-            report[condname] = {'findings': [{'name': x} for x in arr_temp]}
             # create a dict for mass parameters
             mass_ps = create_loc_dict(mammo_mass_params, [(x + condname_id) for x in condition.m_mass_loc])
             mass_lst = [*mass_ps]
@@ -415,7 +413,7 @@ def create_report(infile):
                     paired_vals_fcl = [{**x, **y} for (x, y) in zip(fcl_params_lst, new_par_fcl)]
                     ret['parameters'] = paired_vals_fcl
                 return ret
-        report[condname] = {'findings': [construct_dict(x) for x in arr_temp]}
+        report = {'condition name': condname, 'findings': [construct_dict(x) for x in arr_temp]}
         def randf():
             c = random.randint(0,1)
             if c == 0:
@@ -428,6 +426,7 @@ def create_report(infile):
 
     cond_arr = [subreport() for _ in range(1, 4)]
     multi_rep['conditions'] = cond_arr
+    print(multi_rep)
     return multi_rep
 
 
@@ -443,9 +442,9 @@ def main():
         report_new = create_report(infile="first-names.txt")
         reports_arr.append(report_new)
     result = reports.insert_many(reports_arr)
-    """
     print(reports.count())
-
+    """
+    create_report(infile="first-names.txt")
 
 if __name__ == '__main__':
     main()
