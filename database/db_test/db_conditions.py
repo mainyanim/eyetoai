@@ -424,27 +424,29 @@ def create_report(infile):
         randf()
         return report
 
-    cond_arr = [subreport() for _ in range(1, 4)]
+    cond_arr = [subreport() for _ in range(random.randrange(1, 4))]
     multi_rep['conditions'] = cond_arr
-    print(multi_rep)
     return multi_rep
 
 
 
 def main():
     import pprint
-    client = MongoClient('localhost', 27017)
-    db = client.test_database
-    reports = db.reports
     """
+    client = MongoClient('localhost', 27017)
+    db = client.reports_new
+    reports = db.reports
+
     reports_arr = []
     for _ in range(50):
         report_new = create_report(infile="first-names.txt")
         reports_arr.append(report_new)
     result = reports.insert_many(reports_arr)
     print(reports.count())
-    """
-    create_report(infile="first-names.txt")
+"""
+    for _ in range(3):
+        report_new = create_report(infile="first-names.txt")
+        print(report_new)
 
 if __name__ == '__main__':
     main()
