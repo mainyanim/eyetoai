@@ -225,7 +225,16 @@ def create_report(infile):
             # create a dict for mass parameters
             mass_ps = create_loc_dict(mammo_mass_params, [(x + condname_id) for x in condition.m_mass_loc])
             mass_lst = [*mass_ps]
+            mass_lst += ['Location']
             m_params_lst = [{'name': _} for _ in mass_lst]
+
+            loc_params = {}
+            loc_mm = random.uniform(0, 28.5)
+            loc_radar = random.randrange(0,13)
+            loc_params_dict = {'mm': round(loc_mm, 1), 'time': loc_radar}
+            loc_params['parameters'] = loc_params_dict
+            m_params_lst[3].update(loc_params)
+
 
             # report['conditions'][condname]['findings'] = {'parameters': [{'name': _} for _ in mass_lst]} overrides existed structure
             calc_ps = create_loc_dict(mammo_calc_params, [(x + condname_id) for x in condition.m_calc_loc])
@@ -245,10 +254,13 @@ def create_report(infile):
                 if x == 'Mass':
                     new_par_mass = []
                     # a loop for getting random option for each parameter in a finding (as a test used mass)
-                    for k in range(len(mass_lst)):
+                    for k in range(len(mass_lst) -1):
                         new_par_mass += [{'value': x} for x in condition.get_random_parameter(mass_ps[mass_lst[k]])]
                     paired_vals_mass = [{**x, **y} for (x, y) in zip(m_params_lst, new_par_mass)]
+                    paired_vals_mass.append(m_params_lst[-1])
+                    print(paired_vals_mass)
                     ret['parameters'] = paired_vals_mass
+
                 elif x == 'Calcifications':
                     new_par_calc = []
                     for k in range(len(calc_lst)):
@@ -276,7 +288,6 @@ def create_report(infile):
             add_f = findings_us()
 
             # list of dictionaries for findings
-            report[condname] = {'findings': [{'name': x} for x in arr_temp]}
 
             # create a dict for mass parameters
             mass_ps = create_loc_dict(us_mass_params, [(x + condname_id) for x in condition.us_mass_loc])
@@ -330,7 +341,6 @@ def create_report(infile):
             add_f = findings_mri()
 
             # list of dictionaries for findings
-            report[condname] = {'findings': [{'name': x} for x in arr_temp]}
 
             # create a dict for mass parameters
             mass_ps = create_loc_dict(mri_mass_params, [(x + condname_id) for x in condition.mri_mass_loc])
@@ -426,27 +436,28 @@ def create_report(infile):
 
     cond_arr = [subreport() for _ in range(random.randrange(1, 4))]
     multi_rep['conditions'] = cond_arr
+    print(multi_rep)
     return multi_rep
 
 
 
 def main():
     import pprint
-    """
+
     client = MongoClient('localhost', 27017)
     db = client.reports_new
     reports = db.reports
-
+    """
     reports_arr = []
-    for _ in range(50):
+    for _ in range(100):
         report_new = create_report(infile="first-names.txt")
+        print(report_new)
         reports_arr.append(report_new)
     result = reports.insert_many(reports_arr)
     print(reports.count())
-"""
-    for _ in range(3):
-        report_new = create_report(infile="first-names.txt")
-        print(report_new)
+    """
+    report_new = create_report(infile="first-names.txt")
+
 
 if __name__ == '__main__':
     main()
