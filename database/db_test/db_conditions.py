@@ -176,7 +176,7 @@ def create_report(infile):
     modality = random.choice(modalities_list)
 
     multi_rep = {}
-    multi_rep['date_created'] = datetime.datetime.now().strftime('%d %m %Y')
+    multi_rep['dateCreated'] = datetime.datetime.now().strftime('%d %m %Y')
     multi_rep['doctor'] = {}
     multi_rep['doctor']['id'] = random.randint(0, 5001)
     multi_rep['doctor']['name'] = get_name(infile)
@@ -190,7 +190,7 @@ def create_report(infile):
 
     def subreport():
         report = {}
-        report['condition name'] = {}
+        report['conditionNname'] = {}
         condname = random.choice(conditions_list)
         condname_id = conditions_dict.get(condname)
         condition = Condition(cond_name=condname, birads=birads_list,
@@ -429,13 +429,13 @@ def create_report(infile):
                     paired_vals_fcl = [{**x, **y} for (x, y) in zip(fcl_params_lst, new_par_fcl)]
                     ret['parameters'] = paired_vals_fcl
                 return ret
-        report = {'condition name': condname, 'findings': [construct_dict(x) for x in arr_temp]}
+        report = {'conditionName': condname, 'findings': [construct_dict(x) for x in arr_temp]}
         def randf():
             c = random.randint(0,1)
-            if c == 0:
-                multi_rep['non-associated findings'] = 'no ungrouped findings'
+            if c == 1:
+                multi_rep['nonAssociatedFindings'] = [construct_dict(x) for x in add_f]
             else:
-                multi_rep['non-associated findings'] = {'finding': [construct_dict(x) for x in add_f]}
+                pass
 
         randf()
         return report
@@ -449,17 +449,19 @@ def main():
     import pprint
 
     client = MongoClient('localhost', 27017)
-    db = client.reports_updated
-    reports = db.reports
-
+    db = client.reports_camelcase_upd
+    reportsCollection = db.reportsCollection
+    """
     reports_arr = []
-    for _ in range(2990):
+    for _ in range(3000):
         report_new = create_report(infile="first-names.txt")
         print(report_new)
         reports_arr.append(report_new)
-    result = reports.insert_many(reports_arr)
-    print(reports.count())
-
+    result = reportsCollection.insert_many(reports_arr)
+    print(reportsCollection.count())
+    """
+    report =create_report(infile="first-names.txt")
+    print(report)
 
 
 

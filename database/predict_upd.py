@@ -1,24 +1,9 @@
-import pyodbc
+from pymongo import MongoClient
 
-config = dict(server = 'tcp:eyetoaidevelopment.database.windows.net',
-              port = 1433,
-              database = 'test',
-              username = 'michael',
-              password = 'GradioAI7000')
-
-
-conn_str = ('SERVER={server},{port};'   +
-            'DATABASE={database};'      +
-            'UID={username};'           +
-            'PWD={password}')
-
-conn = pyodbc.connect(
-    r'DRIVER={ODBC Driver 13 for SQL Server};' +
-    conn_str.format(**config)
-    )
-
-
-cursor = conn.cursor()
+client = MongoClient('localhost', 27017)
+db = client.reports_updated
+reports = db.reports
+print(reports.count())
 
 def condition_i(c,f):
     """
@@ -33,11 +18,7 @@ def condition_i(c,f):
     cond_freq is number of reports where cond_0 appears
     """
 
-    cursor.execute("SELECT  Conditions.Name, COUNT (DISTINCT ReportId) " 
-                   "FROM ReportConditionFindingOptions "
-                   "INNER JOIN Conditions "
-                   "ON ReportConditionFindingOptions.ConditionId = Conditions.Id "
-                   "GROUP BY Conditions.Name ")
+
     rep_num = cursor.fetchall()
     cond_total = [sum(rep_num[x][1] for x in range(len(rep_num)))][0]
     cursor.execute("SELECT COUNT (DISTINCT ReportId) " 
