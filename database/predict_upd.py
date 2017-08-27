@@ -31,6 +31,7 @@ def get_results(condition,arr):
     print(k)
     """
     print(result)
+    return result
 
 
 if __name__ == '__main__':
