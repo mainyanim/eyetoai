@@ -1,45 +1,39 @@
 from pymongo import MongoClient
+from functools import reduce
+import operator
 
 client = MongoClient('localhost', 27017)
-db = client.reports_updated
-reports = db.reports
-print(reports.count())
+db = client.reports
+reportsColl = db.reportsColl
 
-def condition_i(c,f):
-    """
-    rep_num returns number of reports with specific condition
-    cond_freq returns condition frequency in all reports
-    :param cond: string, condition name
-    :return: prior probability of specific condition (?)
-    """
-    """
-    rep_num is an array returning tuples of pairs (condition, number of reports with this condition),
-    condtotal is total number of conditions in the reports since one report can contain several conditions
-    cond_freq is number of reports where cond_0 appears
-    """
+def cond_freq(condition):
+    cursor_cond = db.reportsColl.aggregate([
+            {"$unwind": "$conditions"},
+            {"$group": {"_id": "$_id", "sum": { "$sum": 1}}}])
+
+    total = sum(result['sum'] for result in cursor_cond)
+    cursor_c0 = db.reportsColl.find({"conditions.conditionName": condition}).count()
+    freq = cursor_c0/total
+    return freq
 
 
-    rep_num = cursor.fetchall()
-    cond_total = [sum(rep_num[x][1] for x in range(len(rep_num)))][0]
-    cursor.execute("SELECT COUNT (DISTINCT ReportId) " 
-                   "FROM ReportConditionFindingOptions "
-                   "INNER JOIN Conditions "
-                   "ON ReportConditionFindingOptions.ConditionId = Conditions.Id "
-                   "WHERE Name = ? GROUP BY Conditions.Name", c)
-    cond_freq = cursor.fetchval()
-    pr_cond_0 = cond_freq/cond_total
-    print(pr_cond_0)
-    cursor.execute(" SELECT COUNT (FindingId) "
-                   " FROM ReportConditionFindingOptions "
-                   " INNER JOIN Findings "
-                   " ON ReportConditionFindingOptions.FindingId = Findings.Id"
-                   " WHERE FindingId IN (SELECT Id FROM Findings "
-                   " WHERE Name = ? ) AND ConditionId IN (SELECT Id FROM Conditions WHERE Name = ?)"
-                   " GROUP BY ReportId", f, c)
-    find_0 = cursor.fetchall()
-    print(find_0)
-    return pr_cond_0
+def finding_condition(finding, condition):
+    cursor_finding = db.reportsColl.find({"$and": [{"conditions.findings.name" : finding},
+                                                {"conditions.conditionName" : condition}]}).count()
+    return cursor_finding
 
+def get_results(condition,arr):
+    res_arr = []
+    for x in range(len(arr)):
+        x = finding_condition(arr[x], condition)
+        res_arr += [x]
+    final = list(map(lambda x: cond_freq(condition)*x,res_arr))
+    for k in range(len(final)):
+        k*=final[k]
+    print(k)
 
 if __name__ == '__main__':
-    condition_i('Fibroadenoma', 'Mass')
+    cond_freq("Fibroadenoma")
+    findings_arr = ['Mass', 'Lymph nodes', 'Calcifications']
+    get_results('Mastitis', findings_arr)
+    get_results('Fibroadenoma', findings_arr)
