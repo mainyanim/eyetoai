@@ -449,19 +449,16 @@ def main():
     import pprint
 
     client = MongoClient('localhost', 27017)
-    db = client.reports_camelcase_upd
-    reportsCollection = db.reportsCollection
-    """
+    db = client.reports
+    reportsColl= db.reportsColl
+
     reports_arr = []
     for _ in range(3000):
         report_new = create_report(infile="first-names.txt")
         print(report_new)
         reports_arr.append(report_new)
-    result = reportsCollection.insert_many(reports_arr)
-    print(reportsCollection.count())
-    """
-    report =create_report(infile="first-names.txt")
-    print(report)
+    result = reportsColl.insert_many(reports_arr)
+    print(reportsColl.count())
 
 
 
