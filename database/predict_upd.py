@@ -25,11 +25,6 @@ def get_results(condition,arr):
     final_temp = list(map(lambda x: cond_freq(condition)*x,res_arr))
     final = [final_temp[k] for k in range(len(final_temp))]
     result = np.prod(np.array(final))
-    """
-    for k in range(len(final_temp)):
-        k*=final_temp[k]
-    print(k)
-    """
     print(result)
     return result
 
