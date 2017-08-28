@@ -21,17 +21,21 @@ def finding_condition(finding, condition):
     return cursor_finding
 
 def get_results(condition,arr):
-    res_arr = [finding_condition(arr[x],condition) for x in range(len(arr))]
-    final_temp = list(map(lambda x: cond_freq(condition)*x,res_arr))
-    final = [final_temp[k] for k in range(len(final_temp))]
-    result = np.prod(np.array(final))
-    print(result)
+    if len(arr) != 0:
+        res_arr = [finding_condition(arr[x],condition) for x in range(len(arr))]
+        final_temp = list(map(lambda x: cond_freq(condition)*x,res_arr))
+        final = [final_temp[k] for k in range(len(final_temp))]
+        result = np.prod(np.array(final))
+        print(result)
+    else:
+        result = cond_freq(condition)
+        print(result)
     return result
 
 
 if __name__ == '__main__':
     cond_freq("Fibroadenoma")
-    findings_arr = ['Mass', 'Lymph nodes', 'Calcifications']
+    findings_arr = []
 
     get_results('Mastitis', findings_arr)
-    get_results('Fibroadenoma', findings_arr)
+    get_results('Fibroadenoma 3', findings_arr)
