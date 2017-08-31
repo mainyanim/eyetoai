@@ -1,11 +1,14 @@
 from pymongo import MongoClient
 import numpy as np
-import json
-
+from flask_api import FlaskAPI, status, exceptions
+from flask import request, abort
+import json, requests
 
 client = MongoClient('localhost', 27017)
 db = client.reports
 reportsColl = db.reportsColl
+app = FlaskAPI(__name__)
+
 
 def cond_freq(condition):
     cursor_cond = db.reportsColl.aggregate([
@@ -24,7 +27,6 @@ def finding_condition(finding, condition):
     return cursor_finding
 
 
-
 def get_results(condition, arr):
     if len(arr) != 0:
         res_arr = [finding_condition(arr[x], condition) for x in range(len(arr))]
@@ -38,9 +40,18 @@ def get_results(condition, arr):
     return result
 
 
-#curl -X POST -H "Content-Type: application/json" -d "{ \"condition\": \"Fibroadenoma\" }" http://localhost:8080/calc
+
+@app.route("/", methods=['POST'])
+def predict():
+    if not request.json:
+        abort(400)
+    print(request.json)
+    condition = request.json.get("condition")
+    findings = request.json.get("findings")
+    result = str(get_results(condition,findings))
+    return result
 
 if __name__ == '__main__':
-    get_results('Fibroadenoma', ['Mass', 'Calcifications'])
+    app.run(host = 'localhost', port = 8000, debug = True)
 
-
+#curl -X POST -H "Content-Type: application/json" -d "{ \"condition\": \"Fibroadenoma\",\"findings\": [\"Mass\"] }" http://localhost:8000/
