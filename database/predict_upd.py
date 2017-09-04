@@ -7,6 +7,7 @@ import ssl
 
 """
 author: Alexandra Zhuravlyov
+ai_ranking is an algorithm that shows probability of a specific condition given an array of symptoms
 """
 
 client = MongoClient("mongodb://yuri:rxLPDCJPXWHOozeV@cluster0-shard-00-00-lnxfa.mongodb.net:27017,cluster0-shard-00-01-lnxfa.mongodb.net:27017,cluster0-shard-00-02-lnxfa.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin")
