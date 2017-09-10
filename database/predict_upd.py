@@ -42,7 +42,8 @@ def get_results(condition, arr):
     if len(arr) != 0:
         res_arr = [finding_condition(arr[x], condition) for x in range(len(arr))]
         final_temp = list(map(lambda x: cond_freq(condition) * x, res_arr))
-        final = [final_temp[k] for k in range(len(final_temp))]
+        norm = [float(i) / sum(final_temp) for i in final_temp]
+        final = [norm[k] for k in range(len(norm))]
         result = np.prod(np.array(final))
         print(result)
     else:
@@ -63,9 +64,9 @@ def predict():
     return result
 
 if __name__ == '__main__':
-    app.run(host = 'localhost', port = 8000, debug = True)
+    app.run(host = 'localhost', port = 8080, debug = True)
 
 """
 test curl request for getting a result:
-curl -X POST -H "Content-Type: application/json" -d "{ \"condition\": \"Fibroadenoma\",\"findings\": [\"Mass\"] }" http://localhost:8000/
+curl -X POST -H "Content-Type: application/json" -d "{ \"condition\": \"Mastitis\",\"findings\": [\"Mass\", \"Calcifications\"] }" http://localhost:8080/
 """
