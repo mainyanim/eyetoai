@@ -52,8 +52,8 @@ def create_report(infile):
     def subreport():
         report = {}
         report['conditionNname'] = {}
-        #condname = random.choice(conditions)
-        condname = 'Fibroadenoma'
+        condname = random.choice(conditions)
+        #condname = 'Fibroadenoma'
 
         if modality == 'Mammography':
             arr_temp = findings_mammo()
@@ -89,7 +89,6 @@ def create_report(infile):
 
                     paired_vals_mass = [{**x, **y} for (x, y) in zip(m_params_lst, new_par_mass)]
                     if 'value' in paired_vals_mass[-1]: del paired_vals_mass[-1]['value']
-                    print(paired_vals_mass)
                     ret['parameters'] = paired_vals_mass
                 elif x == 'Calcifications':
                     new_par_calc = []
@@ -151,9 +150,7 @@ def create_report(infile):
 
             report = {'conditionName': condname, 'findings': [construct_dict(x) for x in arr_temp]}
 
-
-
-        elif modality == 'US':
+        else:
             arr_temp = findings_mri()
             add_f = findings_mri()
             mri_m_p = get_cond_population_mri(condname).mass
@@ -232,10 +229,12 @@ def create_report(infile):
 
 
 def main():
-    create_report(infile='names.txt')
+    for i in range(100):
+        create_report(infile='names.txt')
 
 
 if __name__ == '__main__':
     main()
+
 
 
