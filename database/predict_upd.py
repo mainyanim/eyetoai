@@ -29,10 +29,13 @@ def cond_freq(condition):
     total = sum(result['sum'] for result in cursor_cond)
     cursor_c0 = db.reports.find({"Conditions.ConditionName": condition}).count()
     freq = cursor_c0 / total
+    print(freq)
     return freq
 
 
 def finding_condition(finding, condition):
+
+
     cursor_finding = db.reports.find({"$and": [{"Conditions.Findings.Name": finding},
                                                    {"Conditions.ConditionName": condition}]}).count()
     return cursor_finding

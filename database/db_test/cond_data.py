@@ -18,7 +18,15 @@ def get_val_prob(finding, group, condition):
 
 
 def get_population(arr):
-    popul = random.choices(arr[0], weights=arr[1], k=1)
+    sum = np.sum(arr[1])
+    arr_t = []
+    if sum > 0:
+        for i in arr[1]:
+            i /= sum
+            arr_t+=[i]
+    else:
+        arr_t = np.ones(len(arr[1]))
+    popul = random.choices(arr[0], weights=arr_t, k=1)
     return popul
 
 
