@@ -223,14 +223,28 @@ def create_report(infile):
 
     cond_arr = [subreport() for _ in range(random.randrange(1, 4))]
     multi_rep['conditions'] = cond_arr
-    print(multi_rep)
     return multi_rep
 
 
 
 def main():
-    for i in range(100):
-        create_report(infile='names.txt')
+    from pymongo import MongoClient
+
+    client = MongoClient(
+        "mongodb://yuri:rxLPDCJPXWHOozeV@cluster0-shard-00-00-lnxfa.mongodb.net:27017,cluster0-shard-00-01-lnxfa.mongodb.net:27017,cluster0-shard-00-02-lnxfa.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin")
+    db = client.eyetoai
+    reportsNew = db.reportsNew
+
+    x = pd.datetime.now()
+    print('Starting time: ', x )
+    for i in range(5000):
+        report_new = create_report(infile="names.txt")
+        result = reportsNew.insert_one(report_new)
+        print(' generated ', i,'/', 5000)
+    print('\n', ' finished in ', pd.datetime.now() - x)
+    y = pd.datetime.now()
+
+    print(reportsNew.count())
 
 
 if __name__ == '__main__':
