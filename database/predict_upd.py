@@ -18,32 +18,35 @@ pymongo driver for local usage
 client = MongoClient('localhost', 27017)
 db  = client.reports
 """
-reports = db.reports
+reportsNew = db.reportsNew
 app = FlaskAPI(__name__)
 
 
 def cond_freq(condition):
-    cursor_cond = db.reports.aggregate([{"$unwind": "$Conditions"},
+    cursor_cond = db.reportsNew.aggregate([{"$unwind": "$conditions"},
                                          {"$group": {"_id": "$_id", "sum": {"$sum": 1}}}])
 
     total = sum(result['sum'] for result in cursor_cond)
-    cursor_c0 = db.reports.find({"Conditions.ConditionName": condition}).count()
+    cursor_c0 = db.reportsNew.find({"conditions.conditionName": condition}).count()
     freq = cursor_c0 / total
     print(freq)
     return freq
 
 
-def finding_condition(finding, condition):
+def finding_condition(finding, parameter, p_value, condition ):
 
 
-    cursor_finding = db.reports.find({"$and": [{"Conditions.Findings.Name": finding},
-                                                   {"Conditions.ConditionName": condition}]}).count()
+    cursor_finding = db.reportsNew.find({"$and": [{"conditions.findings.name": finding},
+                                                   {"conditions.conditionName": condition},
+                                                  {"conditions.findings.parameters.name": parameter},
+                                                  {"conditions.findings.parameters.value": p_value}]}).count()
     return cursor_finding
 
 
-def get_results(condition, arr):
-    if len(arr) != 0:
-        res_arr = [finding_condition(arr[x], condition) for x in range(len(arr))]
+def get_results(condition,  findings_arr, parameter_arr, values_arr):
+    if len(findings_arr) != 0:
+        res_arr = [finding_condition(findings_arr[x], parameter_arr[x], values_arr[x], condition)
+                   for x in range(len(findings_arr))]
         final_temp = list(map(lambda x: cond_freq(condition) * x, res_arr))
         norm = [float(i) / sum(final_temp) for i in final_temp]
         final = [norm[k] for k in range(len(norm))]
@@ -63,7 +66,9 @@ def predict():
     print(request.json)
     condition = request.json.get("condition")
     findings = request.json.get("findings")
-    result = str(get_results(condition,findings))
+    parameters = request.json.get("parameters")
+    values = request.json.get("values")
+    result = str(get_results(condition,findings,parameters,values))
     return result
 
 if __name__ == '__main__':
@@ -71,5 +76,5 @@ if __name__ == '__main__':
 
 """
 test curl request for getting a result:
-curl -X POST -H "Content-Type: application/json" -d "{ \"condition\": \"Mastitis\",\"findings\": [\"Mass\", \"Calcifications\"] }" http://localhost:8080/
+curl -X POST -H "Content-Type: application/json" -d "{ \"condition\": \"Fibroadenoma\",\"findings\": [\"Mass\", \"Calcifications\"], \"parameters\": [\"Shape\", \"Margin\"], \"values\": [\"Round\", \"Circumscribed\"] }" http://localhost:8080/
 """
