@@ -79,11 +79,13 @@ def get_results(condition,  findings_arr, parameter_arr, values_arr, modality):
         print("no selected params")
 
 def get_entropy(condition_arr, findings_arr, parameter_arr, values_arr, modality):
-    for x in range(len(condition_arr)):
-        prob = get_results(condition_arr[x], findings_arr, parameter_arr, values_arr, modality)
+    e = 0
+    # for x in range(len(condition_arr)):
+    for cond in condition_arr:
+        prob = get_results(cond, findings_arr, parameter_arr, values_arr, modality)
         if prob:
-            e = -sum([prob*math.log2(prob)])
-            print(condition_arr[x], "entropy is: ", e)
+            e = e - sum([prob*math.log2(prob)])
+            print(cond, "entropy is: ", e)
 
 
 
