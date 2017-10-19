@@ -41,24 +41,26 @@ def ddata():
 
     cursor_findings = [db.reportsNew.find(get_f_params_val(modality, cond, ui)).count() for ui in user_input]
 
-    freqs = []
     probs = []
+    cursor_c0 = db.reportsNew.find({"conditions.conditionName": cond}).count()  # num of conditions
+    cursor_cond = db.reportsNew.aggregate([{"$unwind": "$conditions"}, {"$group": {"_id": "$_id", "sum": {"$sum": 1}}}])
+    total = sum(result['sum'] for result in cursor_cond)
+    freq = cursor_c0 / total
     for cursor_finding in cursor_findings:
         # print(cursor_finding)
-        cursor_cond = db.reportsNew.aggregate([{"$unwind": "$conditions"},
-                                               {"$group": {"_id": "$_id", "sum": {"$sum": 1}}}])
-        total = sum(result['sum'] for result in cursor_cond)
         # print('total is', total)
-        cursor_c0 = db.reportsNew.find({"conditions.conditionName": cond}).count()  # num of conditions
         # print('cursor is ', cursor_c0)
-        freq = cursor_c0 / total
-        freqs.append(freq)
         # print(freq)  # condition frequency = P(Ci)
         prob = cursor_finding / cursor_c0
         probs.append(prob)
         # print(prob)
-    print("Frequencies are " + str(freqs))
+    print("Frequency is " + str(freq))
     print("Probabilities are " + str(probs))
+    probs_norm = [float(i) / sum(probs) for i in probs]
+    result = np.prod(np.array(probs_norm))*freq
+    print("Result is " + str(result))
+
+
 
 if __name__ == '__main__':
     ddata()
