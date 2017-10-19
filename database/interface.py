@@ -30,7 +30,7 @@ def ddata():
         finding_input = {}
         ch_f = input('Choose finding from the list: ' + str(find_arr)).title()
         finding_input["name"] = ch_f
-        names = get_cond_population_mammo(cond).mass
+        names = list(db.reportsNew.aggregate(get_parameter_names(modality, ch_f)))[0]['uniqueValues']
         parameters_input = []
         for name in names:
             values_arr = list(db.reportsNew.aggregate(get_value(modality, ch_f, name)))[0]['uniqueValues']
@@ -41,20 +41,24 @@ def ddata():
 
     cursor_findings = [db.reportsNew.find(get_f_params_val(modality, cond, ui)).count() for ui in user_input]
 
+    freqs = []
+    probs = []
     for cursor_finding in cursor_findings:
-        print(cursor_finding)
+        # print(cursor_finding)
         cursor_cond = db.reportsNew.aggregate([{"$unwind": "$conditions"},
                                                {"$group": {"_id": "$_id", "sum": {"$sum": 1}}}])
         total = sum(result['sum'] for result in cursor_cond)
-        print('total is', total)
+        # print('total is', total)
         cursor_c0 = db.reportsNew.find({"conditions.conditionName": cond}).count()  # num of conditions
-        print('cursor is ', cursor_c0)
+        # print('cursor is ', cursor_c0)
         freq = cursor_c0 / total
-        print(freq)  # condition frequency = P(Ci)
+        freqs.append(freq)
+        # print(freq)  # condition frequency = P(Ci)
         prob = cursor_finding / cursor_c0
-        print(prob)
-        print()
-
+        probs.append(prob)
+        # print(prob)
+    print("Frequencies are " + str(freqs))
+    print("Probabilities are " + str(probs))
 
 if __name__ == '__main__':
     ddata()
