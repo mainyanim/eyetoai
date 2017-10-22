@@ -43,22 +43,32 @@ def ddata():
 
     probs = []
     cursor_c0 = db.reportsNew.find({"conditions.conditionName": cond}).count()  # num of conditions
-    cursor_cond = db.reportsNew.aggregate([{"$unwind": "$conditions"}, {"$group": {"_id": "$_id", "sum": {"$sum": 1}}}])
-    total = sum(result['sum'] for result in cursor_cond)
-    freq = cursor_c0 / total
-    for cursor_finding in cursor_findings:
-        # print(cursor_finding)
-        # print('total is', total)
-        # print('cursor is ', cursor_c0)
-        # print(freq)  # condition frequency = P(Ci)
-        prob = cursor_finding / cursor_c0
-        probs.append(prob)
-        # print(prob)
-    print("Frequency is " + str(freq))
-    print("Probabilities are " + str(probs))
-    probs_norm = [float(i) / sum(probs) for i in probs]
-    result = np.prod(np.array(probs_norm))*freq
-    print("Result is " + str(result))
+    if cursor_c0:
+        cursor_cond = db.reportsNew.aggregate([{"$unwind": "$conditions"}, {"$group": {"_id": "$_id", "sum": {"$sum": 1}}}])
+        total = sum(result['sum'] for result in cursor_cond)
+        if total:
+            freq = cursor_c0 / total
+            for cursor_finding in cursor_findings:
+                # print(cursor_finding)
+                # print('total is', total)
+                # print('cursor is ', cursor_c0)
+                # print(freq)  # condition frequency = P(Ci)
+                prob = cursor_finding / cursor_c0
+                probs.append(prob)
+                # print(prob)
+            if (sum(probs)!=0):
+                print("Frequency is " + str(freq))
+                print("Probabilities are " + str(probs))
+                probs_norm = [float(i) / sum(probs) for i in probs]
+                result = np.prod(np.array(probs_norm))*freq
+                print("Result is " + str(result))
+            else:
+                result = np.prod(np.ones((len(cursor_findings),), dtype=np.int)) * freq
+                print("Result is " + str(result))
+        else:
+            print("Finding with selected parameters doesn't exist in the database")
+    else:
+        print("Condition doesn't exist")
 
 
 
