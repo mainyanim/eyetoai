@@ -20,35 +20,63 @@ db = client.eyetoai
 
 
 def ddata():
-    modality = input('Modality is: ').title()
-    cond = input('Condition you want to check is: ').title()
-    find_arr = db.reportsNew.distinct("conditions.findings.name", {"modality": modality})
+    modality = input('Modality is: ')
+    #cond = input('Condition you want to check is: ').title()
+    find_arr = db.qa2_lnodes.distinct("conditions.findings.name", {"modality": modality})
 
     num_findings = int(input('How many findings do you have: '))
     user_input = []
-    for i in range(num_findings):
+    for _ in range(num_findings):
         finding_input = {}
-        ch_f = input('Choose finding from the list: ' + str(find_arr)).title()
+        ch_f = input('Choose finding from the list: ' + str(find_arr))
         finding_input["name"] = ch_f
-        names = list(db.reportsNew.aggregate(get_parameter_names(modality, ch_f)))[0]['uniqueValues']
         parameters_input = []
+        if ch_f!='Mass':
+            names = list(db.qa2_lnodes.aggregate(get_parameter_names(modality, ch_f)))[0]['uniqueValues']
+        else:
+            names = list(db.qa2_lnodes.aggregate(get_parameter_names(modality, ch_f)))[0]['uniqueValues']
+            print(names)
+            if 'Location' in names:
+                names.remove('Location')
         for name in names:
-            values_arr = list(db.reportsNew.aggregate(get_value(modality, ch_f, name)))[0]['uniqueValues']
+            values_arr = list(db.qa2_lnodes.aggregate(get_value(modality, ch_f, name)))[0]['uniqueValues']
             value = str(input(name + ' is: ' + str(values_arr)))
             parameters_input.append((name, value))
         finding_input["parameters"] = parameters_input
         user_input.append(finding_input)
-
-    cursor_findings = [db.reportsNew.find(get_f_params_val(modality, cond, ui)).count() for ui in user_input]
-
+    """
+    cursor_findings = [db.qa2_lnodes.find(get_f_params_val(modality, cond, ui)).count() for ui in user_input]
+    print("number of conditions with selected parameters is: ", cursor_findings)
+    if 0 in cursor_findings:
+        print("Finding with selected parameters doesn't exist in the database")
+    selected_f = min(cursor_findings) # total number of condition with values
+    print("selected f are: ", selected_f)
     probs = []
-    cursor_c0 = db.reportsNew.find({"conditions.conditionName": cond}).count()  # num of conditions
-    if cursor_c0:
-        cursor_cond = db.reportsNew.aggregate([{"$unwind": "$conditions"}, {"$group": {"_id": "$_id", "sum": {"$sum": 1}}}])
-        total = sum(result['sum'] for result in cursor_cond)
-        if total:
-            freq = cursor_c0 / total
+    """
+
+    db_condlist = db.qa2_lnodes.distinct("conditions.conditionName")
+
+    for condition in db_condlist:
+        cursor_findings = [db.qa2_lnodes.find(get_f_params_val(modality, condition, ui)).count() for ui in user_input]
+        print("number of conditions with selected parameters is: ", cursor_findings)
+        if 0 in cursor_findings:
+            print("Finding with selected parameters doesn't exist in the database")
+        selected_f = min(cursor_findings)  # total number of condition with values
+        cursor_c0 = db.qa2_lnodes.find({"conditions.conditionName": condition}).count()  # total number of specific conditions
+        if cursor_c0:
+            cursor_cond = db.qa2_lnodes.aggregate([{"$unwind": "$conditions"}, {"$group": {"_id": "$_id", "sum": {"$sum": 1}}}])
+            total = sum(result['sum'] for result in cursor_cond) # total number of reports in the database (splitted)
+            if total:
+                p_v_ci = selected_f / cursor_c0 # P(Values | Ci)
+                p_ci = cursor_c0 / total # specific condition / total num of reports
+                prob = p_v_ci * p_ci # P(Ci | val)
+                print("Prob is: ", prob)
+
+
+
+            """
             for cursor_finding in cursor_findings:
+                
                 # print(cursor_finding)
                 # print('total is', total)
                 # print('cursor is ', cursor_c0)
@@ -69,7 +97,7 @@ def ddata():
             print("Finding with selected parameters doesn't exist in the database")
     else:
         print("Condition doesn't exist")
-
+    """
 
 
 if __name__ == '__main__':
