@@ -1,23 +1,25 @@
+import re
+
 def get_f_params_val(modality, cond, user_input):
     return {
         "$and": [
-            {"modality": modality},
+            {"modality": re.compile(modality, re.IGNORECASE)},
             {"conditions": {
                 "$elemMatch": {
-                    "conditionName": cond,
+                    "conditionName": re.compile(cond, re.IGNORECASE) ,
                     "findings": {
                         "$elemMatch": {
-                            "name": user_input["name"],
+                            "name": re.compile(user_input["name"], re.IGNORECASE),
                             "$and": [
                                 {
                                     "parameters": {
                                         "$elemMatch": {
-                                            "name": query_tuple[0],
-                                            "value": query_tuple[1]
+                                            "name": re.compile(query_tuple[0], re.IGNORECASE),
+                                            "value": re.compile(query_tuple[1], re.IGNORECASE)
                                         }
                                     }
                                 }
-                                for query_tuple in user_input["parameters"]]
+                            for query_tuple in user_input["parameters"]]
                         }
                     }
                 }
@@ -29,7 +31,7 @@ def get_f_params_val(modality, cond, user_input):
 def get_value(modality, finding, parameter):
     return [
         {
-            "$match": {"modality": modality}
+            "$match": {"modality": re.compile(modality, re.IGNORECASE)}
         },
         {
             "$unwind": "$conditions"
@@ -38,13 +40,13 @@ def get_value(modality, finding, parameter):
             "$unwind": "$conditions.findings"
         },
         {
-            "$match": {"conditions.findings.name": finding}
+            "$match": {"conditions.findings.name": re.compile(finding, re.IGNORECASE)}
         },
         {
             "$unwind": "$conditions.findings.parameters"
         },
         {
-            "$match": {"conditions.findings.parameters.name": parameter}
+            "$match": {"conditions.findings.parameters.name": re.compile(parameter, re.IGNORECASE)}
         },
         {
             "$group": {"_id": "null", "uniqueValues": {"$addToSet": "$conditions.findings.parameters.value"}}
@@ -55,7 +57,7 @@ def get_value(modality, finding, parameter):
 def get_parameter_names(modality, finding):
     return [
         {
-            "$match": {"modality": modality}
+            "$match": {"modality": re.compile(modality, re.IGNORECASE)}
         },
         {
             "$unwind": "$conditions"
@@ -64,7 +66,7 @@ def get_parameter_names(modality, finding):
             "$unwind": "$conditions.findings"
         },
         {
-            "$match": {"conditions.findings.name": finding}
+            "$match": {"conditions.findings.name": re.compile(finding, re.IGNORECASE)}
         },
         {
             "$unwind": "$conditions.findings.parameters"
