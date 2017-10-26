@@ -78,3 +78,7 @@ def predict():
 
 if __name__ == '__main__':
     app.run(host = 'localhost', port = 8080, debug = True)
+
+"""
+curl -X POST -H "Content-Type:application/json" -d "{\"modality\":\"Mammography\",\"conditions\":[{\"id\":10,\"name\":\"Fibroadenoma\"},{\"id\":11,\"name\":\"Adenosis\"}],\"findings\":[{\"id\":11,\"name\":\"Mass\",\"parameters\":[{\"name\":\"Shape\",\"value\":\"Oval\"},{\"name\":\"Margin\",\"value\":\"Obscured\"},{\"name\":\"Density\",\"value\":\"Low density\"}]},{\"id\":11,\"name\":\"Mass\",\"parameters\":[{\"name\":\"Shape\",\"value\":\"Oval\"},{\"name\":\"Margin\",\"value\":\"Obscured\"},{\"name\":\"Density\",\"value\":\"Low density\"}]}]}" http://localhost:8000/
+"""
