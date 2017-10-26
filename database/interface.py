@@ -62,7 +62,7 @@ def ddata():
 
     print(probs)
     from operator import itemgetter
-    probs_sorted = sorted(probs, key=itemgetter('prob'))[::-1]
+    probs_sorted = sorted(probs, key=itemgetter('ranking'))[::-1]
     print(probs_sorted)
     #print("Prob is: ", prob)
 
