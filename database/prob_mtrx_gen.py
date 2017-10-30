@@ -24,40 +24,26 @@ H = - E *log 2 (P)
 import itertools
 
 
-#mass
-names = list(db.reportsNew.aggregate(get_parameter_names("Mammography", "Mass")))[0]['uniqueValues']
-print(names)
-mass = []
-for name in names:
-    values_arr = list(db.reportsNew.aggregate(get_value("Mammography", "Mass", name)))[0]['uniqueValues']
-    mass += [values_arr]
+findings = db.fill.distinct("conditions.findings.name", {"modality": "Mammography"})
+#print(findings)
+#check if query works
+
+def get_params():
+    elems = []
+    for elem in findings:
+        names = list(db.fill.aggregate(get_parameter_names("Mammography", elem)))[0]['uniqueValues']
+        elems_tmp = []
+        for name in names:
+            values_arr = list(db.fill.aggregate(get_value("Mammography", elem, name)))[0]['uniqueValues']
+            elems_tmp += [values_arr]
+        elems+=[elems_tmp]
+    return elems
+
     # 3 arrays, create combination for each row, add to new element of arr
+    # check if works for f_list - should reduce next lines
 
-#calc
-names = list(db.reportsNew.aggregate(get_parameter_names("Mammography", "Calcifications")))[0]['uniqueValues']
-print(names)
-calc = []
-for name in names:
-    values_arr = list(db.reportsNew.aggregate(get_value("Mammography", "Calcifications", name)))[0]['uniqueValues']
-    calc += [values_arr]
-
-#assymetry
-names = list(db.reportsNew.aggregate(get_parameter_names("Mammography", "Assymetry")))[0]['uniqueValues']
-print(names)
-assym = []
-for name in names:
-    values_arr = list(db.reportsNew.aggregate(get_value("Mammography", "Assymetry", name)))[0]['uniqueValues']
-    assym += [values_arr]
-
-#lymph nodes
-names = list(db.reportsNew.aggregate(get_parameter_names("Mammography", "Lymph nodes")))[0]['uniqueValues']
-print(names)
-lnodes = []
-for name in names:
-    values_arr = list(db.reportsNew.aggregate(get_value("Mammography", "Lymph nodes", name)))[0]['uniqueValues']
-    lnodes += [values_arr]
-
-values = [mass, calc, assym, lnodes]
+def mean(arr):
+    return float(sum(arr)) / max(len(arr), 1)
 
 
 def cartesian(arrays, out=None):
@@ -74,8 +60,30 @@ def cartesian(arrays, out=None):
             out[j * m:(j + 1) * m, 1:] = out[0:m, 1:]
     return out
 
+
 new_data = []
-for e in values:
+for e in get_params():
     new_data+=[cartesian(e)]
 
-print(len((new_data)), new_data)
+
+mass_mean = []
+for i in new_data[2]:
+    parameters_input = []
+    test_r = i
+    user_input =[]
+    finding_input = {}
+    finding_input["name"] = "Mass"
+    params = ["Density", "Margin", "Shape"]
+    for param in range(len(params)):
+        name = params[param]
+        value = i[param]
+        parameters_input.append((name,value))
+        finding_input["parameters"] = parameters_input[::-1]
+    user_input.append(finding_input)
+    probs = []
+    #db_condlist = db.fill.distinct("conditions.conditionName")
+    cursor_findings = [db.fill.find(get_f_params_val("Mammography", "Fibroadenoma", ui)).count() for ui in user_input]
+    mass_mean+=cursor_findings
+
+mass_mean_final = mean(mass_mean)
+print("Mass mean for Fibroadenoma is: ",mass_mean_final)
