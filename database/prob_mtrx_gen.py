@@ -1,6 +1,10 @@
 from interface import *
 from db_config import *
 import numpy as np
+import pandas as pd
+from db_test import db_conditions
+
+
 """
 1. generate np.array([m_round,m_obsc, m_low .. ], [f2_p1, f2_p2], ..])
 2. calculate median for each element in a row
@@ -64,26 +68,114 @@ def cartesian(arrays, out=None):
 new_data = []
 for e in get_params():
     new_data+=[cartesian(e)]
+#print(new_data)
+db_condlist = db.fill.distinct("conditions.conditionName")
+print(new_data[0], new_data[1], new_data[3])
+
+mass_cond = []
+calc_cond = []
+assym_cond = []
+lnodes_cond = []
+
+for cond in db_condlist:
+    calc_mean = []
+    for j in new_data[0]:
+        parameters_input = []
+        user_input = []
+        finding_input = {}
+        finding_input["name"] = "Calcifications"
+        params = ["Distribution", "Suspicious morphology", "Typically benign"]
+        for param in range(len(params)):
+            name = params[param]
+            value = j[param]
+            parameters_input.append((name, value))
+            finding_input["parameters"] = parameters_input[::-1]
+        user_input.append(finding_input)
+        cursor_findings = [db.fill.find(get_f_params_val("Mammography", cond, ui)).count() for ui in user_input]
+        calc_mean += cursor_findings
+
+    norm = [float(i) / sum(calc_mean) for i in calc_mean]
+    calc_mean_final = mean(norm)
+    calc_cond += [calc_mean_final]
+    print("Calc mean for", cond, "is: ", calc_mean_final)
 
 
-mass_mean = []
-for i in new_data[2]:
-    parameters_input = []
-    test_r = i
-    user_input =[]
-    finding_input = {}
-    finding_input["name"] = "Mass"
-    params = ["Density", "Margin", "Shape"]
-    for param in range(len(params)):
-        name = params[param]
-        value = i[param]
-        parameters_input.append((name,value))
-        finding_input["parameters"] = parameters_input[::-1]
-    user_input.append(finding_input)
-    probs = []
-    #db_condlist = db.fill.distinct("conditions.conditionName")
-    cursor_findings = [db.fill.find(get_f_params_val("Mammography", "Fibroadenoma", ui)).count() for ui in user_input]
-    mass_mean+=cursor_findings
+for cond in db_condlist:
+    lnodes_mean = []
+    for j in new_data[1]:
+        parameters_input = []
+        user_input = []
+        finding_input = {}
+        finding_input["name"] = "Lymph nodes"
+        params = ["Lymph nodes"]
+        for param in range(len(params)):
+            name = params[param]
+            value = j[param]
+            parameters_input.append((name, value))
+            finding_input["parameters"] = parameters_input[::-1]
+        user_input.append(finding_input)
+        cursor_findings = [db.fill.find(get_f_params_val("Mammography", cond, ui)).count() for ui in user_input]
+        lnodes_mean += cursor_findings
 
-mass_mean_final = mean(mass_mean)
-print("Mass mean for Fibroadenoma is: ",mass_mean_final)
+    norm = [float(i) / sum(lnodes_mean) for i in lnodes_mean]
+    lnodes_mean_final = mean(norm)
+    lnodes_cond += [lnodes_mean_final]
+    print("Lymph mean for", cond, "is: ", lnodes_mean_final)
+
+for cond in db_condlist:
+    mass_mean = []
+    for i in new_data[2]:
+        parameters_input = []
+        test_r = i
+        user_input =[]
+        finding_input = {}
+        finding_input["name"] = "Mass"
+        params = ["Density", "Margin", "Shape"]
+        for param in range(len(params)):
+            name = params[param]
+            value = i[param]
+            parameters_input.append((name,value))
+            finding_input["parameters"] = parameters_input[::-1]
+        user_input.append(finding_input)
+        cursor_findings = [db.fill.find(get_f_params_val("Mammography", cond, ui)).count() for ui in user_input]
+        mass_mean+=cursor_findings
+
+    norm = [float(i) / sum(mass_mean) for i in mass_mean]
+    mass_mean_final = mean(norm)
+    mass_cond+=[mass_mean_final]
+    print("Mass mean for", cond,  "is: ",mass_mean_final)
+
+
+for cond in db_condlist:
+    assym_mean = []
+    for j in new_data[3]:
+        parameters_input = []
+        user_input = []
+        finding_input = {}
+        finding_input["name"] = "Assymetry"
+        params = ["Assymetry"]
+        for param in range(len(params)):
+            name = params[param]
+            value = j[param]
+            parameters_input.append((name, value))
+            finding_input["parameters"] = parameters_input[::-1]
+        user_input.append(finding_input)
+        cursor_findings = [db.fill.find(get_f_params_val("Mammography", cond, ui)).count() for ui in user_input]
+        assym_mean += cursor_findings
+
+    norm = [float(i) / sum(assym_mean) for i in assym_mean]
+    assym_mean_final = mean(norm)
+    assym_cond += [assym_mean_final]
+    print("Assym mean for", cond, "is: ", assym_mean_final)
+
+
+d = {'condlist': db_condlist,'mass': mass_cond, 'calc': calc_cond, 'lymph nodes': lnodes_cond, 'assym': assym_cond}
+df = pd.DataFrame(data = d)
+df.to_csv('testmammo3', header=True, index = True)
+
+import xlsxwriter
+writer_orig = pd.ExcelWriter('testmammo3.xlsx', engine='xlsxwriter')
+df.to_excel(writer_orig, index=True, sheet_name='report')
+writer_orig.save()
+
+#normalize values
