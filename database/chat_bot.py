@@ -73,12 +73,41 @@ def entr(maxentrd, entrd, arr):
                 else:
                     probs += [{"id": condition, "entropy": 0}]
             import math
-            entr = -sum(item['entropy'] *math.log2(item['entropy']) for item in probs)
-            entrd.update((x, y * entr) for x, y in entrd.items())
-            print("entr for", max_key, "is: ",entr)
+            entropy = -sum(item['entropy'] *math.log2(item['entropy']) for item in probs)
+            for key in entrd:
+                entrd[key] = [entropy * key for key in entrd[key]]
+            print("entr for", max_key, "is: ",entropy)
             print(entrd)
             return entr
 
+"""
+for key in a:
+    print(key)
+    
+a
+b
+c
+keys = [key for key in a]
+keys
+Out[60]: 
+['a', 'b', 'c']
+a
+Out[61]: 
+{'a': [1, 2], 'b': [3, 4], 'c': [5, 6]}
+keys
+Out[62]: 
+['a', 'b', 'c']
+ui = input('key?')
+key?>? a
+for i in range(len(keys)-1):
+    if ui in keys:
+        del a[ui]
+        for k in a:
+            a[k] = [2*k for k in a[k]]  
+            x = max(a, key = lambda k: a[k])
+print(a)
+
+"""
 
 
 def get_params():
