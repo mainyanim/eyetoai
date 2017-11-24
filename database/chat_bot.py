@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from pymongo import MongoClient
 from config_chatbot import *
+import math
 
 df = pd.read_excel('testmammo5.xlsx')
 df2 = df.set_index("condlist")
@@ -72,13 +73,21 @@ def entr(maxentrd, entrd, arr):
                                 probs+=[{"id": condition, "entropy": prob}]
                 else:
                     probs += [{"id": condition, "entropy": 0}]
-            import math
             entropy = -sum(item['entropy'] *math.log2(item['entropy']) for item in probs)
             for key in entrd:
                 entrd[key] = [entropy * key for key in entrd[key]]
             print("entr for", max_key, "is: ",entropy)
             print(entrd)
             return entr
+        elif ch_f.lower() == 'no':
+            del entrd[max_key]
+            entropy = 1
+            for key in entrd:
+                entrd[key] = [entropy * key for key in entrd[key]]
+            print("entr for", max_key, "is: ", entropy)
+            print(entrd)
+            return entr
+
 
 """
 for key in a:
@@ -153,4 +162,3 @@ if __name__ == '__main__':
     entr(max_dict,entr_dict,heads)
     for x in range(len(entr_dict)):
         entr(entr_dict,entr_dict,heads)
-
